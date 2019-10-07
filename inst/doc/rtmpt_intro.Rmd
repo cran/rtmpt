@@ -1,0 +1,360 @@
+---
+title: "rtmpt_intro"
+author: "Raphael.Hartmann"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{TreeBUGS: Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+# 1 Procedure overview
+
+Given a data file (text file, `data.frame`) with the correct variable names (see section 2.3) and an equation/model file (see section 2.1 and 3) these are the steps needed to fit the data with an RT-MPT model (Klauer and Kellen, 2018):
+
+1. Convert the equation/model file to a `rtmpt_model` via the `to_rtmpt_model()` function
+2. If necessary, specify the restrictions for the model via the `set_params()` and `set_resps()` functions
+3. Convert the data file to a `rtmpt_data` format via the `to_rtmpt_data()` function
+4. Fit the data with the specified model via the `fit_rtmpt()` function
+5. Check convergence in the output of the last function
+
+
+# 2 Detailed explanation of the steps
+
+## 2.1 Model converter
+The equation/model file can be provided by a text file or directly like the following. The syntax is comparable to the `EQN` syntax by Heck, Arnold, and Arnold (2018) or Hu (1999). To separate trees, categories and paths or responses you can either use semicolons (like in the example below) or commas, but not mixed.
+```{r, eval=TRUE}
+eqn = "
+# CORE MODEL
+## tree ; cat ;          mpt
+      0 ;   0 ;           Do
+      0 ;   0 ;     (1-Do)*g
+      0 ;   1 ; (1-Do)*(1-g)
+
+      1 ;   3 ;           Dn
+      1 ;   2 ;     (1-Dn)*g
+      1 ;   3 ; (1-Dn)*(1-g)
+
+# OPTIONAL RESTRICTIONS / SPECIFICATIONS
+const_prob: g=0.5
+
+##   Tree ; Cat ; Resp
+resp:   0 ;   0 ; 0
+resp:   0 ;   1 ; 1
+resp:   1 ;   2 ; 0
+resp:   1 ;   3 ; 1
+"
+```
+
+In this `eqn` we specify a Two-High Threshold (2HT) model restricted to have a constant guessing parameter (`g=0.5`) and two different response execution times, labeled zero and one. Here, zero stands for the response "old" and one for "new" in the word recognition task.
+
+The conversion to a `rtmpt_model` list can then be done by the `to_rtmpt_model()` function:
+```{r, eval=TRUE}
+library(rtmpt)
+restr_2HTM <- to_rtmpt_model(eqn_file = eqn)
+restr_2HTM
+```
+
+
+## 2.2 Model restrictions
+
+Before introducing the functions to set constants process probabilities and suppress process times one conceptual restriction needs to be mentioned; it is not possible to have one process multiple times within one branch of a MPT model. For example, two detection processes like $(1-Do)*g*(1-Do)$ are not allowed. The problem here is, that the respective rate parameters will be the same (for the first and last process in our example) and this will lead to mathematical problems in the likelihood function.
+
+If we had further restrictions that we wanted to implement we could do the following:
+```{r, eval=TRUE}
+crazy_model <- restr_2HTM
+# change parameters of the model:
+crazy_model <- set_params(model = crazy_model, parameter = "probs", 
+                            names = "g", values = NA)  # g will now be estimated again
+crazy_model <- set_params(model = crazy_model, parameter = "tau_minus",
+                            names = "Dn", values = 0) # suppress process-completion time for a 
+                                                      # failure to detect a new item as "new"
+# change responses:
+crazy_model <- set_resps(model = crazy_model, tree = 0, categories = 1, values = 0)
+crazy_model <- set_resps(model = crazy_model, tree = 1, categories = 3, values = 0)
+crazy_model
+```
+
+In the model `crazy_model` the probability parameter "g" will be estimated, but the process time of a failure to detect a new word as "new" will be suppressed and the response execution times are assumed to be the same for "old" and "new" items. The latter two constraints are not necessarily realistic. 
+
+One might notice that changing the restrictions requires multiple function calls and might be faster if done directly without a function. Nevertheless, it is advised to use these functions, because (a) they check whether the model still works with the changes, (b) so many changes are rarely made, and (c) one has more control over the changes.
+
+
+## 2.3 The right data format
+
+The data should be provided with the following variables in this order: `subj`, `group`, `tree`, `cat`, and `rt`. All of these variables except `rt` should have values from zero to the number of unique values minus one. This will get clear with an example; if we have 60 subjects, two groups, two trees and four categories we would have the following values in the variables:
+
+- `subj = {0,1,2,...,58,59}`, 
+- `group = {0,1}`, 
+- `tree = {0,1}`, and 
+- `cat = {0,1,2,3}`.
+
+`rt` should be provided in milliseconds and as integers. If it has decimal places it will be rounded to a whole number.
+
+Given the right order of the variables and the right values one can use a `data.frame` or a path to a text file containing the variable names in the first line. If not, the `to_rtmpt_data()` function can be used to reorder the variables and transform the values of those variables. Next to the new `data.frame` the transformation that is used will be saved in a `rtmpt_data` list. Note that **at least** the variable names should be correctly provided in order to make `to_rtmpt_data()` work. The `to_rtmpt_data()` function is also used automatically in the `fit_rtmpt()` function, but should be used at least once, when the model is specified the first time, to check whether the data is transformed according to the equation / model file.
+
+Here is an example of a data set with unordered variables and wrong values (not starting from zero) and a transformation of this data set:
+```{r, eval=TRUE}
+set.seed(2018)
+raw_data <- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
+                       group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
+raw_data
+data <- to_rtmpt_data(raw_data = raw_data, model = restr_2HTM)
+data
+```
+Note that it is never a good idea to specify the tree and category labels/numbers differently from the data file, or vice versa. It is bad practice to define a model with tree and category values starting from zero and using a data set with tree and category values starting from one. Make sure the labels or numbers match for these two match.
+
+## 2.4/5 Model fitting and checking the convergence
+
+Finally, with the function `fit_rtmpt()` one can fit the model to the data. This code should not be run. There are way too few data points.
+```{r, eval=FALSE}
+## do not run
+rtmpt_out <- fit_rtmpt(model = restr_2HTM, data = data)
+rtmpt_out$diags$R_hat
+## end not run
+```
+
+In this function call we used the default values for all the parameters that are not listed in the call. `model` and `data` do not have default values. The full call of the function would look like this:
+
+```{r, eval=FALSE}
+## do not run
+rtmpt_out <- fit_rtmpt(model = restr_2HTM, 
+                       data = data, 
+                       n.chains = 4, 
+                       n.iter = 5000, 
+                       n.burnin = 200,
+                       n.thin = 1, 
+                       Rhat_max = 1.05, 
+					   Irep = 1000, 
+                       prior_params = NULL,
+                       indices = FALSE,
+                       save_log_lik = FALSE)
+## end not run
+```
+
+`n.chains` is the number of chains with a maximum of 16, `n.iter` is the number of samples to draw from the posterior distribution, `n.burnin` is analogue to the burn-in phase for R package `rjags`, `Rhat_max` is a threshold for the potential scale reduction factor and forces the sampling to start only when the maximal potential scale reduction factor of the parameters is lower or equal to this value, `n.thin` is the thinning parameter, `Irep` is the number of samples until the next summary is printed, `prior_params` is a list of some prior parameter specifications, `indices` is a logical parameter with which one can allow to compute the WAIC and LOO, and `save_log_lik` is a logical parameter that allows one to save the log-likelihood for each posterior sample and data point.
+
+# 3 Equation and model files
+
+## 3.1 Equation files
+
+As we have seen above one can specify an equation file (`eqn_file`) like this:
+```{r, eval=FALSE}
+eqn = "
+# CORE MODEL
+## tree ; cat ;          mpt
+      0 ;   0 ;           Do
+      0 ;   0 ;     (1-Do)*g
+      0 ;   1 ; (1-Do)*(1-g)
+
+      1 ;   3 ;           Dn
+      1 ;   2 ;     (1-Dn)*g
+      1 ;   3 ; (1-Dn)*(1-g)
+
+# OPTIONAL RESTRICTIONS / SPECIFICATIONS
+const_prob: g=0.5, Dn = .5
+suppress_tau: Dn-, Do+
+
+##   Tree ; Cat ; Resp
+resp:   0 ;   0 ; 0
+resp:   0 ;   1 ; 1
+resp:   1 ;   2 ; 0
+resp:   1 ;   3 ; 1
+"
+```
+
+Note that we have suppressed the process completion time of a failure to detect a new word as "new" directly here in the equation file. We did that by providing the process name ("Dn") and the output of the process ("-"). Different restrictions need to be separated by a comma. In general it is sufficient to provide only the first part with the equations:
+```{r, eval=FALSE}
+eqn = "
+# CORE MODEL
+## tree ; cat ;          mpt
+      0 ;   0 ;           Do
+      0 ;   0 ;     (1-Do)*g
+      0 ;   1 ; (1-Do)*(1-g)
+
+      1 ;   3 ;           Dn
+      1 ;   2 ;     (1-Dn)*g
+      1 ;   3 ; (1-Dn)*(1-g)
+"
+```
+
+The rest are optional restrictions / specifications. As mentioned above the `eqn_file` can be provided by a text file through a path to the file or written directly in R/Rstudio like above.
+
+## 3.2 Model files
+
+Another way of specifying the same model is by providing a model file (`mdl_file`). This is not yet the model itself as needed for the `fit_rtmpt()` call, but much closer. It is based on the syntax developed by Singmann and Kellen (2013).
+```{r, eval=FALSE}
+mdl = "
+# CORE MODEL
+## targets:
+Do+(1-Do)*g
+(1-Do)*(1-g)
+
+## lure
+(1-Dn)*g
+Dn+(1-Dn)*(1-g)
+"
+```
+
+Internally an `eqn_file` will be converted to a `mdl_file`. From that a text file will be written locally on your computer, used by the `fit_rtmpt()` call, and removed afterwards. In order to pass all the restrictions to this function call a `rtmpt_model` list is needed. These lists provide all the necessary information about the model.
+
+Restrictions in a `mdl_file` are slightly different from those in a `eqn_file`. In order to specify the different responses one has to write the response coding after the equations separated by a semicolon. The output of the `to_rtmpt_model()` call afterwards is also a little bit different from that using `eqn_file`:
+```{r, eval=TRUE}
+mdl = "
+# CORE MODEL
+## MDL         ; RESP
+
+### targets
+Do+(1-Do)*g    ;    0
+(1-Do)*(1-g)   ;    1
+
+### lure
+(1-Dn)*g       ;    0
+Dn+(1-Dn)*(1-g);    1
+
+# OPTIONAL RESTRICTIONS
+const_prob: g=0.5, Dn = .5
+suppress_tau: Dn-, Do+
+"
+to_rtmpt_model(mdl_file = mdl)
+```
+
+Here we have four columns in the `responses` data frame instead of the three we had previously. This is produced because the TREE and CAT labels are generated by the `to_rtmpt_model()` function rather than specified by ourselves in a `mdl_file`. The additional `MDL` column makes it easier to interpret the output.
+
+## 3.3 Restrictions
+
+As we just saw the restrictions can be provided by using `const_prob` and `suppress_tau` for holding process probabilities to constants and suppressing process completion times, respectively. There are other keywords for holding process probabilities constant: `constant_prob`, `const_probabilities`, `constant_probabilities`, `const`, `constant`. Other keywords for suppressing process completion times are: `suppr_lambda`, `suppr_rate`, `suppr_process`, `suppr_tau`, `suppress`. Keywords must be proceeded by a colon.
+
+Note that it is not possible to make inequality statements, neither for process probabilities nor completion times. It is also not possible to set process completion times to constants. Furthermore, holding a process probability to a constant requires an equal sign between the process name and the value. Values have to be larger than zero and lower than one. Suppressing a process completion time require a minus or a plus sign proceeding the process name. Multiple restrictions of the same type need to be separated by a comma.
+
+
+# 4 Data transformation
+
+## 4.1 Labels in data file
+When labels are used in the data set one has to be cautious when specifying the equation file. The labels of the trees and categories in the equation file must match those of the data. For example, if the tree labels "target" and "lure" are used in the data set, one has to use those also in the equation file. If you specify a model file instead of the equation file the labels in the data set need to be changed to numerics. Otherwise no mapping between those can be done.
+
+## 4.2 Numbers in data file
+When numbers are used in the data set for the trees and categories it is best to also check that they match with the ones used in the equation / model file, but the program checks for the order. So for example, if you are using the numbers \{1, 2, 3, 4\} for you four trees in the data set and \{0, 1, 2, 3\} in the equation file (which is the standard for model files anyway) they will be mapped through the order. The new data, that can be used, will have a zero instead of a one, a one instead of a two, and so on.
+
+One could use labels in the equation file even though you are using numbers in the data file, but it is **strongly advised against** it. It will be assumed, that the order in which you specify the equations matches the order of the numbers in the data file starting from the lowest to the highest. So if you are using again \{1, 2, 3, 4\} for the four trees, then the first tree you need to define in the equation files (no matter what label you use) must correspond to tree 1 in the data and so on.
+
+# 5 Data simulation and simulation-based calibration
+
+## Data simulation
+With the function `sim_rtmpt_data()` it is possible to generate data from an RT-MPT model. Required is a model object generated with the function `to_rtmpt_model()`, a random seed number, the number of subjects, the number of trials per tree in the model, and a named list of parameters. Here it is also possible to set the mean of `mean_of_mu_alpha`; A value of zero refers to the probability of `0.5`. If a given probability is desired, say `0.4`, then one might specify `params <- list(mean_of_mu_alpha = qnorm(.4))`. If a mean process time of `200` ms is required, one might specify `params <- list(mean_of_exp_mu_beta = 1000/200)`. The mean parameter of the motor times is easier to transform, since they are already on the second scale; Just write `500/1000` if your mean motor time should be `500` ms. The code below shows a more or less good balance between too large variances (leading to too many extreme values like probabilities of zero and one and RTs of zero) and too small variances (unrealistic data).
+
+Important: If no variances are specified in the `params` argument, then the corresponding mean values are fixed, else they will be randomly drawn.
+```{r, eval=TRUE}
+# randomly drawn group-level mean values
+mdl_2HTM <- "
+# targets
+do+(1-do)*g     ; 0
+(1-do)*(1-g)    ; 1
+
+# lures
+(1-dn)*g        ; 0
+dn+(1-dn)*(1-g) ; 1
+
+# do: detect old; dn: detect new; g: guess
+"
+
+model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+
+# random group-level parameters
+params <- list(mean_of_mu_alpha = 0, 
+               var_of_mu_alpha = 1,         # delete this line to fix mean_of_mu_alpha to 0
+               mean_of_exp_mu_beta = 10, 
+               var_of_exp_mu_beta = 10,     # delete this line to fix mean_of_exp_mu_beta to 10
+               mean_of_mu_gamma = 0.5, 
+               var_of_mu_gamma = 0.0025,    # delete this line to fix mean_of_mu_gamma to 0.5
+               mean_of_omega_sqr = 0.005, 
+               var_of_omega_sqr = 0.000025, # delete this line to fix mean_of_omega_sqr to 0.005
+               df_of_sigma_sqr = 10, 
+               sf_of_scale_matrix_SIGMA = 0.1, 
+               sf_of_scale_matrix_GAMMA = 0.01, 
+               prec_epsilon = 10,
+               add_df_to_invWish = 5)
+
+sim_dat <- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
+head(sim_dat$data_frame)
+
+```
+
+## 5.1 Simulation-based calibration
+With the function `fit_rtmpt_SBC()` it is possible to generate data and fit the model to that data using the same priors / ground truths. The main output of this function will be the rank statistic for each parameter in the model, which is needed for the simulation-based calibration (SBC) method by Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). For example, if this function is repeated, say `2000` times, with different `seeds` one might add all the rank statistics to a matrix (`2000` rows and number of parameters as columns) and then calculate the pearsons' chi-squared statistic. This allows one to test for how many of the parameters the rank statistics are not uniformly distributed. A value of about `0.05` is typical for a test with an alpha level of `0.05`.
+
+Here is an example of one replication of the SBC procedure:
+```
+mdl_2HTM <- "
+# targets
+d+(1-d)*g     ; 0
+(1-d)*(1-g)    ; 1
+
+# lures
+(1-d)*g        ; 0
+d+(1-d)*(1-g) ; 1
+
+# d: detect; g: guess
+"
+
+model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+
+params <- list(mean_of_exp_mu_beta = 10, 
+               var_of_exp_mu_beta = 10, 
+               mean_of_mu_gamma = 0.5, 
+               var_of_mu_gamma = 0.0025, 
+               mean_of_omega_sqr = 0.005, 
+               var_of_omega_sqr = 0.000025,
+               df_of_sigma_sqr = 10, 
+               sf_of_scale_matrix_SIGMA = 0.1, 
+               sf_of_scale_matrix_GAMMA = 0.01, 
+               prec_epsilon = 10,
+               add_df_to_invWish = 5)
+
+SBC_out <- fit_rtmpt_SBC(model, seed = 123, prior_params = params)
+SBC_out$ranks
+
+```
+
+With the following code it would essentially be possible to calculate the rank statistics of each parameter and then test it with the pearsons' chi-squared test, but much is not considered here (e.g. the convergence and the effective sample size).
+```
+# For 2000 replications
+## This takes too long to run and in addition, Rhat should always be 
+## checked as well as the effective sample size.
+R = 2000
+rank_mat <- data.frame()
+
+for (r in 1:R) {
+  SBC_out <- fit_rtmpt_SBC(model, seed = r*123, prior_params = params, n.eff_samples = 99)
+  rank_mat <- rbind(rank_mat, SBC_out$ranks)
+}
+
+## pearsons' chi-square for testing uniformity
+x <- apply(rank_mat[1:R,], 2, table)
+expect <- R/100 # 100 = number of bins/cells (0:99)
+pearson <- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
+z95 <- qchisq(0.95, 99) # 99 = degrees of freedom
+sum(pearson>z95) / length(pearson)
+```
+
+With the following code a rank matrix is generated from a uniform distribution and then tested for uniformity:
+```{r, eval=TRUE}
+R <- 2000
+rand_rankmat <- matrix(data = sample(0:99, R*393, replace=TRUE), nrow = R, ncol = 393)
+
+## pearsons' chi-square for testing uniformity
+x <- apply(rand_rankmat[1:R,], 2, table)
+expect <- R/100 # 100 = number of bins/cells (0:99)
+pearson <- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
+z95 <- qchisq(0.95, 99) # 99 = degrees of freedom
+sum(pearson>z95) / length(pearson)
+```
+
+# References
+* Heck, D. W., Arnold, N. R., & Arnold, D. (2018). TreeBUGS: An R package for hierarchical multinomial-processing-tree modeling. Behavior Research Methods, 50(1), 264-284. doi: 10.3758/s13428-017-0869-7
+* Hu, X. (1999). Multinomial processing tree models: An implementation. Behavior Research Methods, Instruments, & Computers, 31(4), 689-695. doi: 10.3758/BF03207714
+* Klauer, K. C., & Kellen, D. (2018). RT-MPTs: Process models for response-time distributions based on multinomial processing trees with applications to recognition memory. Journal of Mathematical Psychology, 82, 111-130. doi: 10.1016/j.jmp.2017.12.003
+* Singmann, H., & Kellen, D. (2013). MPTinR: Analysis of multinomial processing tree models in R. Behavior Research Methods, 45(2), 560-575. doi: 10.3758/s13428-012-0259-0
+* Talts, S., Betancourt, M., Simpson, D., Vehtari, A., & Gelman, A. (2018). Validating Bayesian inference algorithms with simulation-based calibration. arXiv preprint arXiv:1804.06788.
+

@@ -1,0 +1,47 @@
+
+- This R package requires at least GNU Scientific Library (GSL; M. Galassi et al., 2016) version 2.5
+
+- If you want to install this package under Windows by source or under Linux or MacOS, please install first GSL 
+  (https://www.gnu.org/software/gsl/) for example from http://gnu.mirrors.hoobly.com/gsl/
+
+- Below are some instructions for installing GSL under Linux and MacOS. An installation on Windows by source is
+  rather complicated because of the fact that GSL version 2.5 is needed. For this version there are no
+  installers yet.
+
+
+Note: Terminal commands are denoted with a dollar sign ($).
+
+
+- You might as well test whether you can run the example: 
+  https://www.gnu.org/software/gsl/manual/html_node/An-Example-Program.html
+  by copying the code into a c-file (here example.c) and compiling and linking by
+  $  gcc -Wall -I/usr/local/include -c example.c
+  $  gcc -L/usr/local/lib example.o -lgsl -lgslcblas -lm
+  after you installed GSL.
+
+
+-----------------
+Linux users:
+install the GSL library with the usual commands in the terminal (assuming you unzipped the gsl in the Downloads 
+folder of your home directory):
+$  cd Downloads/gsl-2.5 
+$  ./configure
+$  make
+$  make check
+and if there are no errors so far
+$  sudo make install
+If the error "libgsl.so.23: cannot open shared object file: No such file or directory" occurs while installing 
+the rtmpt package or testing the GSL example above, run
+$  sudo ldconfig -v
+in the terminal as well.
+
+
+-----------------
+MacOS users:
+Install Homebrew (https://brew.sh/)
+Install GSL via Homebrew using "brew install gsl"
+Install Xcode from the App Store and then install the Command Line Tools using "xcode-select --install"
+If you use macOS Mojave, make sure to also run the following command:
+$  open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+If you encouter probelms, you might also have to install gcc6 or another gcc version. Try "brew install gcc".
+
