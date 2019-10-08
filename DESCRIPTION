@@ -1,5 +1,5 @@
 Package: rtmpt
-Version: 0.1-15
+Version: 0.1-16
 Title: Fitting RT-MPT Models
 Authors@R: c(person("Raphael", "Hartmann", email = "raphael.hartmann@protonmail.com", role = c("aut", "cre")),
              person("Karl C.", "Klauer", email="christoph.klauer@psychologie.uni-freiburg.de", role=c("cph", "aut", "ctb", "ths")),
@@ -13,7 +13,7 @@ Maintainer: Raphael Hartmann <raphael.hartmann@protonmail.com>
 Depends: R (>= 3.0.0)
 Imports: coda, data.table, LaplacesDemon, loo, methods, stats, stringr,
         truncnorm, utils
-Suggests: knitr
+Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: yes
 SystemRequirements: GSL (>=2.3)
@@ -29,6 +29,6 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Packaged: 2019-10-04 18:34:39 UTC; hartmann2
+Packaged: 2019-10-08 10:31:26 UTC; hartmann2
 Repository: CRAN
-Date/Publication: 2019-10-07 14:50:02 UTC
+Date/Publication: 2019-10-08 12:00:02 UTC

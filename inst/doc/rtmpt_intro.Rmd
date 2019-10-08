@@ -1,15 +1,15 @@
 ---
 title: "rtmpt_intro"
-author: "Raphael.Hartmann"
+author: "Raphael Hartmann"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{TreeBUGS: Introduction}
+  %\VignetteIndexEntry{rtmpt: Introduction}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
-# 1 Procedure overview
+# 1 Overview
 
 Given a data file (text file, `data.frame`) with the correct variable names (see section 2.3) and an equation/model file (see section 2.1 and 3) these are the steps needed to fit the data with an RT-MPT model (Klauer and Kellen, 2018):
 

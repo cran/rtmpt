@@ -194,41 +194,48 @@ sim_rtmpt_data_SBC<- function(model,
   
   # READ INFOS OF INFOFILE ----
   readinfofile <- function(infofile) {
-    charstring <- system(paste("gawk 'END {print}' ", infofile), intern = TRUE)
+    all_lines <- readLines(infofile)
+    len_a_l <- length(all_lines)
+    #charstring <- system(paste("gawk 'END {print}' ", infofile), intern = TRUE)
+    charstring <- all_lines[len_a_l]
     ProbNames <- strsplit(charstring, "\\s+")[[1]]
     rm(charstring)
     
-    charstring <- system(paste("gawk 'NR==1' ", infofile), intern = TRUE)
+    #charstring <- system(paste("gawk 'NR==1' ", infofile), intern = TRUE)
+    charstring <- all_lines[1]
     infos <- as.numeric(strsplit(charstring, "\\s+")[[1]])
     rm(charstring)
     NTrees <- infos[4]
     NCateg <- infos[5]
-	if (NCateg/NTrees > 2) stop("Currently this function can only be used with models containing two response categories per tree")
+    if (NCateg/NTrees > 2) stop("Currently this function can only be used with models containing two response categories per tree")
     NParam <- infos[2]
     MaxNode <- infos[3]
     MaxBranch <- infos[1]
     
-    lineNR <- paste0("'NR==", NTrees+4, "'")
-    charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
+    #lineNR <- paste0("'NR==", NTrees+4, "'")
+    #charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
+    charstring <- all_lines[NTrees+4]
     nodespertree <- as.numeric(strsplit(charstring, "\\s+")[[1]])
-    rm(charstring, lineNR)
+    rm(charstring)
     
     tree2node <- list()
     for (i in 3+(1:NTrees)) {
       tmplist <- list()
-      lineNR <- paste0("'NR==", i, "'")
-      charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
+      #lineNR <- paste0("'NR==", i, "'")
+      #charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
+      charstring <- all_lines[i]
       tmplist$nodes <- as.numeric(strsplit(charstring, "\\s+")[[1]])
       tmplist$NRnodes <- nodespertree[i-3]
       tree2node[[i-3]] <- tmplist
-      rm(charstring, lineNR, tmplist)
+      rm(charstring, tmplist)
     }
     rm(nodespertree, i)
     
-    lineNR <- paste0("'NR==", NTrees+5, "'")
-    charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
+    #lineNR <- paste0("'NR==", NTrees+5, "'")
+    #charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
+    charstring <- all_lines[NTrees+5]
     nodeinbranch <- as.numeric(strsplit(charstring, "\\s+")[[1]])
-    rm(charstring, lineNR)
+    rm(charstring)
     infolist <- list(infofile = infofile, infos = infos, 
                      tree2node = tree2node, MaxNode = MaxNode, 
                      NParam = NParam, MaxBranch = MaxBranch,
