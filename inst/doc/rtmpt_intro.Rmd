@@ -16,7 +16,7 @@ Given a data file (text file, `data.frame`) with the correct variable names (see
 1. Convert the equation/model file to a `rtmpt_model` via the `to_rtmpt_model()` function
 2. If necessary, specify the restrictions for the model via the `set_params()` and `set_resps()` functions
 3. Convert the data file to a `rtmpt_data` format via the `to_rtmpt_data()` function
-4. Fit the data with the specified model via the `fit_rtmpt()` function
+4. Fit the specified model to the data via the `fit_rtmpt()` function
 5. Check convergence in the output of the last function
 
 

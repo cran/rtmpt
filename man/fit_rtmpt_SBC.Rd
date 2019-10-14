@@ -81,7 +81,8 @@ A list of the class \code{rtmpt_sbc} containing
   }
 }
 \description{
-Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for SBC. You can specify the random seed, number of subjects, number of trials, and some
+Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for 
+  simulation-based calibration (SBC; Talts et al., 2018). You can specify the random seed, number of subjects, number of trials, and some
   parameters (same as \code{prior_params} from \code{\link{fit_rtmpt}}).
 }
 \examples{
@@ -138,6 +139,9 @@ pearson <- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)}
 z95 <- qchisq(0.95, 99) # 99 = degrees of freedom
 sum(pearson>z95) / length(pearson)
 }
+}
+\references{
+Talts, S., Betancourt, M., Simpson, D., Vehtari, A., & Gelman, A. (2018). Validating Bayesian inference algorithms with simulation-based calibration. \emph{arXiv preprint arXiv:1804.06788}.
 }
 \author{
 Raphael Hartmann

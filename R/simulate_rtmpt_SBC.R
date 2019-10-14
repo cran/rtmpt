@@ -1,7 +1,8 @@
 
 #' Simulate data from RT-MPT models
 #' 
-#' Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for SBC. You can specify the random seed, number of subjects, number of trials, and some
+#' Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for 
+#'   simulation-based calibration (SBC; Talts et al., 2018). You can specify the random seed, number of subjects, number of trials, and some
 #'   parameters (same as \code{prior_params} from \code{\link{fit_rtmpt}}).
 #'
 #' @param model A list of the class \code{rtmpt_model}.
@@ -48,6 +49,8 @@
 #'                            parameters, and the trial-specific probabilities, process-times, and motor-times,
 #'     \item \code{specs}: some specifications like the model, seed number, etc.,
 #'   }
+#' @references
+#'   Talts, S., Betancourt, M., Simpson, D., Vehtari, A., & Gelman, A. (2018). Validating Bayesian inference algorithms with simulation-based calibration. \emph{arXiv preprint arXiv:1804.06788}.
 #' @examples 
 #' ########################################################################################
 #' # Detect-Guess variant of the Two-High Threshold model.
