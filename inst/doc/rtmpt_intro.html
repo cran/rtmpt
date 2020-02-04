@@ -1,146 +1,270 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<title>  %\VignetteEncoding{UTF-8}</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<meta name="author" content="Raphael Hartmann" />
-
-<meta name="date" content="2019-10-14" />
-
-<title>rtmpt_intro</title>
-
-
-
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css" data-origin="pandoc">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
   }
-})();
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 
 
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
 
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
 
 
 
 </head>
 
 <body>
+<hr/>
 
+<p>title: &ldquo;rtmpt_intro&rdquo;
+author: &ldquo;Raphael Hartmann&rdquo;
+date: &ldquo;2020-02-03&rdquo;
+output: rmarkdown::html_vignette
+vignette: &gt;
+  %\VignetteIndexEntry{rtmpt: Introduction}
+  %\VignetteEngine{knitr::rmarkdown}</p>
 
+<h2>  %\VignetteEncoding{UTF-8}</h2>
 
-
-<h1 class="title toc-ignore">rtmpt_intro</h1>
-<h4 class="author">Raphael Hartmann</h4>
-<h4 class="date">2019-10-14</h4>
-
-
-
-<div id="overview" class="section level1">
 <h1>1 Overview</h1>
+
 <p>Given a data file (text file, <code>data.frame</code>) with the correct variable names (see section 2.3) and an equation/model file (see section 2.1 and 3) these are the steps needed to fit the data with an RT-MPT model (Klauer and Kellen, 2018):</p>
-<ol style="list-style-type: decimal">
+
+<ol>
 <li>Convert the equation/model file to a <code>rtmpt_model</code> via the <code>to_rtmpt_model()</code> function</li>
 <li>If necessary, specify the restrictions for the model via the <code>set_params()</code> and <code>set_resps()</code> functions</li>
 <li>Convert the data file to a <code>rtmpt_data</code> format via the <code>to_rtmpt_data()</code> function</li>
 <li>Fit the specified model to the data via the <code>fit_rtmpt()</code> function</li>
 <li>Check convergence in the output of the last function</li>
 </ol>
-</div>
-<div id="detailed-explanation-of-the-steps" class="section level1">
+
 <h1>2 Detailed explanation of the steps</h1>
-<div id="model-converter" class="section level2">
+
 <h2>2.1 Model converter</h2>
+
 <p>The equation/model file can be provided by a text file or directly like the following. The syntax is comparable to the <code>EQN</code> syntax by Heck, Arnold, and Arnold (2018) or Hu (1999). To separate trees, categories and paths or responses you can either use semicolons (like in the example below) or commas, but not mixed.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eqn =<span class="st"> &quot;</span>
-<span class="st"># CORE MODEL</span>
-<span class="st">## tree ; cat ;          mpt</span>
-<span class="st">      0 ;   0 ;           Do</span>
-<span class="st">      0 ;   0 ;     (1-Do)*g</span>
-<span class="st">      0 ;   1 ; (1-Do)*(1-g)</span>
 
-<span class="st">      1 ;   3 ;           Dn</span>
-<span class="st">      1 ;   2 ;     (1-Dn)*g</span>
-<span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span>
+<pre><code class="r">eqn = &quot;
+# CORE MODEL
+## tree ; cat ;          mpt
+      0 ;   0 ;           Do
+      0 ;   0 ;     (1-Do)*g
+      0 ;   1 ; (1-Do)*(1-g)
 
-<span class="st"># OPTIONAL RESTRICTIONS / SPECIFICATIONS</span>
-<span class="st">const_prob: g=0.5</span>
+      1 ;   3 ;           Dn
+      1 ;   2 ;     (1-Dn)*g
+      1 ;   3 ; (1-Dn)*(1-g)
 
-<span class="st">##   Tree ; Cat ; Resp</span>
-<span class="st">resp:   0 ;   0 ; 0</span>
-<span class="st">resp:   0 ;   1 ; 1</span>
-<span class="st">resp:   1 ;   2 ; 0</span>
-<span class="st">resp:   1 ;   3 ; 1</span>
-<span class="st">&quot;</span></code></pre></div>
-<p>In this <code>eqn</code> we specify a Two-High Threshold (2HT) model restricted to have a constant guessing parameter (<code>g=0.5</code>) and two different response execution times, labeled zero and one. Here, zero stands for the response “old” and one for “new” in the word recognition task.</p>
+# OPTIONAL RESTRICTIONS / SPECIFICATIONS
+const_prob: g=0.5
+
+##   Tree ; Cat ; Resp
+resp:   0 ;   0 ; 0
+resp:   0 ;   1 ; 1
+resp:   1 ;   2 ; 0
+resp:   1 ;   3 ; 1
+&quot;
+</code></pre>
+
+<p>In this <code>eqn</code> we specify a Two-High Threshold (2HT) model restricted to have a constant guessing parameter (<code>g=0.5</code>) and two different response execution times, labeled zero and one. Here, zero stands for the response &ldquo;old&rdquo; and one for &ldquo;new&rdquo; in the word recognition task.</p>
+
 <p>The conversion to a <code>rtmpt_model</code> list can then be done by the <code>to_rtmpt_model()</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rtmpt)
-restr_2HTM &lt;-<span class="st"> </span><span class="kw">to_rtmpt_model</span>(<span class="dt">eqn_file =</span> eqn)
-restr_2HTM</code></pre></div>
+
+<pre><code class="r">library(rtmpt)
+restr_2HTM &lt;- to_rtmpt_model(eqn_file = eqn)
+restr_2HTM
+</code></pre>
+
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -187,23 +311,28 @@ restr_2HTM</code></pre></div>
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each response number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 2 distinct response(s) assumed, namely [ 0, 1 ].
-## -----------------------------------</code></pre>
-</div>
-<div id="model-restrictions" class="section level2">
+## -----------------------------------
+</code></pre>
+
 <h2>2.2 Model restrictions</h2>
-<p>Before introducing the functions to set constants process probabilities and suppress process times one conceptual restriction needs to be mentioned; it is not possible to have one process multiple times within one branch of a MPT model. For example, two detection processes like <span class="math inline">\((1-Do)*g*(1-Do)\)</span> are not allowed. The problem here is, that the respective rate parameters will be the same (for the first and last process in our example) and this will lead to mathematical problems in the likelihood function.</p>
+
+<p>Before introducing the functions to set constants process probabilities and suppress process times one conceptual restriction needs to be mentioned; it is not possible to have one process multiple times within one branch of a MPT model. For example, two detection processes like \((1-Do)*g*(1-Do)\) are not allowed. The problem here is, that the respective rate parameters will be the same (for the first and last process in our example) and this will lead to mathematical problems in the likelihood function.</p>
+
 <p>If we had further restrictions that we wanted to implement we could do the following:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crazy_model &lt;-<span class="st"> </span>restr_2HTM
-<span class="co"># change parameters of the model:</span>
-crazy_model &lt;-<span class="st"> </span><span class="kw">set_params</span>(<span class="dt">model =</span> crazy_model, <span class="dt">parameter =</span> <span class="st">&quot;probs&quot;</span>, 
-                            <span class="dt">names =</span> <span class="st">&quot;g&quot;</span>, <span class="dt">values =</span> <span class="ot">NA</span>)  <span class="co"># g will now be estimated again</span>
-crazy_model &lt;-<span class="st"> </span><span class="kw">set_params</span>(<span class="dt">model =</span> crazy_model, <span class="dt">parameter =</span> <span class="st">&quot;tau_minus&quot;</span>,
-                            <span class="dt">names =</span> <span class="st">&quot;Dn&quot;</span>, <span class="dt">values =</span> <span class="dv">0</span>) <span class="co"># suppress process-completion time for a </span>
-                                                      <span class="co"># failure to detect a new item as &quot;new&quot;</span>
-<span class="co"># change responses:</span>
-crazy_model &lt;-<span class="st"> </span><span class="kw">set_resps</span>(<span class="dt">model =</span> crazy_model, <span class="dt">tree =</span> <span class="dv">0</span>, <span class="dt">categories =</span> <span class="dv">1</span>, <span class="dt">values =</span> <span class="dv">0</span>)
-crazy_model &lt;-<span class="st"> </span><span class="kw">set_resps</span>(<span class="dt">model =</span> crazy_model, <span class="dt">tree =</span> <span class="dv">1</span>, <span class="dt">categories =</span> <span class="dv">3</span>, <span class="dt">values =</span> <span class="dv">0</span>)
-crazy_model</code></pre></div>
+
+<pre><code class="r">crazy_model &lt;- restr_2HTM
+# change parameters of the model:
+crazy_model &lt;- set_params(model = crazy_model, parameter = &quot;probs&quot;, 
+                            names = &quot;g&quot;, values = NA)  # g will now be estimated again
+crazy_model &lt;- set_params(model = crazy_model, parameter = &quot;tau_minus&quot;,
+                            names = &quot;Dn&quot;, values = 0) # suppress process-completion time for a 
+                                                      # failure to detect a new item as &quot;new&quot;
+# change responses:
+crazy_model &lt;- set_resps(model = crazy_model, tree = 0, categories = 1, values = 0)
+crazy_model &lt;- set_resps(model = crazy_model, tree = 1, categories = 3, values = 0)
+crazy_model
+</code></pre>
+
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -250,26 +379,36 @@ crazy_model</code></pre></div>
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each response number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct response(s) assumed, namely [ 0 ].
-## -----------------------------------</code></pre>
-<p>In the model <code>crazy_model</code> the probability parameter “g” will be estimated, but the process time of a failure to detect a new word as “new” will be suppressed and the response execution times are assumed to be the same for “old” and “new” items. The latter two constraints are not necessarily realistic.</p>
-<p>One might notice that changing the restrictions requires multiple function calls and might be faster if done directly without a function. Nevertheless, it is advised to use these functions, because (a) they check whether the model still works with the changes, (b) so many changes are rarely made, and (c) one has more control over the changes.</p>
-</div>
-<div id="the-right-data-format" class="section level2">
+## -----------------------------------
+</code></pre>
+
+<p>In the model <code>crazy_model</code> the probability parameter &ldquo;g&rdquo; will be estimated, but the process time of a failure to detect a new word as &ldquo;new&rdquo; will be suppressed and the response execution times are assumed to be the same for &ldquo;old&rdquo; and &ldquo;new&rdquo; items. The latter two constraints are not necessarily realistic. </p>
+
+<p>One might notice that changing the restrictions requires multiple function calls and might be faster if done directly without a function. Nevertheless, it is advised to use these functions, because (a) they check whether the model still works with the changes, (b) so many changes are rarely made, and &copy; one has more control over the changes.</p>
+
 <h2>2.3 The right data format</h2>
+
 <p>The data should be provided with the following variables in this order: <code>subj</code>, <code>group</code>, <code>tree</code>, <code>cat</code>, and <code>rt</code>. All of these variables except <code>rt</code> should have values from zero to the number of unique values minus one. This will get clear with an example; if we have 60 subjects, two groups, two trees and four categories we would have the following values in the variables:</p>
+
 <ul>
-<li><code>subj = {0,1,2,...,58,59}</code>,</li>
-<li><code>group = {0,1}</code>,</li>
-<li><code>tree = {0,1}</code>, and</li>
+<li><code>subj = {0,1,2,...,58,59}</code>, </li>
+<li><code>group = {0,1}</code>, </li>
+<li><code>tree = {0,1}</code>, and </li>
 <li><code>cat = {0,1,2,3}</code>.</li>
 </ul>
+
 <p><code>rt</code> should be provided in milliseconds and as integers. If it has decimal places it will be rounded to a whole number.</p>
+
 <p>Given the right order of the variables and the right values one can use a <code>data.frame</code> or a path to a text file containing the variable names in the first line. If not, the <code>to_rtmpt_data()</code> function can be used to reorder the variables and transform the values of those variables. Next to the new <code>data.frame</code> the transformation that is used will be saved in a <code>rtmpt_data</code> list. Note that <strong>at least</strong> the variable names should be correctly provided in order to make <code>to_rtmpt_data()</code> work. The <code>to_rtmpt_data()</code> function is also used automatically in the <code>fit_rtmpt()</code> function, but should be used at least once, when the model is specified the first time, to check whether the data is transformed according to the equation / model file.</p>
+
 <p>Here is an example of a data set with unordered variables and wrong values (not starting from zero) and a transformation of this data set:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2018</span>)
-raw_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">tree =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="dt">rt =</span> <span class="kw">round</span>(<span class="dv">1000</span><span class="op">*</span>(<span class="kw">runif</span>(<span class="dv">16</span>)<span class="op">+</span>.<span class="dv">3</span>)), 
-                       <span class="dt">group =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">each=</span><span class="dv">8</span>), <span class="dt">subj =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">each =</span> <span class="dv">4</span>), <span class="dt">cat =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">4</span>))
-raw_data</code></pre></div>
+
+<pre><code class="r">set.seed(2018)
+raw_data &lt;- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
+                       group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
+raw_data
+</code></pre>
+
 <pre><code>##    tree   rt group subj cat
 ## 1     1  636     1    1   1
 ## 2     2  764     1    1   2
@@ -286,16 +425,20 @@ raw_data</code></pre></div>
 ## 13    1 1282     2    4   1
 ## 14    2  978     2    4   2
 ## 15    1 1106     2    4   3
-## 16    2  934     2    4   4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">to_rtmpt_data</span>(<span class="dt">raw_data =</span> raw_data, <span class="dt">model =</span> restr_2HTM)
-data</code></pre></div>
+## 16    2  934     2    4   4
+</code></pre>
+
+<pre><code class="r">data &lt;- to_rtmpt_data(raw_data = raw_data, model = restr_2HTM)
+data
+</code></pre>
+
 <pre><code>## 
 ## DATA TRANSFORMATION OVERVIEW
 ## 
 ## 
 ## Reordered variables:
 ## subj, group, tree, cat, rt
-## * NOTE1: Additional variables are attached below these five.
+## * NOTE1: Additional variables are attached next to these five.
 ## * NOTE2: To see your data frame use &lt;object name&gt;$data.
 ## --------------------
 ## 
@@ -325,105 +468,125 @@ data</code></pre></div>
 ## 4   4   3
 ## 
 ## * NOTE: &quot;old&quot; refers to the used labels and &quot;new&quot; to the ones that will be used.
-## ------------------------</code></pre>
+## ------------------------
+</code></pre>
+
 <p>Note that it is never a good idea to specify the tree and category labels/numbers differently from the data file, or vice versa. It is bad practice to define a model with tree and category values starting from zero and using a data set with tree and category values starting from one. Make sure the labels or numbers match for these two match.</p>
-</div>
-<div id="model-fitting-and-checking-the-convergence" class="section level2">
+
 <h2>2.4/5 Model fitting and checking the convergence</h2>
+
 <p>Finally, with the function <code>fit_rtmpt()</code> one can fit the model to the data. This code should not be run. There are way too few data points.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## do not run
-rtmpt_out &lt;-<span class="st"> </span><span class="kw">fit_rtmpt</span>(<span class="dt">model =</span> restr_2HTM, <span class="dt">data =</span> data)
-rtmpt_out<span class="op">$</span>diags<span class="op">$</span>R_hat
-## end not run</code></pre></div>
+
+<pre><code class="r">## do not run
+rtmpt_out &lt;- fit_rtmpt(model = restr_2HTM, data = data)
+rtmpt_out$diags$R_hat
+## end not run
+</code></pre>
+
 <p>In this function call we used the default values for all the parameters that are not listed in the call. <code>model</code> and <code>data</code> do not have default values. The full call of the function would look like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## do not run
-rtmpt_out &lt;-<span class="st"> </span><span class="kw">fit_rtmpt</span>(<span class="dt">model =</span> restr_2HTM, 
-                       <span class="dt">data =</span> data, 
-                       <span class="dt">n.chains =</span> <span class="dv">4</span>, 
-                       <span class="dt">n.iter =</span> <span class="dv">5000</span>, 
-                       <span class="dt">n.burnin =</span> <span class="dv">200</span>,
-                       <span class="dt">n.thin =</span> <span class="dv">1</span>, 
-                       <span class="dt">Rhat_max =</span> <span class="fl">1.05</span>, 
-                       <span class="dt">Irep =</span> <span class="dv">1000</span>, 
-                       <span class="dt">prior_params =</span> <span class="ot">NULL</span>,
-                       <span class="dt">indices =</span> <span class="ot">FALSE</span>,
-                       <span class="dt">save_log_lik =</span> <span class="ot">FALSE</span>)
-## end not run</code></pre></div>
+
+<pre><code class="r">## do not run
+rtmpt_out &lt;- fit_rtmpt(model = restr_2HTM, 
+                       data = data, 
+                       n.chains = 4, 
+                       n.iter = 5000, 
+                       n.burnin = 200,
+                       n.thin = 1, 
+                       Rhat_max = 1.05, 
+                       Irep = 1000, 
+                       prior_params = NULL,
+                       indices = FALSE,
+                       save_log_lik = FALSE)
+## end not run
+</code></pre>
+
 <p><code>n.chains</code> is the number of chains with a maximum of 16, <code>n.iter</code> is the number of samples to draw from the posterior distribution, <code>n.burnin</code> is analogue to the burn-in phase for R package <code>rjags</code>, <code>Rhat_max</code> is a threshold for the potential scale reduction factor and forces the sampling to start only when the maximal potential scale reduction factor of the parameters is lower or equal to this value, <code>n.thin</code> is the thinning parameter, <code>Irep</code> is the number of samples until the next summary is printed, <code>prior_params</code> is a list of some prior parameter specifications, <code>indices</code> is a logical parameter with which one can allow to compute the WAIC and LOO, and <code>save_log_lik</code> is a logical parameter that allows one to save the log-likelihood for each posterior sample and data point.</p>
-</div>
-</div>
-<div id="equation-and-model-files" class="section level1">
+
 <h1>3 Equation and model files</h1>
-<div id="equation-files" class="section level2">
+
 <h2>3.1 Equation files</h2>
+
 <p>As we have seen above one can specify an equation file (<code>eqn_file</code>) like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eqn =<span class="st"> &quot;</span>
-<span class="st"># CORE MODEL</span>
-<span class="st">## tree ; cat ;          mpt</span>
-<span class="st">      0 ;   0 ;           Do</span>
-<span class="st">      0 ;   0 ;     (1-Do)*g</span>
-<span class="st">      0 ;   1 ; (1-Do)*(1-g)</span>
 
-<span class="st">      1 ;   3 ;           Dn</span>
-<span class="st">      1 ;   2 ;     (1-Dn)*g</span>
-<span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span>
+<pre><code class="r">eqn = &quot;
+# CORE MODEL
+## tree ; cat ;          mpt
+      0 ;   0 ;           Do
+      0 ;   0 ;     (1-Do)*g
+      0 ;   1 ; (1-Do)*(1-g)
 
-<span class="st"># OPTIONAL RESTRICTIONS / SPECIFICATIONS</span>
-<span class="st">const_prob: g=0.5, Dn = .5</span>
-<span class="st">suppress_tau: Dn-, Do+</span>
+      1 ;   3 ;           Dn
+      1 ;   2 ;     (1-Dn)*g
+      1 ;   3 ; (1-Dn)*(1-g)
 
-<span class="st">##   Tree ; Cat ; Resp</span>
-<span class="st">resp:   0 ;   0 ; 0</span>
-<span class="st">resp:   0 ;   1 ; 1</span>
-<span class="st">resp:   1 ;   2 ; 0</span>
-<span class="st">resp:   1 ;   3 ; 1</span>
-<span class="st">&quot;</span></code></pre></div>
-<p>Note that we have suppressed the process completion time of a failure to detect a new word as “new” directly here in the equation file. We did that by providing the process name (“Dn”) and the output of the process (“-”). Different restrictions need to be separated by a comma. In general it is sufficient to provide only the first part with the equations:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eqn =<span class="st"> &quot;</span>
-<span class="st"># CORE MODEL</span>
-<span class="st">## tree ; cat ;          mpt</span>
-<span class="st">      0 ;   0 ;           Do</span>
-<span class="st">      0 ;   0 ;     (1-Do)*g</span>
-<span class="st">      0 ;   1 ; (1-Do)*(1-g)</span>
+# OPTIONAL RESTRICTIONS / SPECIFICATIONS
+const_prob: g=0.5, Dn = .5
+suppress_tau: Dn-, Do+
 
-<span class="st">      1 ;   3 ;           Dn</span>
-<span class="st">      1 ;   2 ;     (1-Dn)*g</span>
-<span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span>
-<span class="st">&quot;</span></code></pre></div>
+##   Tree ; Cat ; Resp
+resp:   0 ;   0 ; 0
+resp:   0 ;   1 ; 1
+resp:   1 ;   2 ; 0
+resp:   1 ;   3 ; 1
+&quot;
+</code></pre>
+
+<p>Note that we have suppressed the process completion time of a failure to detect a new word as &ldquo;new&rdquo; directly here in the equation file. We did that by providing the process name (&ldquo;Dn&rdquo;) and the output of the process (&ldquo;-&rdquo;). Different restrictions need to be separated by a comma. In general it is sufficient to provide only the first part with the equations:</p>
+
+<pre><code class="r">eqn = &quot;
+# CORE MODEL
+## tree ; cat ;          mpt
+      0 ;   0 ;           Do
+      0 ;   0 ;     (1-Do)*g
+      0 ;   1 ; (1-Do)*(1-g)
+
+      1 ;   3 ;           Dn
+      1 ;   2 ;     (1-Dn)*g
+      1 ;   3 ; (1-Dn)*(1-g)
+&quot;
+</code></pre>
+
 <p>The rest are optional restrictions / specifications. As mentioned above the <code>eqn_file</code> can be provided by a text file through a path to the file or written directly in R/Rstudio like above.</p>
-</div>
-<div id="model-files" class="section level2">
+
 <h2>3.2 Model files</h2>
+
 <p>Another way of specifying the same model is by providing a model file (<code>mdl_file</code>). This is not yet the model itself as needed for the <code>fit_rtmpt()</code> call, but much closer. It is based on the syntax developed by Singmann and Kellen (2013).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mdl =<span class="st"> &quot;</span>
-<span class="st"># CORE MODEL</span>
-<span class="st">## targets:</span>
-<span class="st">Do+(1-Do)*g</span>
-<span class="st">(1-Do)*(1-g)</span>
 
-<span class="st">## lure</span>
-<span class="st">(1-Dn)*g</span>
-<span class="st">Dn+(1-Dn)*(1-g)</span>
-<span class="st">&quot;</span></code></pre></div>
+<pre><code class="r">mdl = &quot;
+# CORE MODEL
+## targets:
+Do+(1-Do)*g
+(1-Do)*(1-g)
+
+## lure
+(1-Dn)*g
+Dn+(1-Dn)*(1-g)
+&quot;
+</code></pre>
+
 <p>Internally an <code>eqn_file</code> will be converted to a <code>mdl_file</code>. From that a text file will be written locally on your computer, used by the <code>fit_rtmpt()</code> call, and removed afterwards. In order to pass all the restrictions to this function call a <code>rtmpt_model</code> list is needed. These lists provide all the necessary information about the model.</p>
+
 <p>Restrictions in a <code>mdl_file</code> are slightly different from those in a <code>eqn_file</code>. In order to specify the different responses one has to write the response coding after the equations separated by a semicolon. The output of the <code>to_rtmpt_model()</code> call afterwards is also a little bit different from that using <code>eqn_file</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mdl =<span class="st"> &quot;</span>
-<span class="st"># CORE MODEL</span>
-<span class="st">## MDL         ; RESP</span>
 
-<span class="st">### targets</span>
-<span class="st">Do+(1-Do)*g    ;    0</span>
-<span class="st">(1-Do)*(1-g)   ;    1</span>
+<pre><code class="r">mdl = &quot;
+# CORE MODEL
+## MDL         ; RESP
 
-<span class="st">### lure</span>
-<span class="st">(1-Dn)*g       ;    0</span>
-<span class="st">Dn+(1-Dn)*(1-g);    1</span>
+### targets
+Do+(1-Do)*g    ;    0
+(1-Do)*(1-g)   ;    1
 
-<span class="st"># OPTIONAL RESTRICTIONS</span>
-<span class="st">const_prob: g=0.5, Dn = .5</span>
-<span class="st">suppress_tau: Dn-, Do+</span>
-<span class="st">&quot;</span>
-<span class="kw">to_rtmpt_model</span>(<span class="dt">mdl_file =</span> mdl)</code></pre></div>
+### lure
+(1-Dn)*g       ;    0
+Dn+(1-Dn)*(1-g);    1
+
+# OPTIONAL RESTRICTIONS
+const_prob: g=0.5, Dn = .5
+suppress_tau: Dn-, Do+
+&quot;
+to_rtmpt_model(mdl_file = mdl)
+</code></pre>
+
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -468,77 +631,86 @@ rtmpt_out &lt;-<span class="st"> </span><span class="kw">fit_rtmpt</span>(<span 
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each response number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 2 distinct response(s) assumed, namely [ 0, 1 ].
-## -----------------------------------</code></pre>
+## -----------------------------------
+</code></pre>
+
 <p>Here we have four columns in the <code>responses</code> data frame instead of the three we had previously. This is produced because the TREE and CAT labels are generated by the <code>to_rtmpt_model()</code> function rather than specified by ourselves in a <code>mdl_file</code>. The additional <code>MDL</code> column makes it easier to interpret the output.</p>
-</div>
-<div id="restrictions" class="section level2">
+
 <h2>3.3 Restrictions</h2>
+
 <p>As we just saw the restrictions can be provided by using <code>const_prob</code> and <code>suppress_tau</code> for holding process probabilities to constants and suppressing process completion times, respectively. There are other keywords for holding process probabilities constant: <code>constant_prob</code>, <code>const_probabilities</code>, <code>constant_probabilities</code>, <code>const</code>, <code>constant</code>. Other keywords for suppressing process completion times are: <code>suppr_lambda</code>, <code>suppr_rate</code>, <code>suppr_process</code>, <code>suppr_tau</code>, <code>suppress</code>. Keywords must be proceeded by a colon.</p>
+
 <p>Note that it is not possible to make inequality statements, neither for process probabilities nor completion times. It is also not possible to set process completion times to constants. Furthermore, holding a process probability to a constant requires an equal sign between the process name and the value. Values have to be larger than zero and lower than one. Suppressing a process completion time require a minus or a plus sign proceeding the process name. Multiple restrictions of the same type need to be separated by a comma.</p>
-</div>
-</div>
-<div id="data-transformation" class="section level1">
+
 <h1>4 Data transformation</h1>
-<div id="labels-in-data-file" class="section level2">
+
 <h2>4.1 Labels in data file</h2>
-<p>When labels are used in the data set one has to be cautious when specifying the equation file. The labels of the trees and categories in the equation file must match those of the data. For example, if the tree labels “target” and “lure” are used in the data set, one has to use those also in the equation file. If you specify a model file instead of the equation file the labels in the data set need to be changed to numerics. Otherwise no mapping between those can be done.</p>
-</div>
-<div id="numbers-in-data-file" class="section level2">
+
+<p>When labels are used in the data set one has to be cautious when specifying the equation file. The labels of the trees and categories in the equation file must match those of the data. For example, if the tree labels &ldquo;target&rdquo; and &ldquo;lure&rdquo; are used in the data set, one has to use those also in the equation file. If you specify a model file instead of the equation file the labels in the data set need to be changed to numerics. Otherwise no mapping between those can be done.</p>
+
 <h2>4.2 Numbers in data file</h2>
+
 <p>When numbers are used in the data set for the trees and categories it is best to also check that they match with the ones used in the equation / model file, but the program checks for the order. So for example, if you are using the numbers {1, 2, 3, 4} for you four trees in the data set and {0, 1, 2, 3} in the equation file (which is the standard for model files anyway) they will be mapped through the order. The new data, that can be used, will have a zero instead of a one, a one instead of a two, and so on.</p>
+
 <p>One could use labels in the equation file even though you are using numbers in the data file, but it is <strong>strongly advised against</strong> it. It will be assumed, that the order in which you specify the equations matches the order of the numbers in the data file starting from the lowest to the highest. So if you are using again {1, 2, 3, 4} for the four trees, then the first tree you need to define in the equation files (no matter what label you use) must correspond to tree 1 in the data and so on.</p>
-</div>
-</div>
-<div id="data-simulation-and-simulation-based-calibration" class="section level1">
+
 <h1>5 Data simulation and simulation-based calibration</h1>
-<div id="data-simulation" class="section level2">
+
 <h2>Data simulation</h2>
+
 <p>With the function <code>sim_rtmpt_data()</code> it is possible to generate data from an RT-MPT model. Required is a model object generated with the function <code>to_rtmpt_model()</code>, a random seed number, the number of subjects, the number of trials per tree in the model, and a named list of parameters. Here it is also possible to set the mean of <code>mean_of_mu_alpha</code>; A value of zero refers to the probability of <code>0.5</code>. If a given probability is desired, say <code>0.4</code>, then one might specify <code>params &lt;- list(mean_of_mu_alpha = qnorm(.4))</code>. If a mean process time of <code>200</code> ms is required, one might specify <code>params &lt;- list(mean_of_exp_mu_beta = 1000/200)</code>. The mean parameter of the motor times is easier to transform, since they are already on the second scale; Just write <code>500/1000</code> if your mean motor time should be <code>500</code> ms. The code below shows a more or less good balance between too large variances (leading to too many extreme values like probabilities of zero and one and RTs of zero) and too small variances (unrealistic data).</p>
+
 <p>Important: If no variances are specified in the <code>params</code> argument, then the corresponding mean values are fixed, else they will be randomly drawn.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># randomly drawn group-level mean values</span>
-mdl_2HTM &lt;-<span class="st"> &quot;</span>
-<span class="st"># targets</span>
-<span class="st">do+(1-do)*g     ; 0</span>
-<span class="st">(1-do)*(1-g)    ; 1</span>
 
-<span class="st"># lures</span>
-<span class="st">(1-dn)*g        ; 0</span>
-<span class="st">dn+(1-dn)*(1-g) ; 1</span>
+<pre><code class="r"># randomly drawn group-level mean values
+mdl_2HTM &lt;- &quot;
+# targets
+do+(1-do)*g     ; 0
+(1-do)*(1-g)    ; 1
 
-<span class="st"># do: detect old; dn: detect new; g: guess</span>
-<span class="st">&quot;</span>
+# lures
+(1-dn)*g        ; 0
+dn+(1-dn)*(1-g) ; 1
 
-model &lt;-<span class="st"> </span><span class="kw">to_rtmpt_model</span>(<span class="dt">mdl_file =</span> mdl_2HTM)
+# do: detect old; dn: detect new; g: guess
+&quot;
 
-<span class="co"># random group-level parameters</span>
-params &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">mean_of_mu_alpha =</span> <span class="dv">0</span>, 
-               <span class="dt">var_of_mu_alpha =</span> <span class="dv">1</span>,         <span class="co"># delete this line to fix mean_of_mu_alpha to 0</span>
-               <span class="dt">mean_of_exp_mu_beta =</span> <span class="dv">10</span>, 
-               <span class="dt">var_of_exp_mu_beta =</span> <span class="dv">10</span>,     <span class="co"># delete this line to fix mean_of_exp_mu_beta to 10</span>
-               <span class="dt">mean_of_mu_gamma =</span> <span class="fl">0.5</span>, 
-               <span class="dt">var_of_mu_gamma =</span> <span class="fl">0.0025</span>,    <span class="co"># delete this line to fix mean_of_mu_gamma to 0.5</span>
-               <span class="dt">mean_of_omega_sqr =</span> <span class="fl">0.005</span>, 
-               <span class="dt">var_of_omega_sqr =</span> <span class="fl">0.000025</span>, <span class="co"># delete this line to fix mean_of_omega_sqr to 0.005</span>
-               <span class="dt">df_of_sigma_sqr =</span> <span class="dv">10</span>, 
-               <span class="dt">sf_of_scale_matrix_SIGMA =</span> <span class="fl">0.1</span>, 
-               <span class="dt">sf_of_scale_matrix_GAMMA =</span> <span class="fl">0.01</span>, 
-               <span class="dt">prec_epsilon =</span> <span class="dv">10</span>,
-               <span class="dt">add_df_to_invWish =</span> <span class="dv">5</span>)
+model &lt;- to_rtmpt_model(mdl_file = mdl_2HTM)
 
-sim_dat &lt;-<span class="st"> </span><span class="kw">sim_rtmpt_data</span>(model, <span class="dt">seed =</span> <span class="dv">123</span>, <span class="dt">n.subj =</span> <span class="dv">40</span>, <span class="dt">n.trials =</span> <span class="dv">30</span>, <span class="dt">params =</span> params)
-<span class="kw">head</span>(sim_dat<span class="op">$</span>data_frame)</code></pre></div>
+# random group-level parameters
+params &lt;- list(mean_of_mu_alpha = 0, 
+               var_of_mu_alpha = 1,         # delete this line to fix mean_of_mu_alpha to 0
+               mean_of_exp_mu_beta = 10, 
+               var_of_exp_mu_beta = 10,     # delete this line to fix mean_of_exp_mu_beta to 10
+               mean_of_mu_gamma = 0.5, 
+               var_of_mu_gamma = 0.0025,    # delete this line to fix mean_of_mu_gamma to 0.5
+               mean_of_omega_sqr = 0.005, 
+               var_of_omega_sqr = 0.000025, # delete this line to fix mean_of_omega_sqr to 0.005
+               df_of_sigma_sqr = 10, 
+               sf_of_scale_matrix_SIGMA = 0.1, 
+               sf_of_scale_matrix_GAMMA = 0.01, 
+               prec_epsilon = 10,
+               add_df_to_invWish = 5)
+
+sim_dat &lt;- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
+head(sim_dat$data_frame)
+</code></pre>
+
 <pre><code>##   subj group tree cat  rt
 ## 1    0     0    0   0 560
 ## 2    0     0    0   0 456
 ## 3    0     0    0   0 538
 ## 4    0     0    0   0 427
 ## 5    0     0    0   1 420
-## 6    0     0    0   0 574</code></pre>
-</div>
-<div id="simulation-based-calibration" class="section level2">
+## 6    0     0    0   0 574
+</code></pre>
+
 <h2>5.1 Simulation-based calibration</h2>
-<p>With the function <code>fit_rtmpt_SBC()</code> it is possible to generate data and fit the model to that data using the same priors / ground truths. The main output of this function will be the rank statistic for each parameter in the model, which is needed for the simulation-based calibration (SBC) method by Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). For example, if this function is repeated, say <code>2000</code> times, with different <code>seeds</code> one might add all the rank statistics to a matrix (<code>2000</code> rows and number of parameters as columns) and then calculate the pearsons’ chi-squared statistic. This allows one to test for how many of the parameters the rank statistics are not uniformly distributed. A value of about <code>0.05</code> is typical for a test with an alpha level of <code>0.05</code>.</p>
+
+<p>With the function <code>fit_rtmpt_SBC()</code> it is possible to generate data and fit the model to that data using the same priors / ground truths. The main output of this function will be the rank statistic for each parameter in the model, which is needed for the simulation-based calibration (SBC) method by Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). For example, if this function is repeated, say <code>2000</code> times, with different <code>seeds</code> one might add all the rank statistics to a matrix (<code>2000</code> rows and number of parameters as columns) and then calculate the pearsons&#39; chi-squared statistic. This allows one to test for how many of the parameters the rank statistics are not uniformly distributed. A value of about <code>0.05</code> is typical for a test with an alpha level of <code>0.05</code>.</p>
+
 <p>Here is an example of one replication of the SBC procedure:</p>
+
 <pre><code>mdl_2HTM &lt;- &quot;
 # targets
 d+(1-d)*g     ; 0
@@ -567,8 +739,11 @@ params &lt;- list(mean_of_exp_mu_beta = 10,
 
 SBC_out &lt;- fit_rtmpt_SBC(model, seed = 123, prior_params = params)
 SBC_out$ranks
+
 </code></pre>
-<p>With the following code it would essentially be possible to calculate the rank statistics of each parameter and then test it with the pearsons’ chi-squared test, but much is not considered here (e.g. the convergence and the effective sample size).</p>
+
+<p>With the following code it would essentially be possible to calculate the rank statistics of each parameter and then test it with the pearsons&#39; chi-squared test, but much is not considered here (e.g. the convergence and the effective sample size).</p>
+
 <pre><code># For 2000 replications
 ## This takes too long to run and in addition, Rhat should always be 
 ## checked as well as the effective sample size.
@@ -580,27 +755,32 @@ for (r in 1:R) {
   rank_mat &lt;- rbind(rank_mat, SBC_out$ranks)
 }
 
-## pearsons' chi-square for testing uniformity
+## pearsons&#39; chi-square for testing uniformity
 x &lt;- apply(rank_mat[1:R,], 2, table)
 expect &lt;- R/100 # 100 = number of bins/cells (0:99)
 pearson &lt;- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
 z95 &lt;- qchisq(0.95, 99) # 99 = degrees of freedom
-sum(pearson&gt;z95) / length(pearson)</code></pre>
-<p>With the following code a rank matrix is generated from a uniform distribution and then tested for uniformity:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">R &lt;-<span class="st"> </span><span class="dv">2000</span>
-rand_rankmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">99</span>, R<span class="op">*</span><span class="dv">393</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>), <span class="dt">nrow =</span> R, <span class="dt">ncol =</span> <span class="dv">393</span>)
+sum(pearson&gt;z95) / length(pearson)
+</code></pre>
 
-## pearsons' chi-square for testing uniformity
-x &lt;-<span class="st"> </span><span class="kw">apply</span>(rand_rankmat[<span class="dv">1</span><span class="op">:</span>R,], <span class="dv">2</span>, table)
-expect &lt;-<span class="st"> </span>R<span class="op">/</span><span class="dv">100</span> <span class="co"># 100 = number of bins/cells (0:99)</span>
-pearson &lt;-<span class="st"> </span><span class="kw">apply</span>(<span class="dt">X =</span> x, <span class="dt">MARGIN =</span> <span class="dv">2</span>, <span class="dt">FUN =</span> <span class="cf">function</span>(x) {<span class="kw">sum</span>((x<span class="op">-</span>expect)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>expect)})
-z95 &lt;-<span class="st"> </span><span class="kw">qchisq</span>(<span class="fl">0.95</span>, <span class="dv">99</span>) <span class="co"># 99 = degrees of freedom</span>
-<span class="kw">sum</span>(pearson<span class="op">&gt;</span>z95) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(pearson)</code></pre></div>
-<pre><code>## [1] 0.05343511</code></pre>
-</div>
-</div>
-<div id="references" class="section level1">
+<p>With the following code a rank matrix is generated from a uniform distribution and then tested for uniformity:</p>
+
+<pre><code class="r">R &lt;- 2000
+rand_rankmat &lt;- matrix(data = sample(0:99, R*393, replace=TRUE), nrow = R, ncol = 393)
+
+## pearsons&#39; chi-square for testing uniformity
+x &lt;- apply(rand_rankmat[1:R,], 2, table)
+expect &lt;- R/100 # 100 = number of bins/cells (0:99)
+pearson &lt;- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
+z95 &lt;- qchisq(0.95, 99) # 99 = degrees of freedom
+sum(pearson&gt;z95) / length(pearson)
+</code></pre>
+
+<pre><code>## [1] 0.05343511
+</code></pre>
+
 <h1>References</h1>
+
 <ul>
 <li>Heck, D. W., Arnold, N. R., &amp; Arnold, D. (2018). TreeBUGS: An R package for hierarchical multinomial-processing-tree modeling. Behavior Research Methods, 50(1), 264-284. doi: 10.3758/s13428-017-0869-7</li>
 <li>Hu, X. (1999). Multinomial processing tree models: An implementation. Behavior Research Methods, Instruments, &amp; Computers, 31(4), 689-695. doi: 10.3758/BF03207714</li>
@@ -608,22 +788,7 @@ z95 &lt;-<span class="st"> </span><span class="kw">qchisq</span>(<span class="fl
 <li>Singmann, H., &amp; Kellen, D. (2013). MPTinR: Analysis of multinomial processing tree models in R. Behavior Research Methods, 45(2), 560-575. doi: 10.3758/s13428-012-0259-0</li>
 <li>Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2018). Validating Bayesian inference algorithms with simulation-based calibration. arXiv preprint arXiv:1804.06788.</li>
 </ul>
-</div>
-
-
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 </body>
+
 </html>

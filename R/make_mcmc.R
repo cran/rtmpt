@@ -54,6 +54,7 @@ labelnames <- function(data_info) {
   for (s in 1:S) label <- c(label, paste0(Prime[1], "_", probs_string, "[", s-1, "]"))
   index <- index + (S*P)
   ## beta'
+  beta_ind <- (index+1):(index+S*Plam)
   for (s in 1:S) label <- c(label, paste0(Prime[2], "_", all_string[(P+1):Ptot], "_", 
                                           c(rep(sig[2], Pm), rep(sig[3], Pp)), "[", s-1, "]"))
   index <- index + (S*Plam)
@@ -81,7 +82,7 @@ labelnames <- function(data_info) {
   label <- c(label, "log_lik")
   index = index + 1
   
-  return(label)
+  return(list(label=label, beta_ind=beta_ind))
 
 }
 
@@ -153,6 +154,7 @@ labelnames_keep <- function(data_info) {
   }
   index <- index + (S*P)
   ## beta'
+  beta_ind <- (index+1):(index+S*Plam)
   for (s in 1:S) {
     if (subj_flag) s_label <- data_info$transformation$subj$old[s] else s_label <- s-1
     label <- c(label, paste0(Prime[2], "_", all_string[(P+1):Ptot], "_", 
@@ -190,7 +192,7 @@ labelnames_keep <- function(data_info) {
   label <- c(label, "log_lik")
   index = index + 1
   
-  return(label)
+  return(list(label=label, beta_ind=beta_ind))
   
 }
 
@@ -239,8 +241,19 @@ make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   
   # label the samples
   if (keep) {
-    varnames(samples) <- labelnames_keep(data_info = data_info)
-  } else varnames(samples) <- labelnames(data_info = data_info)
+    label_list <- labelnames_keep(data_info = data_info)
+    varnames(samples) <- label_list$label
+  } else {
+    label_list <- labelnames(data_info = data_info)
+    varnames(samples) <- label_list$label
+  }  
+  
+  # change beta_prime to log-scale
+  for (nc in 1:Nchains) {
+    for (ind in label_list$beta_ind) {
+	  samples[[nc]][,ind] <- log(samples[[nc]][,ind])
+	}
+  }
   
   
   return(samples)

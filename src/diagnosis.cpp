@@ -268,7 +268,7 @@ void make_tij_for_one_trial_new(trial one, double *rhos, double *lambdas, double
 				for (int ir = 0; ir != complength; ir++) Rprintf("%15.4g", lams[ir]); Rprintf("\n");
 				pij[k] = GSL_NEGINF;
 			}
-			  
+
 			free(loglams);
 		}*/
 		if ((complength >= 2) /*&& (PFAD_INDEX(j, k) > -1)*/) {

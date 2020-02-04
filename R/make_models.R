@@ -82,9 +82,14 @@ make_raw_model <- function(line_char, membership, form) {
         m$mdl <- rep("", len)
         for ( ind in min(index):max(index) ) {
           row_char <- line_char[ind]
-          output <- fnc5(row_char = row_char)
-          m$mdl[ind-min(index)+1] <- output$text
-          m$resp[ind-min(index)+1] <- output$resp
+          if (ind %in% index) {
+            output <- fnc5(row_char = row_char)
+            m$mdl[ind-min(index)+1] <- output$text
+            m$resp[ind-min(index)+1] <- output$resp
+          } else {
+            m$mdl[ind-min(index)+1] <- ""
+            m$resp[ind-min(index)+1] <- NA
+          }
         }
       }
     }

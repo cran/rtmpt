@@ -74,7 +74,8 @@ set_params <- function(model, parameter, names, values = NA) {
   if ( !(parameter %in% c("probs", "tau_minus", "tau_plus")) ) stop("Allowed \"parameters\" are \"probs\", \"tau_minus\" or \"tau_plus\".")
   if (!is.character(names)) stop("\"names\" must be characters.")
   if (!is.numeric(values) && !is.logical(values)) stop("\"values\" must be numerical.")
-  if (length(names) != length(values)) stop("Length of \"names\" and \"values\" must match.")
+  if (length(values)!=1 & length(names) != length(values)) stop("Length of \"names\" and \"values\" must match.")
+  if (length(values)==1 & length(names) != length(values)) values <- rep(values, length(names))
   if (any(!(names %in% names(params_list$probs)))) stop("\"names\" do not match with the names of the processes in \"params\".")
   
   if (parameter == "probs") {

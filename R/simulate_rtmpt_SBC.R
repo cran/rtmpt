@@ -87,7 +87,6 @@
 #'                                       n.trials = 30, params = params)
 #' 
 #' @author Raphael Hartmann
-#' @importFrom LaplacesDemon rinvchisq rinvwishart rmvn
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom stats rgamma rnorm pnorm rexp
 sim_rtmpt_data_SBC<- function(model, 
@@ -192,62 +191,7 @@ sim_rtmpt_data_SBC<- function(model,
   SF_cov_LAM = params$sf_of_scale_matrix_GAMMA
   epsilon_prec = params$prec_epsilon
   add_COV_df = params$add_df_to_invWish - 1
-  
-  
-  
-  # READ INFOS OF INFOFILE ----
-  readinfofile <- function(infofile) {
-    all_lines <- readLines(infofile)
-    len_a_l <- length(all_lines)
-    #charstring <- system(paste("gawk 'END {print}' ", infofile), intern = TRUE)
-    charstring <- all_lines[len_a_l]
-    ProbNames <- strsplit(charstring, "\\s+")[[1]]
-    rm(charstring)
-    
-    #charstring <- system(paste("gawk 'NR==1' ", infofile), intern = TRUE)
-    charstring <- all_lines[1]
-    infos <- as.numeric(strsplit(charstring, "\\s+")[[1]])
-    rm(charstring)
-    NTrees <- infos[4]
-    NCateg <- infos[5]
-    if (NCateg/NTrees > 2) stop("Currently this function can only be used with models containing two response categories per tree")
-    NParam <- infos[2]
-    MaxNode <- infos[3]
-    MaxBranch <- infos[1]
-    
-    #lineNR <- paste0("'NR==", NTrees+4, "'")
-    #charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
-    charstring <- all_lines[NTrees+4]
-    nodespertree <- as.numeric(strsplit(charstring, "\\s+")[[1]])
-    rm(charstring)
-    
-    tree2node <- list()
-    for (i in 3+(1:NTrees)) {
-      tmplist <- list()
-      #lineNR <- paste0("'NR==", i, "'")
-      #charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
-      charstring <- all_lines[i]
-      tmplist$nodes <- as.numeric(strsplit(charstring, "\\s+")[[1]])
-      tmplist$NRnodes <- nodespertree[i-3]
-      tree2node[[i-3]] <- tmplist
-      rm(charstring, tmplist)
-    }
-    rm(nodespertree, i)
-    
-    #lineNR <- paste0("'NR==", NTrees+5, "'")
-    #charstring <- system(paste("gawk ",lineNR, " ", infofile), intern = TRUE)
-    charstring <- all_lines[NTrees+5]
-    nodeinbranch <- as.numeric(strsplit(charstring, "\\s+")[[1]])
-    rm(charstring)
-    infolist <- list(infofile = infofile, infos = infos, 
-                     tree2node = tree2node, MaxNode = MaxNode, 
-                     NParam = NParam, MaxBranch = MaxBranch,
-                     NTrees = NTrees, NCateg = NCateg, 
-                     NodeInBranch = nodeinbranch,
-                     ProbNames = ProbNames)
-    return(infolist)
-  }
-  
+   
   
   
   # ASSIGN PROCESS PARAMS ----
@@ -605,13 +549,13 @@ sim_rtmpt_data_SBC<- function(model,
             index <- infolist$tree2node[[t]]$nodes[n]
             if (ProbsList$NiB_list[[n]][Categ+add, bran] == 1) {
               rate <- ProcessList$rates_plus[index, s]
-              if(rate==0) warning("rate 0 produced")
-              PT_TrialParam[x, index+infolist$NParam] <- PT_TrialParam[x, index+infolist$NParam] + rexp(n = 1, rate = rate)
+              #if(rate==0) warning("rate 0 produced")
+              PT_TrialParam[x, index+infolist$NParam] <- PT_TrialParam[x, index+infolist$NParam] + ifelse(rate==0, 0, rexp(n = 1, rate = rate))
             } 
             if (ProbsList$NiB_list[[n]][Categ+add, bran] == -1) {
               rate <- ProcessList$rates_minus[index, s]
-              if(rate==0) warning("rate 0 produced")
-              PT_TrialParam[x, index] <- PT_TrialParam[x, index] + rexp(n = 1, rate = rate)
+              #if(rate==0) warning("rate 0 produced")
+              PT_TrialParam[x, index] <- PT_TrialParam[x, index] + ifelse(rate==0, 0, rexp(n = 1, rate = rate))
             }
           }
           ## Execution Times
@@ -651,6 +595,7 @@ sim_rtmpt_data_SBC<- function(model,
   set.seed(seed)
   
   infolist <- readinfofile(infofile = infofile)
+  if (infolist$NCateg/infolist$NTrees > 2) stop("Currently this function can only be used with models containing two response categories per tree")
   ProcessList <- ProcessAssign(Nproc = Nproc, Nprob = Nprob, Nminus = Nminus, Nplus = Nplus, 
                                Nsubj = Nsubj, epsilon = epsilon_prec, SF_P = SF_cov_SIG, 
                                mu_beta_shape = e_mu_beta_shape, mu_beta_rate = e_mu_beta_rate, 

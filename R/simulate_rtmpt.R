@@ -1,4 +1,61 @@
 
+# multivariate normal distribution
+# Copied from the R package LaplacesDemon
+#' @importFrom matrixcalc is.positive.definite
+rmvn <- function(n=1, mu=rep(0,k), Sigma) {
+  mu <- rbind(mu)
+  if(missing(Sigma)) Sigma <- diag(ncol(mu))
+  if(!is.matrix(Sigma)) Sigma <- matrix(Sigma)
+  if(!is.positive.definite(Sigma))
+    stop("Matrix Sigma is not positive-definite.")
+  k <- ncol(Sigma)
+  if(n > nrow(mu)) mu <- matrix(mu, n, k, byrow=TRUE)
+  z <- matrix(rnorm(n*k),n,k) %*% chol(Sigma)
+  x <- mu + z
+  return(x)
+}
+
+# scaled inverse chi-square distribution
+# Copied from the R package LaplacesDemon
+#' @importFrom stats rchisq
+rinvchisq <- function(n, df, scale=1/df) {
+  df <- rep(df, len=n); scale <- rep(scale, len=n)
+  if(any(df <= 0)) stop("The df parameter must be positive.")
+  if(any(scale <= 0)) stop("The scale parameter must be positive.")
+  z <- rchisq(n, df=df)
+  z[which(z == 0)] <- 1e-100
+  x <- (df*scale) / z
+  return(x)
+}
+
+# scaled (inverse) wishart distribution
+# Copied from the R package LaplacesDemon
+#' @importFrom matrixcalc is.positive.semi.definite
+rwishartc <- function(nu, S) {
+  if(!is.matrix(S)) S <- matrix(S)
+  if(!is.positive.semi.definite(S))
+    stop("Matrix S is not positive-semidefinite.")
+  if(nu < nrow(S)) {
+    stop("The nu parameter is less than the dimension of S.")}
+  k <- nrow(S)
+  Z <- matrix(0, k, k)
+  x <- rchisq(k, nu:{nu - k + 1})
+  x[which(x == 0)] <- 1e-100
+  diag(Z) <- sqrt(x)
+  if(k > 1) {
+    kseq <- 1:(k-1)
+    Z[rep(k*kseq, kseq) +
+        unlist(lapply(kseq, seq))] <- rnorm(k*{k - 1}/2)
+  }
+  return(Z %*% chol(S))
+}
+rinvwishart <- function(nu, S) {
+  return(chol2inv(rwishartc(nu, chol2inv(chol(S)))))
+}
+
+
+
+
 # READ INFOS OF INFOFILE ----
 readinfofile <- function(infofile) {
   all_lines <- readLines(infofile)
@@ -14,7 +71,6 @@ readinfofile <- function(infofile) {
   rm(charstring)
   NTrees <- infos[4]
   NCateg <- infos[5]
-  if (NCateg/NTrees > 2) stop("Currently this function can only be used with models containing two response categories per tree")
   NParam <- infos[2]
   MaxNode <- infos[3]
   MaxBranch <- infos[1]
@@ -109,13 +165,13 @@ readinfofile <- function(infofile) {
 #'           distributed within \code{[-1, 1]}.
 #'     \item \code{SIGMA}: Variance-covariance matrix of the process-related parameters. It must match the number of process-related parameters to be estimated. 
 #'           If scalars or vectors are given, they will be transformed into diagonal matrices using \code{diag(SIGMA)}.
-#'           If not specified it will be randomly generated using \code{diag(xi)\%*\%LaplacesDemon::rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
+#'           If not specified it will be randomly generated using \code{diag(xi)\%*\%rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
 #'           process-related group-level parameters to be estimated plus \code{add_df_to_invWish}, S is the identity matrix multiplied by 
 #'           \code{sf_of_scale_matrix_SIGMA}, and xi (randomly generated from N(\code{1, 1/prec_epsilon})) are the scaling factors for the scaled inverse wishart distribution.
 #'           If \code{SIGMA} is used, \code{sf_of_scale_matrix_SIGMA} and \code{add_df_to_invWish} will be ignored for the process-related parameters.
 #'     \item \code{GAMMA}: Variance-covariance matrix of the motor time parameters. It must match the number of motor time parameters to be estimated. 
 #'           If scalars or vectors are given, they will be transformed into diagonal matrices using \code{diag(SIGMA)}.
-#'           If not specified it will be randomly generated using \code{diag(xi)\%*\%LaplacesDemon::rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
+#'           If not specified it will be randomly generated using \code{diag(xi)\%*\%rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
 #'           motor time group-level parameters to be estimated plus \code{add_df_to_invWish}, S is the identity matrix multiplied by 
 #'           \code{sf_of_scale_matrix_GAMMA}, and xi (randomly generated from N(\code{1, 1/prec_epsilon})) are the scaling factors for the scaled inverse wishart distribution.
 #'           If \code{GAMMA} is used, \code{sf_of_scale_matrix_GAMMA} and \code{add_df_to_invWish} will be ignored for the motor time parameters.
@@ -182,7 +238,7 @@ readinfofile <- function(infofile) {
 #' 
 #' @author Raphael Hartmann
 #' @export
-#' @importFrom LaplacesDemon is.positive.definite rinvchisq rinvwishart rmvn
+#' @importFrom matrixcalc is.positive.definite
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom stats rgamma rnorm pnorm rexp
 sim_rtmpt_data <- function(model, 
@@ -219,8 +275,8 @@ sim_rtmpt_data <- function(model,
   some_const <- any(!is.na(model$params$probs[1,]))
   PositionProb <- ifelse(some_const, which(!is.na(model$params$probs[1,])), 0)
   ConstProb <- ifelse(some_const, model$params$probs[1, PositionProb], 0)
-  SupprMinus <- ifelse(any(!is.na(model$params$taus[1,])), which(!is.na(model$params$taus[1,])), 0)
-  SupprPlus <- ifelse(any(!is.na(model$params$taus[2,])), which(!is.na(model$params$taus[2,])), 0)
+  if (any(!is.na(model$params$taus[1,]))) {SupprMinus <- which(!is.na(model$params$taus[1,]))} else {SupprMinus <- 0}
+  if (any(!is.na(model$params$taus[2,]))) {SupprPlus <- which(!is.na(model$params$taus[2,]))} else {SupprPlus <- 0}
   SIGMA_flag <- FALSE
   GAMMA_flag <- FALSE
   alpha_flag <- ifelse(exists("var_of_mu_alpha", where = params), TRUE, FALSE)
@@ -726,13 +782,13 @@ sim_rtmpt_data <- function(model,
             index <- infolist$tree2node[[t]]$nodes[n]
             if (ProbsList$NiB_list[[n]][Categ+add, bran] == 1) {
               rate <- ProcessList$rates_plus[index, s]
-              if(rate==0) warning("rate 0 produced")
-              PT_TrialParam[x, index+infolist$NParam] <- PT_TrialParam[x, index+infolist$NParam] + rexp(n = 1, rate = rate)
+              #if(rate==0) warning("rate 0 produced")
+              PT_TrialParam[x, index+infolist$NParam] <- PT_TrialParam[x, index+infolist$NParam] + ifelse(rate==0, 0, rexp(n = 1, rate = rate))
             } 
             if (ProbsList$NiB_list[[n]][Categ+add, bran] == -1) {
               rate <- ProcessList$rates_minus[index, s]
-              if(rate==0) warning("rate 0 produced")
-              PT_TrialParam[x, index] <- PT_TrialParam[x, index] + rexp(n = 1, rate = rate)
+              #if(rate==0) warning("rate 0 produced")
+              PT_TrialParam[x, index] <- PT_TrialParam[x, index] + ifelse(rate==0, 0, rexp(n = 1, rate = rate))
             }
           }
           ## Execution Times
@@ -772,6 +828,7 @@ sim_rtmpt_data <- function(model,
   set.seed(seed)
   
   infolist <- readinfofile(infofile = infofile)
+  if (infolist$NCateg/infolist$NTrees > 2) stop("Currently this function can only be used with models containing two response categories per tree")
   ProcessList <- ProcessAssign(Nproc = Nproc, Nprob = Nprob, Nminus = Nminus, Nplus = Nplus, 
                                Nsubj = Nsubj, epsilon = epsilon_prec, SF_P = SF_cov_SIG, 
                                mu_alpha_mean = mean_of_mu_alpha, mu_alpha_var = params$var_of_mu_alpha, 

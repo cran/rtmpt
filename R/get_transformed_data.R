@@ -190,7 +190,7 @@ print.rtmpt_data <- function(x, ...) {
   cat("\nDATA TRANSFORMATION OVERVIEW\n\n")
   
   cat("\nReordered variables:\nsubj, group, tree, cat, rt\n")
-  cat("* NOTE1: Additional variables are attached below these five.\n")
+  cat("* NOTE1: Additional variables are attached next to these five.\n")
   cat("* NOTE2: To see your data frame use <object name>$data.\n")
   cat("--------------------\n")
   

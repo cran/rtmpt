@@ -55,7 +55,8 @@ set_resps <- function(model, tree, categories, values = 0) {
   if (!(tree %in% resps_df$TREE)) stop("\"tree\" name must match names used in \"model$responses$TREE\".")
   # if (!is.character(categories)) stop("\"categories\" must be characters.")
   if (!is.numeric(values)) stop("\"values\" must be numerical.")
-  if (length(categories) != length(values)) stop("Length of \"categories\" and \"values\" must match.")
+  if (length(values)!=1 & length(categories) != length(values)) stop("Length of \"categories\" and \"values\" must match.")
+  if (length(values)==1 & length(categories) != length(values)) values <- rep(values, length(categories))
   if (any(!(categories %in% resps_df$CAT))) stop("\"categories\" do not match with the names used in \"model$responses$CAT\".")
   if (!all(categories == unique(categories))) {
     uniq_cats <- unique(categories)

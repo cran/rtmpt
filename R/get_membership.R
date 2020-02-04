@@ -35,7 +35,7 @@ get_membership <- function(line_char, form) {
       # prob_key <- c("prob", "porbabilities", "probability")
       # minus_key <- c("lambda_minus", "rate_minus", "process_minus", "tau_minus")
       # plus_key <- c("lambda_plus", "rate_plus", "process_minus", "tau_plus")
-      suppr_key <- c("suppress_lambda", "suppress_rate", "suppress_process", "suppress_tau",
+      suppr_key <- c("suppr", "suppress_lambda", "suppress_rate", "suppress_process", "suppress_tau",
                      "suppr_lambda", "suppr_rate", "suppr_process", "suppr_tau", "suppress")
       const_key <- c("const_prob", "constant_prob", "const_probabilities", "constant_probabilities", "const")
       resp_key <- c("resp", "gamma", "mean", "responses")

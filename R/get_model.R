@@ -137,6 +137,14 @@ to_rtmpt_model <- function(eqn_file = NULL, mdl_file = NULL) {
   
   class(model) <- "rtmpt_model"
   
+  
+  # test model for structure
+  mdl_txt <- gsub("\\\\", "/", tempfile(pattern = "model", tmpdir = tempdir(), fileext = ".txt"))
+  mdl_info <- gsub("\\\\", "/", tempfile(pattern = "model", tmpdir = tempdir(), fileext = ".info"))
+  infofile <- get_infofile(model, mdl_txt = mdl_txt, mdl_info = mdl_info)
+  
+  
+  # return
   return(model)
   
 }

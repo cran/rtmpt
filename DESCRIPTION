@@ -1,5 +1,5 @@
 Package: rtmpt
-Version: 0.1-17
+Version: 0.1-18
 Title: Fitting RT-MPT Models
 Authors@R: c(person("Raphael", "Hartmann", email = "raphael.hartmann@protonmail.com", role = c("aut", "cre")),
              person("Karl C.", "Klauer", email="christoph.klauer@psychologie.uni-freiburg.de", role=c("cph", "aut", "ctb", "ths")),
@@ -11,7 +11,7 @@ Author: Raphael Hartmann [aut, cre],
   Jean Marie Linhart [cph]
 Maintainer: Raphael Hartmann <raphael.hartmann@protonmail.com>
 Depends: R (>= 3.0.0)
-Imports: coda, data.table, LaplacesDemon, loo, methods, stats, stringr,
+Imports: coda, data.table, loo, matrixcalc, methods, stats, stringr,
         truncnorm, utils
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
@@ -28,7 +28,7 @@ Description: Fit response-time extended multinomial processing tree (RT-MPT) mod
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
-Packaged: 2019-10-14 07:51:58 UTC; hartmann2
+RoxygenNote: 7.0.2
+Packaged: 2020-02-03 19:11:31 UTC; fluffy
 Repository: CRAN
-Date/Publication: 2019-10-14 10:10:02 UTC
+Date/Publication: 2020-02-04 09:50:03 UTC

@@ -71,6 +71,7 @@ void logPhikl(int k, int a, vector<int> r, double *lams, double *loglams, int l,
 						std::cout << std::endl;
 						char x; std::cin >> x;
 			 */
+			// for (int i = 0; i != a; i++) Rprintf("%4d", iz[i]); Rprintf("\n");
 		}
 		temp = step(k, a, iz, l - 1);
 	}

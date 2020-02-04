@@ -61,13 +61,13 @@ since they lead to many probabilities close or equal to \code{0} and/or \code{1}
         distributed within \code{[-1, 1]}.
   \item \code{SIGMA}: Variance-covariance matrix of the process-related parameters. It must match the number of process-related parameters to be estimated. 
         If scalars or vectors are given, they will be transformed into diagonal matrices using \code{diag(SIGMA)}.
-        If not specified it will be randomly generated using \code{diag(xi)\%*\%LaplacesDemon::rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
+        If not specified it will be randomly generated using \code{diag(xi)\%*\%rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
         process-related group-level parameters to be estimated plus \code{add_df_to_invWish}, S is the identity matrix multiplied by 
         \code{sf_of_scale_matrix_SIGMA}, and xi (randomly generated from N(\code{1, 1/prec_epsilon})) are the scaling factors for the scaled inverse wishart distribution.
         If \code{SIGMA} is used, \code{sf_of_scale_matrix_SIGMA} and \code{add_df_to_invWish} will be ignored for the process-related parameters.
   \item \code{GAMMA}: Variance-covariance matrix of the motor time parameters. It must match the number of motor time parameters to be estimated. 
         If scalars or vectors are given, they will be transformed into diagonal matrices using \code{diag(SIGMA)}.
-        If not specified it will be randomly generated using \code{diag(xi)\%*\%LaplacesDemon::rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
+        If not specified it will be randomly generated using \code{diag(xi)\%*\%rinvwishart(nu, S)\%*\%diag(xi)}, where nu is the number of
         motor time group-level parameters to be estimated plus \code{add_df_to_invWish}, S is the identity matrix multiplied by 
         \code{sf_of_scale_matrix_GAMMA}, and xi (randomly generated from N(\code{1, 1/prec_epsilon})) are the scaling factors for the scaled inverse wishart distribution.
         If \code{GAMMA} is used, \code{sf_of_scale_matrix_GAMMA} and \code{add_df_to_invWish} will be ignored for the motor time parameters.
