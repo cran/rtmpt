@@ -4,20 +4,9 @@
 \alias{fit_rtmpt_SBC}
 \title{Simulate data from RT-MPT models}
 \usage{
-fit_rtmpt_SBC(
-  model,
-  seed,
-  n.eff_samples = 99,
-  n.chains = 4,
-  n.iter = 5000,
-  n.burnin = 200,
-  n.thin = 1,
-  Rhat_max = 1.05,
-  Irep = 1000,
-  n.subj = 40,
-  n.trials = 30,
-  prior_params = NULL
-)
+fit_rtmpt_SBC(model, seed, n.eff_samples = 99, n.chains = 4,
+  n.iter = 5000, n.burnin = 200, n.thin = 1, Rhat_max = 1.05,
+  Irep = 1000, n.subj = 40, n.trials = 30, prior_params = NULL)
 }
 \arguments{
 \item{model}{A list of the class \code{rtmpt_model}.}

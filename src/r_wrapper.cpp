@@ -6,7 +6,9 @@
 #include "rts.h"
 #include "main.h"
 #include <Rinternals.h>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 
 // namespace rtsNS {

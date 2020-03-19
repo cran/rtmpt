@@ -1,5 +1,5 @@
 Package: rtmpt
-Version: 0.1-18
+Version: 0.1-19
 Title: Fitting RT-MPT Models
 Authors@R: c(person("Raphael", "Hartmann", email = "raphael.hartmann@protonmail.com", role = c("aut", "cre")),
              person("Karl C.", "Klauer", email="christoph.klauer@psychologie.uni-freiburg.de", role=c("cph", "aut", "ctb", "ths")),
@@ -29,6 +29,6 @@ License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2
-Packaged: 2020-02-03 19:11:31 UTC; fluffy
+Packaged: 2020-03-17 15:07:42 UTC; hartmann2
 Repository: CRAN
-Date/Publication: 2020-02-04 09:50:03 UTC
+Date/Publication: 2020-03-19 15:10:08 UTC

@@ -13,7 +13,9 @@
 #include <algorithm>
 #include <R.h>
 #include <math.h>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>

@@ -4,20 +4,9 @@
 \alias{fit_rtmpt}
 \title{Posterior sample, diagnostics and some optional stuff}
 \usage{
-fit_rtmpt(
-  model,
-  data,
-  n.chains = 4,
-  n.iter = 5000,
-  n.burnin = 200,
-  n.thin = 1,
-  Rhat_max = 1.05,
-  Irep = 1000,
-  prior_params = NULL,
-  indices = FALSE,
-  save_log_lik = FALSE,
-  old_label = FALSE
-)
+fit_rtmpt(model, data, n.chains = 4, n.iter = 5000, n.burnin = 200,
+  n.thin = 1, Rhat_max = 1.05, Irep = 1000, prior_params = NULL,
+  indices = FALSE, save_log_lik = FALSE, old_label = FALSE)
 }
 \arguments{
 \item{model}{A list of the class \code{rtmpt_model}.}

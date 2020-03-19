@@ -993,7 +993,9 @@ RESTART:
 WEITER: irun++;
 	int offset = irun * ireps;
 
-#pragma omp parallel for ordered lastprivate(parmon) shared(rst1,rst2,rst3,rst4,rst5,rst6,rst7,rst8,rst9,rst10,rst11,rst12,rst13,rst14,rst15,rst16, save,sample,ntau,ntau_position,nz_position,n_value_store,daten,nnodes,nz,offset,valuestore,parmonstore,xwbr,rmax,free2kern,kern2free,comp,cat2tree, kernpar,kerncat,indi,zweig,branch,nodemax,ar,nodes_per_tree,tree_and_node2par,ilamfree, ifree,ipred,ndrin,drin,path_info,pfad_index,n_all_parameters,nppr,igroup,t2group,ireps,cat2resp,respno,alphaoff,sigalphaoff,restparsno,consts,bridge_sample,n_bridge_store)
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(NOTHREADS) ordered lastprivate(parmon) shared(rst1,rst2,rst3,rst4,rst5,rst6,rst7,rst8,rst9,rst10,rst11,rst12,rst13,rst14,rst15,rst16, save,sample,ntau,ntau_position,nz_position,n_value_store,daten,nnodes,nz,offset,valuestore,parmonstore,xwbr,rmax,free2kern,kern2free,comp,cat2tree, kernpar,kerncat,indi,zweig,branch,nodemax,ar,nodes_per_tree,tree_and_node2par,ilamfree, ifree,ipred,ndrin,drin,path_info,pfad_index,n_all_parameters,nppr,igroup,t2group,ireps,cat2resp,respno,alphaoff,sigalphaoff,restparsno,consts,bridge_sample,n_bridge_store)
+#endif
 	for (int ithread = 0; ithread < NOTHREADS; ithread++) {
 		double *mu = 0, *lams = 0, *slams = 0, *beta = 0, *rhos = 0, *lambdas = 0, *restpars = 0, *factor = 0;
 		mu = (double *)malloc(ifree*igroup * sizeof(double));
@@ -1051,7 +1053,9 @@ WEITER: irun++;
 			case 16: gsl_rng_memcpy(rst16, rst); break;
 		}
 		int ido = 2;
+#ifdef _OPENMP
 #pragma omp ordered
+#endif
 		{
 			if (ithread == 0) ido = 1; if (ithread + 1 == NOTHREADS) ido = 3;
 			int iter = offset + ireps;
