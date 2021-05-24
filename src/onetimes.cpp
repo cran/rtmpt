@@ -217,7 +217,7 @@ void trans(int n, double *x, double *pars, bool inverse) {
 double objfun(const gsl_vector * y, void * params)
 {
 	double *pars = (double *)params;
-	int n = int(trunc(pars[0]));
+	int n = static_cast<int>(trunc(pars[0]));
 	double *x = 0; x = (double *)malloc(n * sizeof(double));
 	for (int i = 0; i != n; i++) x[i] = gsl_vector_get(y, i);
 	trans(n, x, pars, false);
@@ -228,7 +228,7 @@ double objfun(const gsl_vector * y, void * params)
 	double *x_for_all = 0; x_for_all = (double *)malloc(ifree * sizeof(double));
 	double *pij = 0; pij = (double *)malloc(zweig * sizeof(double));
 
-	int trialno = int(itdaten.size());
+	int trialno = static_cast<int>(itdaten.size());
 
 	for (int i = 0; i != ilamfree; i++) {
 		if (DEBUG) if (!(x[ifree + i] == x[ifree + i])) {
@@ -303,11 +303,11 @@ void tby_individuals(vector<trial> daten, int kerntree, double *beta, double *la
 	for (int t = 0; t != indi; t++) {
 		restart = false;
 		itdaten.clear();
-		for (int ix = 0; ix != int(daten.size()); ix++) if (daten[ix].person == t) itdaten.push_back(daten[ix]);
+		for (int ix = 0; ix != static_cast<int>(daten.size()); ix++) if (daten[ix].person == t) itdaten.push_back(daten[ix]);
 
 		progress = 1.0*(t+1)/indi;
 
-		double mean = 0.0, sx2 = 0.0; int ndat = int(itdaten.size());
+		double mean = 0.0, sx2 = 0.0; int ndat = static_cast<int>(itdaten.size());
 		for (int ix = 0; ix != ndat; ix++) {
 			double xd = itdaten[ix].rt / 1000.0;
 			mean += xd;
@@ -382,23 +382,23 @@ void tby_individuals(vector<trial> daten, int kerntree, double *beta, double *la
 				if (status == GSL_SUCCESS) {
 					if (DEBUG){
 						Rprintf("Minimum found at:\n");
-						Rprintf("%5d %10.5f\n", int(iter),
+						Rprintf("%5d %10.5f\n", static_cast<int>(iter),
 							//			gsl_vector_get(s->x, 0),
 							//			gsl_vector_get(s->x, 1),
 							s->fval);
 					}
 				}
 
-				if (int(iter) == imax) {
+				if (static_cast<int>(iter) == imax) {
 					if (DEBUG){
 						Rprintf("Minimum not found:\n");
-						Rprintf("%5d %10.5f\n", int(iter),
+						Rprintf("%5d %10.5f\n", static_cast<int>(iter),
 							//			gsl_vector_get(s->x, 0),
 							//			gsl_vector_get(s->x, 1),
 							s->fval);
 					}
 				}
-			} while (status == GSL_CONTINUE && int(iter) < imax);
+			} while (status == GSL_CONTINUE && static_cast<int>(iter) < imax);
 
 			if (s->fval < oldfit) {
 				oldfit = s->fval;
@@ -417,9 +417,9 @@ void tby_individuals(vector<trial> daten, int kerntree, double *beta, double *la
 		for (int ip = ifree; ip != ifree + ilamfree; ip++) lambdas[t*ilamfree + ip - ifree] = xsave[ip];
 		restpars[t + 3] = xsave[n - 2];
 		restpars[t + indi + 3] = gsl_pow_2(xsave[n - 1]);
-
+#pragma optimize("", off)
 		if (!DEBUG) {
-			int pos = int(ML_bar * progress);
+			int pos = static_cast<int>(ML_bar * progress);
 			Rprintf("\r[");
 			for (int i = 0; i < ML_bar; i++) {
 			  if (i < pos) {
@@ -428,9 +428,9 @@ void tby_individuals(vector<trial> daten, int kerntree, double *beta, double *la
 					Rprintf(">");
 				} else Rprintf(" ");
 			}
-			Rprintf("] %d%%", int(progress * 100.0));
+			Rprintf("] %d%%", static_cast<int>(progress * 100.0));
 		}
-
+#pragma optimize("", on)
 
 
 

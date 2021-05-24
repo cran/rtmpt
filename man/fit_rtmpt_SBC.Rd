@@ -4,9 +4,21 @@
 \alias{fit_rtmpt_SBC}
 \title{Simulate data from RT-MPT models}
 \usage{
-fit_rtmpt_SBC(model, seed, n.eff_samples = 99, n.chains = 4,
-  n.iter = 5000, n.burnin = 200, n.thin = 1, Rhat_max = 1.05,
-  Irep = 1000, n.subj = 40, n.trials = 30, prior_params = NULL)
+fit_rtmpt_SBC(
+  model,
+  seed,
+  n.eff_samples = 99,
+  n.chains = 4,
+  n.iter = 5000,
+  n.burnin = 200,
+  n.thin = 1,
+  Rhat_max = 1.05,
+  Irep = 1000,
+  n.subj = 40,
+  n.trials = 30,
+  prior_params = NULL,
+  sim_list = NULL
+)
 }
 \arguments{
 \item{model}{A list of the class \code{rtmpt_model}.}
@@ -37,11 +49,11 @@ factor is shown. Default is 1000. The following statements must hold true for \c
 
 \item{n.trials}{Number of trials per tree. Default is 30.}
 
-\item{prior_params}{Named list of parameters from which the data will be generated. This must be the same named list as \code{prior_params} from 
-\code{\link{fit_rtmpt}} and has the same defaults. It is not recommended to use the defaults since they lead to many probabilities close or 
+\item{prior_params}{Named list of parameters from which the data will be generated. This must be the same named list as \code{prior_params} from
+\code{\link{fit_rtmpt}} and has the same defaults. It is not recommended to use the defaults since they lead to many probabilities close or
 equal to \code{0} and/or \code{1} and to RTs close or equal to \code{0}. Allowed parameters are:
 \itemize{
-  \item \code{mean_of_exp_mu_beta}: This is the expected exponential rate (\code{E(exp(beta)) = E(lambda)}) and 
+  \item \code{mean_of_exp_mu_beta}: This is the expected exponential rate (\code{E(exp(beta)) = E(lambda)}) and
         \code{1/mean_of_exp_mu_beta} is the expected process time (\code{1/E(exp(beta)) = E(tau)}). The default
         mean is set to \code{10}, such that the expected process time is \code{0.1} seconds.
   \item \code{var_of_exp_mu_beta}: The group-specific variance of the exponential rates. Since
@@ -52,27 +64,30 @@ equal to \code{0} and/or \code{1} and to RTs close or equal to \code{0}. Allowed
   \item \code{var_of_mu_gamma}: The group-specific variance of the \emph{mean parameter}. Its default is \code{10}.
   \item \code{mean_of_omega_sqr}: This is the expected residual variance (\code{E(omega^2)}). The default is \code{0.005}.
   \item \code{var_of_omega_sqr}: The variance of the residual variance (\code{Var(omega^2)}). The default is
-        \code{0.01}. The default of the mean and variance is equivalent to a shape and rate of \code{0.0025} and 
+        \code{0.01}. The default of the mean and variance is equivalent to a shape and rate of \code{0.0025} and
         \code{0.5}, respectivly.
   \item \code{df_of_sigma_sqr}: degrees of freedom for the individual variance of the response executions. The
         individual variance follows a scaled inverse chi-squared distribution with \code{df_of_sigma_sqr} degrees of freedom and
         \code{omega^2} as scale. \code{2} is the default and it should be an integer.
-  \item \code{sf_of_scale_matrix_SIGMA}: The original scaling matrix (S) of the (scaled) inverse Wishart distribution for the process 
-        related parameters is an identity matrix \code{S=I}. \code{sf_of_scale_matrix_SIGMA} is a scaling factor, that scales this 
+  \item \code{sf_of_scale_matrix_SIGMA}: The original scaling matrix (S) of the (scaled) inverse Wishart distribution for the process
+        related parameters is an identity matrix \code{S=I}. \code{sf_of_scale_matrix_SIGMA} is a scaling factor, that scales this
         matrix (\code{S=sf_of_scale_matrix_SIGMA*I}). Its default is \code{1}.
   \item \code{sf_of_scale_matrix_GAMMA}: The original scaling matrix (S) of the (scaled) inverse Wishart distribution for the encoding and
-        motor execution parameters is an identity matrix \code{S=I}. \code{sf_of_scale_matrix_GAMMA} is a scaling factor that scales 
+        motor execution parameters is an identity matrix \code{S=I}. \code{sf_of_scale_matrix_GAMMA} is a scaling factor that scales
         this matrix (\code{S=sf_of_scale_matrix_GAMMA*I}). Its default is \code{1}.
   \item \code{prec_epsilon}: This is epsilon in the paper. It is the precision of mu_alpha and all xi (scaling parameter
         in the scaled inverse Wishart distribution). Its default is also \code{1}.
   \item \code{add_df_to_invWish}: If \code{P} is the number of parameters or rather the size of the scale matrix used in the (scaled)
         inverse Wishart distribution then \code{add_df_to_invWish} is the number of degrees of freedom that can be added to it. So
-        \code{DF = P + add_df_to_invWish}. The default for \code{add_df_to_invWish} is \code{1}, such that the correlations are uniformly 
+        \code{DF = P + add_df_to_invWish}. The default for \code{add_df_to_invWish} is \code{1}, such that the correlations are uniformly
         distributed within \code{[-1, 1]}.
 }}
+
+\item{sim_list}{Object of class \code{rtmpt_sim}. This is also an output object. Can be used to re-fit the model if \code{n.eff_samples} was not achieved in a previous fitting attempt.
+It will then use the data stored in this object. Default is NULL and this object will be created anew.}
 }
 \value{
-A list of the class \code{rtmpt_sbc} containing 
+A list of the class \code{rtmpt_sbc} containing
   \itemize{
     \item \code{ranks}: the rank statistic for all parameters,
     \item \code{sim_list}: an object of the class \code{rtmpt_sim},
@@ -81,7 +96,7 @@ A list of the class \code{rtmpt_sbc} containing
   }
 }
 \description{
-Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for 
+Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for
   simulation-based calibration (SBC; Talts et al., 2018). You can specify the random seed, number of subjects, number of trials, and some
   parameters (same as \code{prior_params} from \code{\link{fit_rtmpt}}).
 }
@@ -105,40 +120,28 @@ d+(1-d)*(1-g) ; 1
 
 model <- to_rtmpt_model(mdl_file = mdl_2HTM)
 
-params <- list(mean_of_exp_mu_beta = 10, 
-               var_of_exp_mu_beta = 10, 
-               mean_of_mu_gamma = 0.5, 
-               var_of_mu_gamma = 0.0025, 
-               mean_of_omega_sqr = 0.005, 
+params <- list(mean_of_exp_mu_beta = 10,
+               var_of_exp_mu_beta = 10,
+               mean_of_mu_gamma = 0.5,
+               var_of_mu_gamma = 0.0025,
+               mean_of_omega_sqr = 0.005,
                var_of_omega_sqr = 0.000025,
-               df_of_sigma_sqr = 10, 
-               sf_of_scale_matrix_SIGMA = 0.1, 
-               sf_of_scale_matrix_GAMMA = 0.01, 
+               df_of_sigma_sqr = 10,
+               sf_of_scale_matrix_SIGMA = 0.1,
+               sf_of_scale_matrix_GAMMA = 0.01,
                prec_epsilon = 10,
                add_df_to_invWish = 5)
 \donttest{
-SBC_out <- fit_rtmpt_SBC(model, seed = 123, prior_params = params)
-SBC_out$ranks
-}
-\donttest{
-# For 2000 replications
-## This takes too long to run and in addition Rhat should always be 
-## checked as well as the effective sample size.
-R = 2000
-rank_mat <- data.frame()
-
+R = 2 # typically 2000 with n.eff_samples = 99, but this will run many days
+rank_mat <- matrix(NA, ncol = 393, nrow = 2)
 for (r in 1:R) {
-  SBC_out <- fit_rtmpt_SBC(model, seed = r*123, prior_params = params, n.eff_samples = 99)
-  rank_mat <- rbind(rank_mat, SBC_out$ranks)
+  SBC_out <- fit_rtmpt_SBC(model, seed = r*123, prior_params = params,
+                           n.eff_samples = 99, n.thin = 5,
+                           n.iter = 5000, n.burnin = 2000, Irep = 5000)
+  rank_mat[r, ] <- SBC_out$ranks
+}
 }
 
-## pearson chi square for testing uniformity
-x <- apply(rank_mat[1:R,], 2, table)
-expect <- R/100 # 100 = number of bins/cells (0:99)
-pearson <- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
-z95 <- qchisq(0.95, 99) # 99 = degrees of freedom
-sum(pearson>z95) / length(pearson)
-}
 }
 \references{
 Talts, S., Betancourt, M., Simpson, D., Vehtari, A., & Gelman, A. (2018). Validating Bayesian inference algorithms with simulation-based calibration. \emph{arXiv preprint arXiv:1804.06788}.

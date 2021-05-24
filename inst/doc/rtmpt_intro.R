@@ -1,4 +1,4 @@
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 eqn = "
 # CORE MODEL
 ## tree ; cat ;          mpt
@@ -20,12 +20,12 @@ resp:   1 ;   2 ; 0
 resp:   1 ;   3 ; 1
 "
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 library(rtmpt)
 restr_2HTM <- to_rtmpt_model(eqn_file = eqn)
 restr_2HTM
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 crazy_model <- restr_2HTM
 # change parameters of the model:
 crazy_model <- set_params(model = crazy_model, parameter = "probs", 
@@ -38,7 +38,7 @@ crazy_model <- set_resps(model = crazy_model, tree = 0, categories = 1, values =
 crazy_model <- set_resps(model = crazy_model, tree = 1, categories = 3, values = 0)
 crazy_model
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 set.seed(2018)
 raw_data <- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
                        group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
@@ -46,13 +46,13 @@ raw_data
 data <- to_rtmpt_data(raw_data = raw_data, model = restr_2HTM)
 data
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  ## do not run
 #  rtmpt_out <- fit_rtmpt(model = restr_2HTM, data = data)
 #  rtmpt_out$diags$R_hat
 #  ## end not run
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  ## do not run
 #  rtmpt_out <- fit_rtmpt(model = restr_2HTM,
 #                         data = data,
@@ -67,7 +67,7 @@ data
 #                         save_log_lik = FALSE)
 #  ## end not run
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  eqn = "
 #  # CORE MODEL
 #  ## tree ; cat ;          mpt
@@ -90,7 +90,7 @@ data
 #  resp:   1 ;   3 ; 1
 #  "
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  eqn = "
 #  # CORE MODEL
 #  ## tree ; cat ;          mpt
@@ -103,7 +103,7 @@ data
 #        1 ;   3 ; (1-Dn)*(1-g)
 #  "
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  mdl = "
 #  # CORE MODEL
 #  ## targets:
@@ -115,7 +115,7 @@ data
 #  Dn+(1-Dn)*(1-g)
 #  "
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 mdl = "
 # CORE MODEL
 ## MDL         ; RESP
@@ -134,7 +134,7 @@ suppress_tau: Dn-, Do+
 "
 to_rtmpt_model(mdl_file = mdl)
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 # randomly drawn group-level mean values
 mdl_2HTM <- "
 # targets
@@ -169,7 +169,7 @@ sim_dat <- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params 
 head(sim_dat$data_frame)
 
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=TRUE---------------------------------------------------------------
 R <- 2000
 rand_rankmat <- matrix(data = sample(0:99, R*393, replace=TRUE), nrow = R, ncol = 393)
 

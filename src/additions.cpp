@@ -398,8 +398,8 @@ double logf_tij(int a, vector<int> r, double *lams, double *loglams, double mu, 
 	std::sort(hypoplus.begin(), hypoplus.end());
 	std::sort(hypominus.begin(), hypominus.end());
 	double hplus = GSL_NEGINF, hminus = GSL_NEGINF;
-	for (int i = 0; i != int(hypoplus.size()); i++) hplus=logsum(hplus, hypoplus[i]);
-	for (int i = 0; i != int(hypominus.size()); i++) hminus=logsum(hminus, hypominus[i]);
+	for (int i = 0; i != static_cast<int>(hypoplus.size()); i++) hplus=logsum(hplus, hypoplus[i]);
+	for (int i = 0; i != static_cast<int>(hypominus.size()); i++) hminus=logsum(hminus, hypominus[i]);
 
 	if (hplus <= hminus) {
 		// printf("logf_tij - Problem\n");

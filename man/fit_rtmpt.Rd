@@ -4,9 +4,20 @@
 \alias{fit_rtmpt}
 \title{Posterior sample, diagnostics and some optional stuff}
 \usage{
-fit_rtmpt(model, data, n.chains = 4, n.iter = 5000, n.burnin = 200,
-  n.thin = 1, Rhat_max = 1.05, Irep = 1000, prior_params = NULL,
-  indices = FALSE, save_log_lik = FALSE, old_label = FALSE)
+fit_rtmpt(
+  model,
+  data,
+  n.chains = 4,
+  n.iter = 5000,
+  n.burnin = 200,
+  n.thin = 1,
+  Rhat_max = 1.05,
+  Irep = 1000,
+  prior_params = NULL,
+  indices = FALSE,
+  save_log_lik = FALSE,
+  old_label = FALSE
+)
 }
 \arguments{
 \item{model}{A list of the class \code{rtmpt_model}.}
@@ -131,7 +142,7 @@ rtmpt_out
 # Type ?SimData for another working example.
 }
 \references{
-Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98.
+Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98. doi:\doi{10.1007/s11336-004-1188-3}
 
 Klauer, K. C., & Kellen, D. (2018). RT-MPTs: Process models for response-time distributions based on multinomial processing trees with 
   applications to recognition memory. \emph{Journal of Mathematical Psychology, 82}, 111-130.

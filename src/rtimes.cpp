@@ -41,7 +41,7 @@
 		double *n_per_person = 0; n_per_person = (double *)malloc(indi * sizeof(double));
 
 		double sigsquar = restpar[1 + respno * igroup - 1];
-		int no_trials = int(daten.size());
+		int no_trials = static_cast<int>(daten.size());
 		for (int it = 0; it != indi; it++) {
 			u[it] = pr_df_sigma_sqr*sigsquar; n_per_person[it] = pr_df_sigma_sqr;
 			for (int r = 0; r != respno; r++) n_per_person[it] += (double) NPPR(it, r);
@@ -118,7 +118,7 @@
 
 
 
-		for (int i = 0; i != int(daten.size()); i++) {
+		for (int i = 0; i != static_cast<int>(daten.size()); i++) {
 			trial one = daten[i]; int t = one.person, r = cat2resp[one.category];
 			double be = restpars[t2group[t] * respno + r];
 			BA(t, r) += (rest[i] - be);
@@ -185,7 +185,7 @@
 
 		for (int t = 0; t != indi; t++) for (int iz = 0; iz != respno; iz++) { BA(t, iz) = 0.0; FIG(t, iz) = 0.0; }
 
-		for (int i = 0; i != int(daten.size()); i++) {
+		for (int i = 0; i != static_cast<int>(daten.size()); i++) {
 			trial one = daten[i]; int t = one.person, r = cat2resp[one.category];
 			double be = restpars[t2group[t] * respno + r];
 			BA(t, r) += (rest[i] - be);
@@ -235,7 +235,7 @@
 
 	void make_rmu(vector<trial> daten, double* factor, double *rest, double *restpar, double *slams, gsl_rng *rst) {
 
-		int no_trials = int(daten.size()); double sig_prior = pr_var_mu_gamma;//1.0 / 0.1;
+		int no_trials = static_cast<int>(daten.size()); double sig_prior = pr_var_mu_gamma;//1.0 / 0.1;
 		double *u = 0; u = (double *)malloc(igroup*respno * sizeof(double));
 		double *rsig = 0; rsig = (double *)malloc(igroup*respno * sizeof(double));
 		double *spostg = 0; spostg = (double *)malloc(igroup*respno * sizeof(double));

@@ -2,16 +2,7 @@
 # LIB_GSL32 = C:/gsl_32
 
 PKG_CFLAGS = -I$(LIB_GSL)/include
-PKG_CXXFLAGS = -I$(LIB_GSL)/include $(SHLIB_OPENMP_CXXFLAGS)
-PKG_LIBS = -L$(LIB_GSL)/lib -lgsl -lgslcblas -lR $(SHLIB_OPENMP_CXXFLAGS)
+PKG_CXXFLAGS = -I$(LIB_GSL)/include
+PKG_LIBS = -L$(LIB_GSL)/lib -lgsl -lgslcblas -lR
 
-# ifeq "$(WIN)" "64"
-# PKG_CXXFLAGS = -I$(LIB_GSL64)/include $(SHLIB_OPENMP_CXXFLAGS)
-# PKG_LIBS = -L$(LIB_GSL64)/lib -l:libgsl.a -l:libgslcblas.a $(SHLIB_OPENMP_CXXFLAGS)
-# else
-# PKG_CXXFLAGS = -I$(LIB_GSL32)/include $(SHLIB_OPENMP_CXXFLAGS)
-# PKG_LIBS = -L$(LIB_GSL32)/lib -l:libgsl.a -l:libgslcblas.a $(SHLIB_OPENMP_CXXFLAGS)
-# endif
-  
-# PKG_CXXFLAGS = -I$(LIB_GSL)/include $(SHLIB_OPENMP_CXXFLAGS)
-# PKG_LIBS = -L$(LIB_GSL)/lib -lgsl -lgslcblas -lm -lR $(SHLIB_OPENMP_CXXFLAGS)
+CXX_STD = CXX11

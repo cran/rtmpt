@@ -29,7 +29,7 @@ void lies(int n_all_parameters, double *sample) {
 }
 
 void hdi(int length, double * parameter, double p, double iv[2]) {
-	int inc = int(p*length) + 1;
+	int inc = static_cast<int>(p*length) + 1;
 	int nci = length - inc;
 	int imin = -1;
 	double tempold = parameter[length - 1] - parameter[0];
@@ -148,7 +148,7 @@ void quantiles(vector<trial> daten, int n_all_parameters, double *sample) {
 		}
 
 	// Daten zum Vergleich:
-	double s = 0.0; int no_trials = int(daten.size());
+	double s = 0.0; int no_trials = static_cast<int>(daten.size());
 	double *u = 0; u = (double *)malloc(indi * sizeof(double));
 	int *nj = 0; nj = (int *)malloc(indi * sizeof(int));
 	for (int t = 0; t != indi; t++) { u[t] = 0.0; nj[t] = 0; }
@@ -305,7 +305,7 @@ void dic(int N_all_parameters, vector <trial> daten, double *beta, double *sampl
 	double *restpars = 0; restpars = (double *)malloc(restparsno * sizeof(double));
 	//		double *temp=0; if (!(temp=NAG_ALLOC(SAMPLE_SIZE*sizeof(double)))){printf("Allocation failure\n");exit_status = -1;}
 
-	int trialno = int(daten.size());
+	int trialno = static_cast<int>(daten.size());
 	for (int i = 0; i != n_all_parameters; i++) xbar[i] = 0.0;
 	for (int is = 0; is != SAMPLE_SIZE; is++) {
 
@@ -520,7 +520,7 @@ void aggregate(int n_all_parameters, int kerntree, int *idaten, vector<trial> da
 
 	for (int j = 0; j != kerncat * indi; j++) tdaten[j] = 0.0;
 #define TDATEN(T,J) tdaten[T*kerncat+J]
-	for (int it = 0; it != int(daten.size()); it++) {
+	for (int it = 0; it != static_cast<int>(daten.size()); it++) {
 		trial one = daten[it]; TDATEN(one.person, one.category) += one.rt / 1000.0;
 	}
 	for (int t = 0; t != indi; t++) for (int j = 0; j != kerncat; j++) if (IDATEN(t, j) > 0) TDATEN(t, j) /= IDATEN(t, j);

@@ -11,7 +11,7 @@ void make_idaten(vector<trial> daten, int *idaten) {
 #define IDATEN(I,J) idaten[I*kerncat + J]
 	trial one;
 	for (int i = 0; i != indi * kerncat; ++i) idaten[i] = 0;
-	for (int i = 0; i != int(daten.size()); ++i) {
+	for (int i = 0; i != static_cast<int>(daten.size()); ++i) {
 		one = daten[i];
 		IDATEN(one.person, one.category)++;
 	}

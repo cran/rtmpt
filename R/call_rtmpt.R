@@ -78,7 +78,8 @@
 #'     \item \code{summary} includes posterior mean and median of the main parameters.
 #'   }
 #' @references
-#' Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98.
+#' Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98. doi:\doi{10.1007/s11336-004-1188-3}
+
 #' 
 #' Klauer, K. C., & Kellen, D. (2018). RT-MPTs: Process models for response-time distributions based on multinomial processing trees with 
 #'   applications to recognition memory. \emph{Journal of Mathematical Psychology, 82}, 111-130.

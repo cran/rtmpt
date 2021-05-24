@@ -15,7 +15,7 @@
 
 
 	void generate_intervals(double totallow, vector<point> h, vector<piece> &lower, vector<piece> &upper) {
-		int k = int(h.size());
+		int k = static_cast<int>(h.size());
 
 		lower.clear(); upper.clear(); piece low, up;
 		for (int j = 0; j != k; j++) {
@@ -35,7 +35,7 @@
 	void update_intervals(double totallow, point new_point, vector<point> &h, vector<piece> &lower, vector<piece> &upper) {
 		vector<point> temp; temp.clear();
 		double x = new_point.x;
-		int i = 0; int k = int(h.size());
+		int i = 0; int k = static_cast<int>(h.size());
 		while ((i != k) && (x > h[i].x))  i++;
 		h.insert(h.begin() + i, new_point);
 		piece low;
@@ -60,7 +60,7 @@
 	}
 
 	double fun_upper(double x, vector<piece> upper) {
-		int i = 1; int k = int(upper.size());
+		int i = 1; int k = static_cast<int>(upper.size());
 		while ((i != k) && (x >= upper[i].z)) i++;
 		i = i - 1;
 		double t = upper[i].absc + upper[i].slope * (x - upper[i].center);
@@ -68,7 +68,7 @@
 	}
 
 	double fun_lower(double x, vector<point> h, vector<piece> lower) {
-		int i = 1; int k = int(lower.size());
+		int i = 1; int k = static_cast<int>(lower.size());
 		while ((i != k) && (x >= lower[i].z)) i++;
 		i = i - 1; double t;
 		if ((i == 0) || (i == k - 1)) t = -DBL_MAX;
@@ -97,7 +97,7 @@
 
 	double inverse_distribution(double xstar, vector<piece> upper, bool &flag) {
 		double sum = 0, t; vector<double> s;
-		int k = int(upper.size());
+		int k = static_cast<int>(upper.size());
 		for (int i = 0; i != k; i++) {
 			if (i == 0) t = fun_upper(upper[i + 1].z, upper);
 			else

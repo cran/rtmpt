@@ -4,14 +4,16 @@
 \name{SimData}
 \alias{SimData}
 \title{Data simulated from the restricted 2HTM}
-\format{A data frame with five variables:
+\format{
+A data frame with five variables:
 \describe{
   \item{\code{subj}}{subjects number}
   \item{\code{group}}{group label of the subjects}
   \item{\code{tree}}{condition of the current trial}
   \item{\code{cat}}{observed response category}
   \item{\code{rt}}{observed response time in ms}
-}}
+}
+}
 \usage{
 SimData
 }
@@ -48,7 +50,7 @@ data <- to_rtmpt_data(raw_data = SimData, model = model)
 rtmpt_out <- fit_rtmpt(model = model, data = data)
 
 # convergence
-## traceplot and summary of the first six parameters  
+## traceplot and summary of the first six parameters
 plot(rtmpt_out$samples[,1:6])
 summary(rtmpt_out)
 }

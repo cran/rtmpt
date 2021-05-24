@@ -89,8 +89,8 @@
 
 
 		vector<int>  o;
-		int n = int(daten.size());
-		for (int i = 0; i != int(daten.size()); i++) o.push_back(daten[i].rt);
+		int n = static_cast<int>(daten.size());
+		for (int i = 0; i != static_cast<int>(daten.size()); i++) o.push_back(daten[i].rt);
 		sort(o.begin(),o.end());
 		if (DEBUG) Rprintf("%6d%6d%6d%6d%6d\n", o[0], o[n/4], o[n/2], o[(3*n)/4], o[n-1]);
 

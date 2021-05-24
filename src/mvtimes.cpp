@@ -1,5 +1,13 @@
 // authors: Christoph Klauer and Raphael Hartmann
 #include "rts.h"
+#include <vector>
+#include <thread>
+#include <atomic>
+
+
+std::atomic<int> atm_int(0);
+
+
 
 double  mlamb(int t, int pm, int ip, double *lambdas, double *lams)
 {
@@ -520,7 +528,7 @@ void gibbs_full_cycle(vector <trial> daten, double *factor, double *mu, double *
 	double *rest = 0; rest = (double *)malloc(daten.size() * sizeof(double));
 	double *taui = 0; taui = (double *)malloc(respno*respno * sizeof(double));
 
-	int trialno = int(daten.size());
+	int trialno = static_cast<int>(daten.size());
 
 	for (int x = 0; x != trialno; x++) {
 		double p;
@@ -739,7 +747,7 @@ double loglik(vector<trial> daten, double *rhos, double *mu, double *beta, doubl
 	}
 
 	double temp = 0;
-	int trialno = int(daten.size());
+	int trialno = static_cast<int>(daten.size());
 	for (int x = 0; x != trialno; x++) {
 		double p;
 		trial one = daten[x];
@@ -766,6 +774,8 @@ void gibbs_and_monitor(vector<trial> daten,double* factor, double *mu, double *l
 
 	// n_all_parameters = ifree*igroup (mu) + 2*ilamfree*igroup (rhos) + (ifree+2*ilamfree)*(ifree+2*ilamfree+1)/2 (sig) + indi*ifree (betas) + indi*2*ilamfree (lambdas) + restparsno (restpars)
 	for (int i = 0; i != ireps; i++) {
+
+
 		bool xflag = (i == 0) && (offset == 0) ? true : false;
 		gibbs_full_cycle(daten,factor, mu, lams, beta, sig, rhos, lambdas, ntau, ntau_position, taus, nz, nz_position, nnodes, restpars, slams, xflag, rst);
 
@@ -926,7 +936,7 @@ void gibbs_times_new(vector<trial> daten, int *nnodes, int nz, int *nz_position,
 
 	//
 
-	// push f�r rstore
+	// push f�r rstoreNOTHREADS
 	for (int ithread = 0; ithread != NOTHREADS; ithread++) {
 		push(ithread, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon, parmonstore);
 	}
@@ -993,77 +1003,236 @@ RESTART:
 WEITER: irun++;
 	int offset = irun * ireps;
 
-#ifdef _OPENMP
-#pragma omp parallel for num_threads(NOTHREADS) ordered lastprivate(parmon) shared(rst1,rst2,rst3,rst4,rst5,rst6,rst7,rst8,rst9,rst10,rst11,rst12,rst13,rst14,rst15,rst16, save,sample,ntau,ntau_position,nz_position,n_value_store,daten,nnodes,nz,offset,valuestore,parmonstore,xwbr,rmax,free2kern,kern2free,comp,cat2tree, kernpar,kerncat,indi,zweig,branch,nodemax,ar,nodes_per_tree,tree_and_node2par,ilamfree, ifree,ipred,ndrin,drin,path_info,pfad_index,n_all_parameters,nppr,igroup,t2group,ireps,cat2resp,respno,alphaoff,sigalphaoff,restparsno,consts,bridge_sample,n_bridge_store)
-#endif
-	for (int ithread = 0; ithread < NOTHREADS; ithread++) {
-		double *mu = 0, *lams = 0, *slams = 0, *beta = 0, *rhos = 0, *lambdas = 0, *restpars = 0, *factor = 0;
-		mu = (double *)malloc(ifree*igroup * sizeof(double));
-		lams = (double *)malloc((ifree + ilamfree) * sizeof(double));
-		slams = (double *)malloc(respno * sizeof(double));
-		beta = (double *)malloc(indi*ifree * sizeof(double));
 
-		parmon = (double *)malloc(2 * n_all_parameters * sizeof(double));
-		rhos = (double *)malloc(ilamfree*igroup * sizeof(double));
-		lambdas = (double *)malloc(indi*ilamfree * sizeof(double));
-		restpars = (double *)malloc(restparsno * sizeof(double));
-		factor = (double *)malloc(indi*respno * sizeof(double));
+	// int maxThreads = std::thread::hardware_concurrency();
+  // if (maxThreads == 0) Rprintf("Could not find out number of threads. Taking 2 threads.\n");
+  // int suppThreads = maxThreads == 0 ? 2 : maxThreads;
+  // int AmntOfThreads = suppThreads > NOTHREADS ? NOTHREADS : suppThreads;
+  // int NperThread = N / AmntOfThreads;
+  std::vector<std::thread> threads(NOTHREADS-1);
 
+  /* starting threads while ... */
+  for (int j = 0; j < NOTHREADS-1; j++) {
+		threads[j] = std::thread([=]() {
+    // threads[j] = std::thread([j,rst1,rst2,rst3,rst4,rst5,rst6,rst7,rst8,rst9,rst10,rst11,rst12,rst13,rst14,rst15,rst16, save,sample,ntau,ntau_position,nz_position,n_value_store,daten,nnodes,nz,offset,valuestore,parmonstore,xwbr,rmax,free2kern,kern2free,comp,cat2tree, kernpar,kerncat,indi,zweig,branch,nodemax,ar,nodes_per_tree,tree_and_node2par,ilamfree, ifree,ipred,ndrin,drin,path_info,pfad_index,n_all_parameters,nppr,igroup,t2group,ireps,cat2resp,respno,alphaoff,sigalphaoff,restparsno,consts,bridge_sample,n_bridge_store]() {
 
-		gsl_rng *rst;
-		rst = gsl_rng_alloc(T_rng);
-		switch (ithread + 1) {
-			case 1: gsl_rng_memcpy(rst, rst1); break;
-			case 2: gsl_rng_memcpy(rst, rst2); break;
-			case 3: gsl_rng_memcpy(rst, rst3); break;
-			case 4: gsl_rng_memcpy(rst, rst4); break;
-			case 5: gsl_rng_memcpy(rst, rst5); break;
-			case 6: gsl_rng_memcpy(rst, rst6); break;
-			case 7: gsl_rng_memcpy(rst, rst7); break;
-			case 8: gsl_rng_memcpy(rst, rst8); break;
-			case 9: gsl_rng_memcpy(rst, rst9); break;
-			case 10: gsl_rng_memcpy(rst, rst10); break;
-			case 11: gsl_rng_memcpy(rst, rst11); break;
-			case 12: gsl_rng_memcpy(rst, rst12); break;
-			case 13: gsl_rng_memcpy(rst, rst13); break;
-			case 14: gsl_rng_memcpy(rst, rst14); break;
-			case 15: gsl_rng_memcpy(rst, rst15); break;
-			case 16: gsl_rng_memcpy(rst, rst16); break;
-		}
-		pop(ithread, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon, parmonstore);
-		gibbs_and_monitor(daten,factor, mu, lams, beta, rhos, lambdas, ntau, ntau_position, restpars, slams, nnodes,
-			nz, nz_position, offset, n_all_parameters, parmon, rst, ithread, save, sample, n_bridge_store, bridge_sample);
-		push(ithread, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon, parmonstore);
-		switch (ithread + 1) {
-			case 1: gsl_rng_memcpy(rst1, rst); break;
-			case 2: gsl_rng_memcpy(rst2, rst); break;
-			case 3: gsl_rng_memcpy(rst3, rst); break;
-			case 4: gsl_rng_memcpy(rst4, rst); break;
-			case 5: gsl_rng_memcpy(rst5, rst); break;
-			case 6: gsl_rng_memcpy(rst6, rst); break;
-			case 7: gsl_rng_memcpy(rst7, rst); break;
-			case 8: gsl_rng_memcpy(rst8, rst); break;
-			case 9: gsl_rng_memcpy(rst9, rst); break;
-			case 10: gsl_rng_memcpy(rst10, rst); break;
-			case 11: gsl_rng_memcpy(rst11, rst); break;
-			case 12: gsl_rng_memcpy(rst12, rst); break;
-			case 13: gsl_rng_memcpy(rst13, rst); break;
-			case 14: gsl_rng_memcpy(rst14, rst); break;
-			case 15: gsl_rng_memcpy(rst15, rst); break;
-			case 16: gsl_rng_memcpy(rst16, rst); break;
-		}
-		int ido = 2;
-#ifdef _OPENMP
-#pragma omp ordered
-#endif
-		{
-			if (ithread == 0) ido = 1; if (ithread + 1 == NOTHREADS) ido = 3;
+			double rmax2;
+			double *mu = 0, *lams = 0, *slams = 0, *beta = 0, *rhos = 0, *lambdas = 0, *restpars = 0, *factor = 0, *parmon2;
+			mu = (double *)malloc(ifree*igroup * sizeof(double));
+			lams = (double *)malloc((ifree + ilamfree) * sizeof(double));
+			slams = (double *)malloc(respno * sizeof(double));
+			beta = (double *)malloc(indi*ifree * sizeof(double));
+
+			parmon2 = (double *)malloc(2 * n_all_parameters * sizeof(double));
+			rhos = (double *)malloc(ilamfree*igroup * sizeof(double));
+			lambdas = (double *)malloc(indi*ilamfree * sizeof(double));
+			restpars = (double *)malloc(restparsno * sizeof(double));
+			factor = (double *)malloc(indi*respno * sizeof(double));
+
+			gsl_rng *rst;
+			rst = gsl_rng_alloc(T_rng);
+			switch (j + 1) {
+				case 1: gsl_rng_memcpy(rst, rst1); break;
+				case 2: gsl_rng_memcpy(rst, rst2); break;
+				case 3: gsl_rng_memcpy(rst, rst3); break;
+				case 4: gsl_rng_memcpy(rst, rst4); break;
+				case 5: gsl_rng_memcpy(rst, rst5); break;
+				case 6: gsl_rng_memcpy(rst, rst6); break;
+				case 7: gsl_rng_memcpy(rst, rst7); break;
+				case 8: gsl_rng_memcpy(rst, rst8); break;
+				case 9: gsl_rng_memcpy(rst, rst9); break;
+				case 10: gsl_rng_memcpy(rst, rst10); break;
+				case 11: gsl_rng_memcpy(rst, rst11); break;
+				case 12: gsl_rng_memcpy(rst, rst12); break;
+				case 13: gsl_rng_memcpy(rst, rst13); break;
+				case 14: gsl_rng_memcpy(rst, rst14); break;
+				case 15: gsl_rng_memcpy(rst, rst15); break;
+				case 16: gsl_rng_memcpy(rst, rst16); break;
+			}
+			pop(j, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon2, parmonstore);
+			gibbs_and_monitor(daten,factor, mu, lams, beta, rhos, lambdas, ntau, ntau_position, restpars, slams, nnodes,
+				nz, nz_position, offset, n_all_parameters, parmon2, rst, j, save, sample, n_bridge_store, bridge_sample);
+			push(j, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon2, parmonstore);
+			switch (j + 1) {
+				case 1: gsl_rng_memcpy(rst1, rst); break;
+				case 2: gsl_rng_memcpy(rst2, rst); break;
+				case 3: gsl_rng_memcpy(rst3, rst); break;
+				case 4: gsl_rng_memcpy(rst4, rst); break;
+				case 5: gsl_rng_memcpy(rst5, rst); break;
+				case 6: gsl_rng_memcpy(rst6, rst); break;
+				case 7: gsl_rng_memcpy(rst7, rst); break;
+				case 8: gsl_rng_memcpy(rst8, rst); break;
+				case 9: gsl_rng_memcpy(rst9, rst); break;
+				case 10: gsl_rng_memcpy(rst10, rst); break;
+				case 11: gsl_rng_memcpy(rst11, rst); break;
+				case 12: gsl_rng_memcpy(rst12, rst); break;
+				case 13: gsl_rng_memcpy(rst13, rst); break;
+				case 14: gsl_rng_memcpy(rst14, rst); break;
+				case 15: gsl_rng_memcpy(rst15, rst); break;
+				case 16: gsl_rng_memcpy(rst16, rst); break;
+			}
+			int ido = 2;
+
+			while (j != atm_int);
+			if (j == 0) ido = 1;
 			int iter = offset + ireps;
-			r_statistic(ido, n_all_parameters, ithread, iter, parmon, xwbr, rmax);
-		}
-		gsl_rng_free(rst);
-		free(mu); free(lams); free(slams); free(beta); free(rhos); free(lambdas); free(restpars); free(factor);
+			r_statistic(ido, n_all_parameters, j, iter, parmon2, xwbr, rmax2);
+			atm_int++;
+
+			gsl_rng_free(rst);
+			free(mu); free(lams); free(slams); free(beta); free(rhos); free(lambdas); free(restpars); free(factor);
+    });
+  }
+
+  /* the main thread also runs */
+	double *mu2 = 0, *lams2 = 0, *slams2 = 0, *beta2 = 0, *rhos2 = 0, *lambdas2 = 0, *restpars2 = 0, *factor2 = 0;
+	mu2 = (double *)malloc(ifree*igroup * sizeof(double));
+	lams2 = (double *)malloc((ifree + ilamfree) * sizeof(double));
+	slams2 = (double *)malloc(respno * sizeof(double));
+	beta2 = (double *)malloc(indi*ifree * sizeof(double));
+
+	parmon = (double *)malloc(2 * n_all_parameters * sizeof(double));
+	rhos2 = (double *)malloc(ilamfree*igroup * sizeof(double));
+	lambdas2 = (double *)malloc(indi*ilamfree * sizeof(double));
+	restpars2 = (double *)malloc(restparsno * sizeof(double));
+	factor2 = (double *)malloc(indi*respno * sizeof(double));
+
+	gsl_rng *rst;
+	rst = gsl_rng_alloc(T_rng);
+	switch (NOTHREADS) {
+		case 1: gsl_rng_memcpy(rst, rst1); break;
+		case 2: gsl_rng_memcpy(rst, rst2); break;
+		case 3: gsl_rng_memcpy(rst, rst3); break;
+		case 4: gsl_rng_memcpy(rst, rst4); break;
+		case 5: gsl_rng_memcpy(rst, rst5); break;
+		case 6: gsl_rng_memcpy(rst, rst6); break;
+		case 7: gsl_rng_memcpy(rst, rst7); break;
+		case 8: gsl_rng_memcpy(rst, rst8); break;
+		case 9: gsl_rng_memcpy(rst, rst9); break;
+		case 10: gsl_rng_memcpy(rst, rst10); break;
+		case 11: gsl_rng_memcpy(rst, rst11); break;
+		case 12: gsl_rng_memcpy(rst, rst12); break;
+		case 13: gsl_rng_memcpy(rst, rst13); break;
+		case 14: gsl_rng_memcpy(rst, rst14); break;
+		case 15: gsl_rng_memcpy(rst, rst15); break;
+		case 16: gsl_rng_memcpy(rst, rst16); break;
 	}
+	pop(NOTHREADS-1, n_value_store, n_all_parameters, factor2, mu2, lams2, rhos2, beta2, lambdas2, restpars2, slams2, valuestore, parmon, parmonstore);
+	gibbs_and_monitor(daten,factor2, mu2, lams2, beta2, rhos2, lambdas2, ntau, ntau_position, restpars2, slams2, nnodes,
+		nz, nz_position, offset, n_all_parameters, parmon, rst, NOTHREADS-1, save, sample, n_bridge_store, bridge_sample);
+	push(NOTHREADS-1, n_value_store, n_all_parameters, factor2, mu2, lams2, rhos2, beta2, lambdas2, restpars2, slams2, valuestore, parmon, parmonstore);
+	switch (NOTHREADS) {
+		case 1: gsl_rng_memcpy(rst1, rst); break;
+		case 2: gsl_rng_memcpy(rst2, rst); break;
+		case 3: gsl_rng_memcpy(rst3, rst); break;
+		case 4: gsl_rng_memcpy(rst4, rst); break;
+		case 5: gsl_rng_memcpy(rst5, rst); break;
+		case 6: gsl_rng_memcpy(rst6, rst); break;
+		case 7: gsl_rng_memcpy(rst7, rst); break;
+		case 8: gsl_rng_memcpy(rst8, rst); break;
+		case 9: gsl_rng_memcpy(rst9, rst); break;
+		case 10: gsl_rng_memcpy(rst10, rst); break;
+		case 11: gsl_rng_memcpy(rst11, rst); break;
+		case 12: gsl_rng_memcpy(rst12, rst); break;
+		case 13: gsl_rng_memcpy(rst13, rst); break;
+		case 14: gsl_rng_memcpy(rst14, rst); break;
+		case 15: gsl_rng_memcpy(rst15, rst); break;
+		case 16: gsl_rng_memcpy(rst16, rst); break;
+	}
+	int ido = 2;
+
+	while (NOTHREADS-1 != atm_int);
+	ido = 3;
+	int iter = offset + ireps;
+	r_statistic(ido, n_all_parameters, NOTHREADS-1, iter, parmon, xwbr, rmax);
+	atm_int.store(0);
+
+	gsl_rng_free(rst);
+	free(mu2); free(lams2); free(slams2); free(beta2); free(rhos2); free(lambdas2); free(restpars2); free(factor2);
+
+
+  /* join threads */
+  for (int j = 0; j < NOTHREADS-1; j++) {
+    threads[j].join();
+  }
+
+
+
+// #ifdef _OPENMP
+// #pragma omp parallel for num_threads(NOTHREADS) ordered lastprivate(parmon) shared(rst1,rst2,rst3,rst4,rst5,rst6,rst7,rst8,rst9,rst10,rst11,rst12,rst13,rst14,rst15,rst16, save,sample,ntau,ntau_position,nz_position,n_value_store,daten,nnodes,nz,offset,valuestore,parmonstore,xwbr,rmax,free2kern,kern2free,comp,cat2tree, kernpar,kerncat,indi,zweig,branch,nodemax,ar,nodes_per_tree,tree_and_node2par,ilamfree, ifree,ipred,ndrin,drin,path_info,pfad_index,n_all_parameters,nppr,igroup,t2group,ireps,cat2resp,respno,alphaoff,sigalphaoff,restparsno,consts,bridge_sample,n_bridge_store)
+// #endif
+// 	for (int ithread = 0; ithread < NOTHREADS; ithread++) {
+// 		double *mu = 0, *lams = 0, *slams = 0, *beta = 0, *rhos = 0, *lambdas = 0, *restpars = 0, *factor = 0;
+// 		mu = (double *)malloc(ifree*igroup * sizeof(double));
+// 		lams = (double *)malloc((ifree + ilamfree) * sizeof(double));
+// 		slams = (double *)malloc(respno * sizeof(double));
+// 		beta = (double *)malloc(indi*ifree * sizeof(double));
+//
+// 		parmon = (double *)malloc(2 * n_all_parameters * sizeof(double));
+// 		rhos = (double *)malloc(ilamfree*igroup * sizeof(double));
+// 		lambdas = (double *)malloc(indi*ilamfree * sizeof(double));
+// 		restpars = (double *)malloc(restparsno * sizeof(double));
+// 		factor = (double *)malloc(indi*respno * sizeof(double));
+//
+//
+// 		gsl_rng *rst;
+// 		rst = gsl_rng_alloc(T_rng);
+// 		switch (ithread + 1) {
+// 			case 1: gsl_rng_memcpy(rst, rst1); break;
+// 			case 2: gsl_rng_memcpy(rst, rst2); break;
+// 			case 3: gsl_rng_memcpy(rst, rst3); break;
+// 			case 4: gsl_rng_memcpy(rst, rst4); break;
+// 			case 5: gsl_rng_memcpy(rst, rst5); break;
+// 			case 6: gsl_rng_memcpy(rst, rst6); break;
+// 			case 7: gsl_rng_memcpy(rst, rst7); break;
+// 			case 8: gsl_rng_memcpy(rst, rst8); break;
+// 			case 9: gsl_rng_memcpy(rst, rst9); break;
+// 			case 10: gsl_rng_memcpy(rst, rst10); break;
+// 			case 11: gsl_rng_memcpy(rst, rst11); break;
+// 			case 12: gsl_rng_memcpy(rst, rst12); break;
+// 			case 13: gsl_rng_memcpy(rst, rst13); break;
+// 			case 14: gsl_rng_memcpy(rst, rst14); break;
+// 			case 15: gsl_rng_memcpy(rst, rst15); break;
+// 			case 16: gsl_rng_memcpy(rst, rst16); break;
+// 		}
+// 		pop(ithread, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon, parmonstore);
+// 		gibbs_and_monitor(daten,factor, mu, lams, beta, rhos, lambdas, ntau, ntau_position, restpars, slams, nnodes,
+// 			nz, nz_position, offset, n_all_parameters, parmon, rst, ithread, save, sample, n_bridge_store, bridge_sample);
+// 		push(ithread, n_value_store, n_all_parameters, factor, mu, lams, rhos, beta, lambdas, restpars, slams, valuestore, parmon, parmonstore);
+// 		switch (ithread + 1) {
+// 			case 1: gsl_rng_memcpy(rst1, rst); break;
+// 			case 2: gsl_rng_memcpy(rst2, rst); break;
+// 			case 3: gsl_rng_memcpy(rst3, rst); break;
+// 			case 4: gsl_rng_memcpy(rst4, rst); break;
+// 			case 5: gsl_rng_memcpy(rst5, rst); break;
+// 			case 6: gsl_rng_memcpy(rst6, rst); break;
+// 			case 7: gsl_rng_memcpy(rst7, rst); break;
+// 			case 8: gsl_rng_memcpy(rst8, rst); break;
+// 			case 9: gsl_rng_memcpy(rst9, rst); break;
+// 			case 10: gsl_rng_memcpy(rst10, rst); break;
+// 			case 11: gsl_rng_memcpy(rst11, rst); break;
+// 			case 12: gsl_rng_memcpy(rst12, rst); break;
+// 			case 13: gsl_rng_memcpy(rst13, rst); break;
+// 			case 14: gsl_rng_memcpy(rst14, rst); break;
+// 			case 15: gsl_rng_memcpy(rst15, rst); break;
+// 			case 16: gsl_rng_memcpy(rst16, rst); break;
+// 		}
+// 		int ido = 2;
+//
+//
+// #ifdef _OPENMP
+// #pragma omp ordered
+// #endif
+// 		{
+// 			if (ithread == 0) ido = 1; if (ithread + 1 == NOTHREADS) ido = 3;
+// 			int iter = offset + ireps;
+// 			r_statistic(ido, n_all_parameters, ithread, iter, parmon, xwbr, rmax);
+// 		}
+// 		gsl_rng_free(rst);
+// 		free(mu); free(lams); free(slams); free(beta); free(rhos); free(lambdas); free(restpars); free(factor);
+// 	}
+
+
 	on_screen3(n_all_parameters, xwbr, parmon, beta, rmax, irun);
 
 

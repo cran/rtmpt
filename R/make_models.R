@@ -220,7 +220,8 @@ make_model <- function(RAW_MODEL, save_model = FALSE, form) {
     index <- 1
     for (i in 1:length(comment_lines)) {
       ind <- which(mapping_tree==i)
-      ind2 <- which(grepl(pattern = paste0(RAW_MODEL$eqn$TREE[ind[1]], " "), x = uniq_char_vec))
+      pat <- paste0(RAW_MODEL$eqn$TREE[ind[1]], " ")
+      ind2 <- which(grepl(pattern = pat, x = substr(uniq_char_vec, 1, nchar(pat))))
       all_lines[index:(index+length(ind2)+1)] <- c(comment_lines[i], model_lines[ind2], "")
       index <- index+length(ind2)+2
     }

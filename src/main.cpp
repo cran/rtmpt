@@ -46,13 +46,13 @@ vector<pfadinfo> path_info;
 void set_ns(vector<trial> daten, int &indi, int &kerntree, int &kerncat, int &igroup, int &ntot)
 {
 	indi = 0; kerntree = 0; kerncat = 0; ntot = 0; igroup = 0;
-	for (int i = 0; i != int(daten.size()); i++) {
+	for (int i = 0; i != static_cast<int>(daten.size()); i++) {
 		trial one = daten[i];
 		if (one.person > indi) indi = one.person;
 		igroup = std::max(igroup, one.group);
 	}
 	indi++; kerntree++; kerncat++; igroup++;
-	ntot = int(daten.size());
+	ntot = static_cast<int>(daten.size());
 	std::ifstream info(MODEL);
 	info >> zweig;
 	info >> kernpar;
@@ -67,7 +67,7 @@ void set_cat2tree(vector<trial> &daten, int *cat2tree)
 	std::ifstream info(MODEL); int schrott;
 	for (int j = 0; j != 5; j++) info >> schrott;
 	for (int j = 0; j != kerncat; j++) { info >> cat2tree[j]; cat2tree[j]--; }
-	int ntot = int(daten.size());
+	int ntot = static_cast<int>(daten.size());
 	for (int i = 0; i != ntot; ++i) {
 		daten[i].tree = cat2tree[daten[i].category];
 	}
@@ -75,7 +75,7 @@ void set_cat2tree(vector<trial> &daten, int *cat2tree)
 }
 
 void set_t2group(vector<trial> daten, int *t2group) {
-	int ntot = int(daten.size());
+	int ntot = static_cast<int>(daten.size());
 	for (int i = 0; i != ntot; ++i) {
 		trial one = daten[i];
 		t2group[one.person] = one.group;
@@ -117,7 +117,7 @@ void make_positions(vector<trial> daten, int *nnodes, int *nz_position, int *nta
 #define BTEMP(T,I) btemp[T*kernpar+I]
 #define LTEMP(T,I) ltemp[T*kernpar+I]
 
-	int trialno = int(daten.size());
+	int trialno = static_cast<int>(daten.size());
 	for (int i = 0; i != indi * kernpar; i++) boffset[i] = loffset[i] = btemp[i] = ltemp[i] = 0;
 	int jj = 0;
 	for (int ip = 0; ip != kernpar; ip++) if (comp[ip])
@@ -395,7 +395,7 @@ int mainx() {
 	make_nodes_by_ind(idaten, kerntree, nodes_per_par, nz, nnodes, ntau);
 
 	//NZ und NTAU Positions berechnen
-	int trialno = int(daten.size());
+	int trialno = static_cast<int>(daten.size());
 	int *nz_position = 0; nz_position = (int *)malloc(trialno*nodemax * sizeof(int));
 	int *ntau_position = 0; ntau_position = (int *)malloc(2 * trialno*nodemax * sizeof(int));
 	make_positions(daten, nnodes, nz_position, ntau_position);
@@ -404,7 +404,7 @@ int mainx() {
 	nppr = (int *)malloc(indi*respno * sizeof(int));
 
 	for (int t = 0; t != indi * respno; t++) nppr[t] = 0;
-	for (int x = 0; x != int(daten.size()); x++)
+	for (int x = 0; x != static_cast<int>(daten.size()); x++)
 	{
 		int t = daten[x].person; int r = cat2resp[daten[x].category];
 		nppr[t*respno + r]++;
@@ -495,5 +495,3 @@ int mainx() {
 	gsl_rng_free(rst16);
 	return exit_status;
 }
-
-
