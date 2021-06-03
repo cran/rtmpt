@@ -1,7 +1,75 @@
+# check if matrix is square
+# Copied from the R package matrixcalc
+is.square.matrix <- function (x) {
+  if (!is.matrix(x)) 
+    stop("argument x is not a matrix")
+  return(nrow(x) == ncol(x))
+}
+
+
+# check if matrix is symmetric
+# Copied from the R package matrixcalc
+is.symmetric.matrix <- function (x) {
+  if (!is.matrix(x)) {
+    stop("argument x is not a matrix")
+  }
+  if (!is.numeric(x)) {
+    stop("argument x is not a numeric matrix")
+  }
+  if (!is.square.matrix(x)) 
+    stop("argument x is not a square numeric matrix")
+  return(sum(x == t(x)) == (nrow(x)^2))
+}
+
+
+# check if matrix positive definite
+# Copied from the R package matrixcalc
+is.positive.definite <- function (x, tol = 1e-08) {
+  if (!is.square.matrix(x)) 
+    stop("argument x is not a square matrix")
+  if (!is.symmetric.matrix(x)) 
+    stop("argument x is not a symmetric matrix")
+  if (!is.numeric(x)) 
+    stop("argument x is not a numeric matrix")
+  eigenvalues <- eigen(x, only.values = TRUE)$values
+  n <- nrow(x)
+  for (i in 1:n) {
+    if (abs(eigenvalues[i]) < tol) {
+      eigenvalues[i] <- 0
+    }
+  }
+  if (any(eigenvalues <= 0)) {
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+# check if matrix is positive semi definite
+is.positive.semi.definite <- function (x, tol = 1e-08) {
+  if (!is.square.matrix(x)) 
+    stop("argument x is not a square matrix")
+  if (!is.symmetric.matrix(x)) 
+    stop("argument x is not a symmetric matrix")
+  if (!is.numeric(x)) 
+    stop("argument x is not a numeric matrix")
+  eigenvalues <- eigen(x, only.values = TRUE)$values
+  n <- nrow(x)
+  for (i in 1:n) {
+    if (abs(eigenvalues[i]) < tol) {
+      eigenvalues[i] <- 0
+    }
+  }
+  if (any(eigenvalues < 0)) {
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
 
 # multivariate normal distribution
 # Copied from the R package LaplacesDemon
-#' @importFrom matrixcalc is.positive.definite
 rmvn <- function(n=1, mu=rep(0,k), Sigma) {
   mu <- rbind(mu)
   if(missing(Sigma)) Sigma <- diag(ncol(mu))
@@ -30,7 +98,6 @@ rinvchisq <- function(n, df, scale=1/df) {
 
 # scaled (inverse) wishart distribution
 # Copied from the R package LaplacesDemon
-#' @importFrom matrixcalc is.positive.semi.definite
 rwishartc <- function(nu, S) {
   if(!is.matrix(S)) S <- matrix(S)
   if(!is.positive.semi.definite(S))
@@ -52,8 +119,6 @@ rwishartc <- function(nu, S) {
 rinvwishart <- function(nu, S) {
   return(chol2inv(rwishartc(nu, chol2inv(chol(S)))))
 }
-
-
 
 
 # READ INFOS OF INFOFILE ----
@@ -238,7 +303,6 @@ readinfofile <- function(infofile) {
 #' 
 #' @author Raphael Hartmann
 #' @export
-#' @importFrom matrixcalc is.positive.definite
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom stats rgamma rnorm pnorm rexp
 sim_rtmpt_data <- function(model, 

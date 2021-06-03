@@ -1,6 +1,6 @@
-31bf378acc701e862b29e5c9059e37f4 *DESCRIPTION
+f9aa1f6fb91a509fae333ea60ce3e8b5 *DESCRIPTION
 9ff74224ef1bebafabf3ea5d31b32b70 *INSTALL
-8e4b75c11569bd71a0875a0c211a07e7 *NAMESPACE
+fcce15b69e83db855adb4e2075db6920 *NAMESPACE
 cabcfd5d7459bcc93e34db3e84545f95 *R/SBC_fit_rtmpt.R
 d589a3b9cb1f8093e7f415733cd4b947 *R/SimData.R
 ddc3d3419e1976ba7a4f6a3f5a6e3e01 *R/call_rtmpt.R
@@ -18,15 +18,15 @@ a364800dead2def20630a24a143ef900 *R/make_models.R
 2a069e3e489a52aa8cd71003f0527931 *R/print_RTMPT.R
 bd54a245bd2eebc2b0fb55a44c1d463f *R/set_params.R
 8f0c20061bf8083285f769f7add67a36 *R/set_resps.R
-f336a5984aef94afac033ec4304a1d47 *R/simulate_rtmpt.R
+5c521d951c8a18675bb2d2bac14d54b0 *R/simulate_rtmpt.R
 d67da82f67d9e7f5aaf87e0725d56a55 *R/simulate_rtmpt_SBC.R
-351b2579f08bda853dee536774356320 *build/partial.rdb
+2276eeecc8fee3f6db2c09a2768a4f62 *build/partial.rdb
 fa6c57b4680374dd37c6a41910a78bba *build/vignette.rds
 e3f528d60bd78a128d84fc5fb597c97c *data/SimData.RData
 2548525f23e4686c182d0fd5788afc76 *inst/CITATION
 b9aef807974d3f3cd105752cbcc259ed *inst/doc/rtmpt_intro.R
 de1cc1e621cf38ad27be8bc6173cf1ec *inst/doc/rtmpt_intro.Rmd
-abbbd25136ee9b89cc7d27cffcd49e69 *inst/doc/rtmpt_intro.html
+c5178076b37df895f4c3056644cba74b *inst/doc/rtmpt_intro.html
 e72addc73769a9974bb79aa913205447 *inst/extdata/data.txt
 4f926a3ac6344ff57d0341903e42748f *inst/extdata/labeled_data.txt
 475f9c67b6b2cd1d31ded34a0e43324b *man/SimData.Rd
