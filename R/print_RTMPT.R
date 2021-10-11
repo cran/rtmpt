@@ -26,7 +26,9 @@ writeSummaryRTMPT <- function(x, keep, ...) {
   tauP_names <- colnames(x$specs$model$params$taus[2, which(is.na(x$specs$model$params$taus[2,]))])
   tau_names <- c(tauM_names, tauP_names)
   Nprobs <- sum(is.na(x$specs$model$params$probs))
-  Ntaus <- sum(is.na(x$specs$model$params$taus))
+  Ntau_m <- sum(is.na(x$specs$model$params$taus[1,]))
+  Ntau_p <- sum(is.na(x$specs$model$params$taus[2,]))
+  Ntaus <- Ntau_m + Ntau_p
   Nparams <- Nprobs+Ntaus
   Nresps <- length(unique(x$specs$model$responses$RESP))
   Ngroups <- x$specs$n.groups
@@ -127,9 +129,9 @@ writeSummaryRTMPT <- function(x, keep, ...) {
   delta_names <- paste0(rnams[4], rep(paste0("R", 0:(Nresps-1))))
   if(Ngroups>1) {
     theta_names <- paste0(rep(theta_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Nprobs))
-    tau_M_names <- paste0(rep(tau_M_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Nprobs))
-    tau_P_names <- paste0(rep(tau_P_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Nprobs))
-    delta_names <- paste0(rep(delta_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Nprobs))
+    tau_M_names <- paste0(rep(tau_M_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Ntau_m))
+    tau_P_names <- paste0(rep(tau_P_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Ntau_p))
+    delta_names <- paste0(rep(delta_names, Ngroups), rep(paste0("[", group_labels, "]"), each=Nresps))
   }
   rownames(main_mat) <- c(theta_names, tau_M_names, tau_P_names, delta_names)
 
