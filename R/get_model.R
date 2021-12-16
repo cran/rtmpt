@@ -115,6 +115,18 @@ to_rtmpt_model <- function(eqn_file = NULL, mdl_file = NULL) {
   
   ordered_probs <- get_ordered_probs(RAW_MODEL = RAW_MODEL, form = form)
   
+  if(form == 1) {
+    raw_model <- RAW_MODEL$resp
+  } else if(form == 2) {
+    raw_model <- RAW_MODEL$eqn
+  }
+  
+  wrong_trees <- check_one(raw_model = raw_model, variables = ordered_probs)
+  len_wt <- length(wrong_trees)
+  if(len_wt != 1 | any(wrong_trees != 0)) {
+    stop(paste0(ifelse(len_wt > 1, "Trees ", "Tree "), paste0(wrong_trees, collapse = " and "), " with ", ifelse(len_wt > 1, "labels ", "label ") , paste0("\'", unique(raw_model$TREE)[wrong_trees], "\'", collapse = " and "), ifelse(len_wt > 1, " do", " does"), " not sum to 1"))
+  }
+  
   
   probabilities <- get_probs(RAW_MODEL = RAW_MODEL, ordered_probs = ordered_probs)
   taus <- get_taus(RAW_MODEL = RAW_MODEL, ordered_probs = ordered_probs)

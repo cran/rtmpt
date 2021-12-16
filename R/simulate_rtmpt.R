@@ -343,10 +343,14 @@ sim_rtmpt_data <- function(model,
   if (any(!is.na(model$params$taus[2,]))) {SupprPlus <- which(!is.na(model$params$taus[2,]))} else {SupprPlus <- 0}
   SIGMA_flag <- FALSE
   GAMMA_flag <- FALSE
-  alpha_flag <- ifelse(exists("var_of_mu_alpha", where = params), TRUE, FALSE)
-  beta_flag <- ifelse(exists("var_of_exp_mu_beta", where = params), TRUE, FALSE)
-  gamma_flag <- ifelse(exists("var_of_mu_gamma", where = params), TRUE, FALSE)
-  omega_flag <- ifelse(exists("var_of_omega_sqr", where = params), TRUE, FALSE)
+  if (!is.null(params)) {
+    alpha_flag <- ifelse(exists("var_of_mu_alpha", where = params), TRUE, FALSE)
+    beta_flag <- ifelse(exists("var_of_exp_mu_beta", where = params), TRUE, FALSE)
+    gamma_flag <- ifelse(exists("var_of_mu_gamma", where = params), TRUE, FALSE)
+    omega_flag <- ifelse(exists("var_of_omega_sqr", where = params), TRUE, FALSE)
+  } else {
+    alpha_flag <- beta_flag <- gamma_flag <- omega_flag <- FALSE
+  }
   
   # produce infofile ----
   mdl_txt <- gsub("\\\\", "/", tempfile(pattern = "model", tmpdir = tempdir(), fileext = ".txt"))

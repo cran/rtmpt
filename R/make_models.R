@@ -240,3 +240,35 @@ make_model <- function(RAW_MODEL, save_model = FALSE, form) {
   
 }
 
+#' @importFrom stringr str_replace_all
+#' @importFrom Ryacas yac_str
+check_one <- function(raw_model, variables) {
+  
+  new_vars <- paste0("var", 1:length(variables))
+  
+  unq_tree <- unique(raw_model[,1])
+  
+  nmbr <- vector(mode = "list", length = length(unq_tree))
+  
+  for(i in 1:length(nmbr)) {
+    
+    nmbr[[i]] <- raw_model[which(raw_model[,1] == unq_tree[i]), 3]
+    for(j in 1:length(new_vars)) {
+      nmbr[[i]] <- unlist(str_replace_all(nmbr[[i]], variables[j], new_vars[j]))
+    }
+    nmbr[[i]] <- paste(nmbr[[i]], collapse = "+")
+    
+    nmbr[[i]] <- yac_str(paste0("Simplify(", nmbr[[i]], ")"))
+    
+  }
+  
+  resp <- NULL
+  if(all(unlist(nmbr)=="1")) {
+    resp <- 0
+  } else {
+    resp <- which(unlist(nmbr)!="1")
+  }
+  return(resp)
+  
+}
+

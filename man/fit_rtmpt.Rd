@@ -136,7 +136,7 @@ data <- read.table(file = data_file, header = TRUE)
 data_list <- to_rtmpt_data(raw_data = data, model = model)
 \donttest{
 # This might take some time
-rtmpt_out <- fit_rtmpt(model = model, data = data_list)
+rtmpt_out <- fit_rtmpt(model = model, data = data_list, Rhat_max = 1.1)
 rtmpt_out
 }
 # Type ?SimData for another working example.

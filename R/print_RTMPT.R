@@ -98,8 +98,8 @@ writeSummaryRTMPT <- function(x, keep, ...) {
   n_eff <- effectiveSize(samp)
   n_eff_orig <- effectiveSize(x$samples)
   n_eff_delta <- effectiveSize(delta)
-  R_hat <- gelman.diag(samp)
-  R_hat_delta <- gelman.diag(delta)
+  R_hat <- gelman.diag(samp, multivariate = FALSE)
+  R_hat_delta <- gelman.diag(delta, multivariate = FALSE)
   
   
   # output
@@ -113,7 +113,7 @@ writeSummaryRTMPT <- function(x, keep, ...) {
   ind_main <- c(ind_probs, ind_taus)
   main_mat <- cbind(su$statistics[ind_main, c(1,2)], su$quantiles[ind_main, c(1,3,5)], 
                     su$statistics[ind_main, c(3,4)], n_eff[ind_main], R_hat$psrf[ind_main,])
-  if (Nresps > 1) {
+  if (Nresps > 1 | Ngroups > 1) {
 	main_mat <- rbind(main_mat, cbind(sudelta$statistics[, c(1,2)], sudelta$quantiles[, c(1,3,5)], 
                                     sudelta$statistics[, c(3,4)], n_eff_delta, R_hat_delta$psrf))
   } else {

@@ -117,7 +117,7 @@
 #' data_list <- to_rtmpt_data(raw_data = data, model = model)
 #' \donttest{
 #' # This might take some time
-#' rtmpt_out <- fit_rtmpt(model = model, data = data_list)
+#' rtmpt_out <- fit_rtmpt(model = model, data = data_list, Rhat_max = 1.1)
 #' rtmpt_out
 #' }
 #' # Type ?SimData for another working example.
@@ -349,7 +349,29 @@ fit_rtmpt <- function(model,
   # diagnostics
   rtmpt$diags <- get_diags(diag_file = diag_path, data_info = data_info, keep = old_label)
   if (file.exists(diag_path)) file.remove(diag_path)
-  rtmpt$diags$R_hat <- gelman.diag(rtmpt$samples)
+  rtmpt$diags$R_hat <- gelman.diag(rtmpt$samples, multivariate = FALSE)
+  # rtmpt$diags$R_hat_multivariate <- data.frame(SIGMA = NA, GAMMA = NA)
+  # cntr <- 0
+  # Nprocesses <- data_info$Ngroups * (data_info$Nprobs + data_info$Nminus + data_info$Nplus)
+  # NSIGMA <- Nprocesses / data_info$Ngroups 
+  # NSIGMA <- NSIGMA * (NSIGMA+1) / 2
+  # Nab_primes <- Nprocesses / data_info$Ngroups * data_info$Nsubj
+  # Ngamma <- data_info$Ngroups * data_info$Nresps
+  # NGAMMA <- Ngamma / data_info$Ngroups
+  # NGAMMA <- NGAMMA * (NGAMMA+1) / 2
+  # Ng_primes <- Ngamma / data_info$Ngroups * data_info$Nsubj
+  # rtmpt$diags$R_hat_multivariate$processes <- gelman.diag(rtmpt$samples[,(cntr+1):(cntr+Nprocesses)])$mpsrf
+  # cntr <- cntr+Nprocesses
+  # rtmpt$diags$R_hat_multivariate$SIGMA <- gelman.diag(rtmpt$samples[,(cntr+1):(cntr+NSIGMA)])$mpsrf
+  # cntr <- cntr+NSIGMA
+  # rtmpt$diags$R_hat_multivariate$alpha_beta_primes <- gelman.diag(rtmpt$samples[,(cntr+1):(cntr+Nab_primes)])$mpsrf
+  # cntr <- cntr+Nab_primes
+  # rtmpt$diags$R_hat_multivariate$gamma <- gelman.diag(rtmpt$samples[,(cntr+1):(cntr+Ngamma)])$mpsrf
+  # cntr <- cntr+Ngamma+1
+  # rtmpt$diags$R_hat_multivariate$GAMMA <- gelman.diag(rtmpt$samples[,(cntr+1):(cntr+NGAMMA)])$mpsrf
+  # cntr <- cntr+NGAMMA
+  # rtmpt$diags$R_hat_multivariate$gamma_primes <- gelman.diag(rtmpt$samples[,(cntr+1):(cntr+Ng_primes)])$mpsrf
+  
   
   
   # specs
