@@ -99,7 +99,8 @@
 
 		kerncat=nKERN;
 		cat2resp = (int *)calloc(kerncat, sizeof(int));
-		for (int i=0;i!=kerncat;i++) cat2resp[i]= CatToResp[i]; respno = nRESP;
+		for (int i=0;i!=kerncat;i++) cat2resp[i]= CatToResp[i];
+		respno = nRESP;
 	  // char y; std::cin >> y;
 	}
 
@@ -179,8 +180,8 @@
 		}
 		//    comp[3]=comp[4]=false;
 
-		ifree = 0;
-		for (int i=0;i!=kernpar;i++) if (comp[i]) ifree++;
+		// ifree = 0;
+		// for (int i=0;i!=kernpar;i++) if (comp[i]) ifree++;
 		// GEGEBENENFALLS konstanten setzen
 		for (int i=0;i!=kernpar;i++) if (!comp[i]) consts[i]=ConstProb[i]; else	consts[i]=-1.0;
 
@@ -189,8 +190,8 @@
 		for (int i=0;i!=kernpar;i++) comp[kernpar+i] = CompMinus[i]==0 ? false : true;
 		for (int i=0;i!=kernpar;i++) comp[2*kernpar+i] = CompPlus[i]==0 ? false : true;
 		//comp[9]=comp[17]=false;
-		ilamfree = 0;
-		for (int i = 0; i != 2 * kernpar; i++) if (comp[kernpar + i]) ilamfree++;
+		// ilamfree = 0;
+		// for (int i = 0; i != 2 * kernpar; i++) if (comp[kernpar + i]) ilamfree++;
 
 	}
 

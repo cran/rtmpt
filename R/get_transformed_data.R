@@ -1,5 +1,5 @@
 
-#' Transform data for use in \code{\link{fit_rtmpt}}
+#' Transform data to be used in RT-MPT model fitting
 #'
 #' Transform data, such that it can be used in \code{\link{fit_rtmpt}}. This implies changing each value/label in
 #'   "subj", "group", "tree", and "cat" to numbers such that it starts from zero (e.g. data$tree = c(1,1,3,3,2,2,...)

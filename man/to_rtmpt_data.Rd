@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_transformed_data.R
 \name{to_rtmpt_data}
 \alias{to_rtmpt_data}
-\title{Transform data for use in \code{\link{fit_rtmpt}}}
+\title{Transform data to be used in RT-MPT model fitting}
 \usage{
 to_rtmpt_data(raw_data, model)
 }

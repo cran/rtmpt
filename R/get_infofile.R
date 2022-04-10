@@ -32,10 +32,10 @@ setClass("Rbmpt.model", representation = representation(A = "array", B = "array"
 # setClass("bmpt", representation(typeHessian = "character", hfail = "numeric", fia = "list", parametric.ci = "list", nonparametric.ci = "list"), contains = "mpt")
 
 ## make.mpt helper classes
-setOldClass( c("file", "connection" ) )
-setOldClass( c("url", "connection" ) )
-setOldClass( c("textConnection", "connection" ) )
-setClassUnion("characterOrConnection", c("character", "connection"))
+#setOldClass( c("file", "connection" ) )
+#setOldClass( c("url", "connection" ) )
+#setOldClass( c("textConnection", "connection" ) )
+#setClassUnion("characterOrConnection", c("character"))
 # setClassUnion("characterOrNull", c("character", "NULL"))
 #setClassUnion("listOrNull", c("list", "NULL"))
 
@@ -44,12 +44,7 @@ setClassUnion("characterOrConnection", c("character", "connection"))
 # functions from
 # methods.for.models.R
 ########################
-if(!isGeneric("Rcheck")){
-  if (is.function("Rcheck"))
-    fun <- Rcheck
-  else fun <- function(object) standardGeneric("Rcheck")
-  setGeneric("Rcheck", fun)
-}
+setGeneric("Rcheck", function(object) standardGeneric("Rcheck"))
 setMethod("Rcheck", "Rmpt.model", function(object) object@Rcheck)
 setGeneric("Rcheck<-", function(x, value) standardGeneric("Rcheck<-"))
 setReplaceMethod("Rcheck", "Rmpt.model", function(x, value) {
@@ -58,12 +53,7 @@ setReplaceMethod("Rcheck", "Rmpt.model", function(x, value) {
   x
 })
 
-if(!isGeneric("model.list")){
-  if (is.function("model.list"))
-    fun <- model.list
-  else fun <- function(object) standardGeneric("model.list")
-  setGeneric("model.list", fun)
-}
+setGeneric("model.list", function(object) standardGeneric("model.list"))
 setMethod("model.list", "Rmpt.model", function(object) object@model.list)
 setGeneric("model.list<-", function(x, value) standardGeneric("model.list<-"))
 setReplaceMethod("model.list", "Rmpt.model", function(x, value) {
@@ -72,12 +62,7 @@ setReplaceMethod("model.list", "Rmpt.model", function(x, value) {
   x
 })
 
-if(!isGeneric("model.data.frame")){
-  if (is.function("model.data.frame"))
-    fun <- model.data.frame
-  else fun <- function(object) standardGeneric("model.data.frame")
-  setGeneric("model.data.frame", fun)
-}
+setGeneric("model.data.frame", function(object) standardGeneric("model.data.frame"))
 setMethod("model.data.frame", "Rmpt.model", function(object) object@model.data.frame)
 setGeneric("model.data.frame<-", function(x, value) standardGeneric("model.data.frame<-"))
 setReplaceMethod("model.data.frame", "Rmpt.model", function(x, value) {
@@ -86,12 +71,7 @@ setReplaceMethod("model.data.frame", "Rmpt.model", function(x, value) {
   x
 })
 
-if(!isGeneric("Rinitial.model.data.frame")){
-  if (is.function("Rinitial.model.data.frame"))
-    fun <- Rinitial.model.data.frame
-  else fun <- function(object) standardGeneric("Rinitial.model.data.frame")
-  setGeneric("Rinitial.model.data.frame", fun)
-}
+setGeneric("Rinitial.model.data.frame", function(object) standardGeneric("Rinitial.model.data.frame"))
 setMethod("Rinitial.model.data.frame", "Rmpt.model", function(object) object@Rinitial.model.data.frame)
 setGeneric("Rinitial.model.data.frame<-", function(x, value) standardGeneric("Rinitial.model.data.frame<-"))
 setReplaceMethod("Rinitial.model.data.frame", "Rmpt.model", function(x, value) {
@@ -100,11 +80,7 @@ setReplaceMethod("Rinitial.model.data.frame", "Rmpt.model", function(x, value) {
   x
 })
 
-if(!isGeneric("Rinitial.model")){
-  if (is.function("Rinitial.model")) fun <- Rinitial.model
-  else fun <- function(object) standardGeneric("Rinitial.model")
-  setGeneric("Rinitial.model", fun)
-}
+setGeneric("Rinitial.model", function(object) standardGeneric("Rinitial.model"))
 setMethod("Rinitial.model", "Rmpt.model", function(object) object@Rinitial.model)
 setGeneric("Rinitial.model<-", function(x, value) standardGeneric("Rinitial.model<-"))
 setReplaceMethod("Rinitial.model", "Rmpt.model", function(x, value) {
@@ -113,12 +89,7 @@ setReplaceMethod("Rinitial.model", "Rmpt.model", function(x, value) {
   x
 })
 
-if(!isGeneric("A")){
-	if (is.function("A"))
-		fun <- A
-	else fun <- function(object) standardGeneric("A")
-	setGeneric("A", fun)
-}
+setGeneric("A", function(object) standardGeneric("A"))
 setMethod("A", "Rbmpt.model", function(object) object@A)
 setGeneric("A<-", function(x, value) standardGeneric("A<-"))
 setReplaceMethod("A", "Rbmpt.model", function(x, value) {
@@ -127,12 +98,7 @@ setReplaceMethod("A", "Rbmpt.model", function(x, value) {
 	x
 })
 
-if(!isGeneric("B")){
-	if (is.function("B"))
-		fun <- B
-	else fun <- function(object) standardGeneric("B")
-	setGeneric("B", fun)
-}
+setGeneric("B", function(object) standardGeneric("B"))
 setMethod("B", "Rbmpt.model", function(object) object@B)
 setGeneric("B<-", function(x, value) standardGeneric("B<-"))
 setReplaceMethod("B", "Rbmpt.model", function(x, value) {
@@ -141,12 +107,7 @@ setReplaceMethod("B", "Rbmpt.model", function(x, value) {
 	x
 })
 
-if(!isGeneric("lbmpt")){
-	if (is.function("lbmpt"))
-		fun <- lbmpt
-	else fun <- function(object) standardGeneric("lbmpt")
-	setGeneric("lbmpt", fun)
-}
+setGeneric("lbmpt", function(object) standardGeneric("lbmpt"))
 setMethod("lbmpt", "Rbmpt.model", function(object) object@lbmpt)
 setGeneric("lbmpt<-", function(x, value) standardGeneric("lbmpt<-"))
 setReplaceMethod("lbmpt", "Rbmpt.model", function(x, value) {
@@ -160,12 +121,7 @@ setReplaceMethod("lbmpt", "Rbmpt.model", function(x, value) {
 # function from
 # methods.for.restrictions.R
 ##############################
-if(!isGeneric("restrictions")){
-  if (is.function("restrictions"))
-    fun <- restrictions
-  else fun <- function(object) standardGeneric("restrictions")
-  setGeneric("restrictions", fun)
-}
+setGeneric("restrictions", function(object) standardGeneric("restrictions"))
 setMethod("restrictions", "Rmpt.model", function(object) object@restrictions)
 setGeneric("restrictions<-", function(x, value) standardGeneric("restrictions<-"))
 setReplaceMethod("restrictions", "Rmpt.model", function(x, value) {
@@ -372,7 +328,7 @@ setReplaceMethod("restrictions", "Rmpt.model", function(x, value) {
 }
 
 setGeneric("make.Rmpt", function(model, restrictions = NULL, ...) standardGeneric("make.Rmpt"))
-setMethod("make.Rmpt", signature(model = "characterOrConnection"), function(model, restrictions = NULL, model.type = c("easy", "eqn", "eqn2"), ...) {
+setMethod("make.Rmpt", signature(model = "character"), function(model, restrictions = NULL, model.type = c("easy", "eqn", "eqn2"), ...) {
   
   raw.model <- .read.mpt(model.filename = model, model.type = model.type)
 

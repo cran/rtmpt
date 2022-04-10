@@ -83,14 +83,52 @@ void make_rhos(int *nnodes, double *lambdas, double *lams, double *taus, double*
 #define RHOS(IG,IZ) rhos[(IG)*ilamfree+IZ]
 #define LAMBDAS(T,IZ) lambdas[T*ilamfree+IZ] //PM=0 negativ; PM=1 positiv
 
-	double *n = 0;	n = (double *)malloc(igroup * sizeof(double));
-	double *te = 0;	te = (double *)malloc(2 * igroup * sizeof(double));
-	double *p = 0;	p = (double *)malloc(2 * igroup * sizeof(double));
+	double *n = 0;	n = (double *)calloc(igroup * ilamfree, sizeof(double));
+	double *te = 0;	te = (double *)calloc(indi * ilamfree, sizeof(double));
+	double *p = 0;	p = (double *)calloc(igroup * ilamfree, sizeof(double));
 
 
-
+// Rprintf("hier 1\n");
 	int jj = 0;
 
+	for (int ip = 0; ip != kernpar; ip++) if ((comp[kernpar + ip]) || (comp[ip + 2 * kernpar])) {
+    for (int t = 0; t != indi; t++) {
+      int ig = t2group[t];
+      for (int pm = 0; pm != 2; pm++) if (comp[ip + (1 + pm) * kernpar]) {
+        int iz = kern2free[ip + (1 + pm) * kernpar] - ifree;
+        n[ig * ilamfree + iz] += NNODES(t, ip) * 1.0;
+      }
+      for (int i = 0; i != NNODES(t, ip); i++) {
+        for (int pm = 0; pm != 2; pm++) if (comp[ip + (1 + pm) * kernpar]) {
+          int iz = kern2free[ip + (1 + pm) * kernpar] - ifree;
+          te[t * ilamfree + iz] += taus[jj];
+          jj++;
+        }
+      }
+  	}
+  }
+
+  for (int iz = 0; iz != ilamfree; iz++) {
+    int ip = free2kern[iz + ifree];
+    int pm = (ip < 2 * kernpar) ? 0 : 1;
+    ip -=  (1 + pm) * kernpar;
+    for (int t = 0; t != indi; t++) {
+      int ig = t2group[t];
+      p[ig * ilamfree + iz] += mlamb(t, pm, ip, lambdas, lams) * te[t * ilamfree + iz];
+    }
+
+    for (int ig = 0; ig != igroup; ig++) {
+      double x;
+			double a = n[ig * ilamfree + iz] + prior;
+			double b = p[ig * ilamfree + iz] + pr_rate_exp_mu_beta; //prior / 10.0;
+      b = 1.0 / b;
+      x = gsl_ran_gamma(rst, a, b);
+      RHOS(ig, iz) = x;
+    }
+  }
+
+
+/*
 	for (int ip = 0; ip != kernpar; ip++) if ((comp[kernpar + ip]) || (comp[ip + 2 * kernpar])) {
 		//		int iz=index[ip];
 		for (int ig = 0; ig != igroup; ig++) { n[ig] = 0; p[ig] = 0.0; p[ig + igroup] = 0.0; }
@@ -112,10 +150,12 @@ void make_rhos(int *nnodes, double *lambdas, double *lams, double *taus, double*
 				RHOS(ig, iz) = x[0];
 			}
 	}
-	if (n) free(n);
+*/
+
+  if (n) free(n);
 	if (p) free(p);
 	if (te) free(te);
-
+// Rprintf("hier 9\n");
 }
 
 void lambda_cond(double scale, double norm, double n, double alpha, double p, double *beta, double *sigi, double *lambdas, double *lams, int t, int iz, bool deriv, point &h) {
@@ -149,7 +189,45 @@ void lambda_cond(double scale, double norm, double n, double alpha, double p, do
 
 void make_lambdas_new(int *nnodes, double *taus, double *beta, double *sigi, double *rhos, double *lambdas, double *lams, gsl_rng *rst) {
 
-	int jj = 0;
+	double* n = 0;	n = (double*)calloc(indi * ilamfree, sizeof(double));
+	double* p = 0;	p = (double*)calloc(indi * ilamfree, sizeof(double));
+
+  int jj = 0;
+
+  for (int ip = 0; ip != kernpar; ip++) if ((comp[kernpar + ip]) || (comp[ip + 2 * kernpar])) {
+    for (int t = 0; t != indi; t++) {
+      for (int pm = 0; pm != 2; pm++) if (comp[ip + (1 + pm) * kernpar]) {
+        int iz = kern2free[(1 + pm) * kernpar + ip] - ifree;
+        n[t * ilamfree + iz] += NNODES(t, ip);
+      }
+      for (int i = 0; i != NNODES(t, ip); i++) {
+        for (int pm = 0; pm != 2; pm++) if (comp[ip + (1 + pm) * kernpar]) {
+          int iz = kern2free[(1 + pm) * kernpar + ip] - ifree;
+          p[t * ilamfree + iz] += taus[jj]; jj++;
+        }
+      }
+    }
+  }
+  for (int iz = 0; iz != ilamfree; iz++) {
+    for (int t = 0; t != indi; t++) {
+      p[t * ilamfree + iz] *= RHOS(t2group[t], iz);
+      // int ipar = iz + ifree;
+      // double b = p[t * ilamfree + iz];
+      double a = n[t * ilamfree + iz];
+      double start = 0.0;
+      //AGAIN:
+      double step = 1, scale = (a > 0) ? sqrt(a) : 1.0; start = start * scale;
+			double totallow = -DBL_MAX;//GSL_NEGINF;
+      double temp = ars(step, scale, totallow, a, p[t * ilamfree + iz], beta, sigi, lambdas, lams, t, iz, start, rst, lambda_cond);
+      temp = temp / scale;
+      LAMBDAS(t, iz) = temp;
+    }
+  }
+
+	if (n) free(n);
+	if (p) free(p);
+
+/*
 	for (int ip = 0; ip != kernpar; ip++) if ((comp[kernpar + ip]) || (comp[ip + 2 * kernpar])) {
 
 		for (int t = 0; t != indi; t++) {
@@ -161,9 +239,9 @@ void make_lambdas_new(int *nnodes, double *taus, double *beta, double *sigi, dou
 				int iz = kern2free[(1 + pm)*kernpar + ip] - ifree;
 				p[pm] *= RHOS(t2group[t], iz);
 
-				//int ipar = iz + ifree;
-				// double b = p[pm];
-				// double a = n;
+				int ipar = iz + ifree; double sm = SIGI(ipar, ipar);
+				double b = p[pm];
+				double a = n;
 				double start = 0.0;
 
 				double step = 1, scale = (n > 0) ? sqrt(n) : 1.0; start = start * scale; double totallow = -DBL_MAX;
@@ -173,6 +251,7 @@ void make_lambdas_new(int *nnodes, double *taus, double *beta, double *sigi, dou
 			}
 		}
 	}
+*/
 }
 
 void lam2(double scale, double norm, double n, double alpha, double p, double *beta, double *sigi, double *lambdas, double *lams, int t, int iz, bool deriv, point &h) {
@@ -222,8 +301,40 @@ void lam2(double scale, double norm, double n, double alpha, double p, double *b
 
 void make_lamb2(int *nnodes, double *taus, double *beta, double *sigi, double *rhos, double *lambdas, double *lams, gsl_rng *rst) {
 
-	double *b = 0;	b = (double *)malloc(ilamfree*indi * sizeof(double));
+	double *b = 0;	b = (double *)calloc(ilamfree*indi , sizeof(double));
+	double *m = 0;	m = (double *)calloc(ilamfree , sizeof(double));
+	double *n = 0;	n = (double *)calloc(ilamfree , sizeof(double));
 	int jj = 0;
+
+	for (int ip = 0; ip != kernpar; ip++) if ((comp[kernpar + ip]) || (comp[ip + 2 * kernpar])) {
+		for (int t = 0; t != indi; t++) {
+			for (int pm = 0; pm != 2; pm++) if (comp[ip + (1 + pm) * kernpar]) {
+				int iz = kern2free[(1 + pm) * kernpar + ip] - ifree;
+				double lax = LAMBDAS(t, iz);
+				m[iz] += NNODES(t, ip);
+				n[iz] += NNODES(t, ip) * lax;
+			}
+			for (int i = 0; i != NNODES(t, ip); i++) {
+				for (int pm = 0; pm != 2; pm++) if (comp[ip + (1 + pm) * kernpar])
+				{
+					int iz = kern2free[(1 + pm) * kernpar + ip] - ifree;
+					b[t * ilamfree + iz] += taus[jj]; jj++;
+				}
+			}
+		}
+	}
+	for (int iz = 0; iz != ilamfree; iz++) {
+		for (int t = 0; t!= indi; t++) b[t * ilamfree + iz] *= (RHOS((t2group[t]), iz));
+		double start = 0.0; int xt = 0;
+		double step = 1, totallow;//=(0.1-1.0)*sqrt(abs(n[pm]));
+		totallow = -DBL_MAX;
+		double scale = sqrt(m[iz] / indi);
+		double temp = ars(step, scale, totallow, n[iz], n[iz], b, sigi, lambdas, lams, xt, iz, start, rst, lam2); //std::cout << temp<< std::endl;
+		lams[ifree + iz] = 1 + temp / scale;
+	}
+
+
+/*
 	for (int ip = 0; ip != kernpar; ip++) if ((comp[kernpar + ip]) || (comp[ip + 2 * kernpar])) {
 		double p[2] = { 0.0,0.0 }, n[2] = { 0.0,0.0 }, m[2] = { 0.0,0.0 };
 		for (int t = 0; t != indi; t++) {
@@ -257,20 +368,23 @@ void make_lamb2(int *nnodes, double *taus, double *beta, double *sigi, double *r
 			if (DEBUG) if (fabs(temp) > 1000) Rprintf("ars %g\n", 1 + temp / sqrt(fabs(m[pm])));//std::cout << "ars " << 1 + temp / sqrt(fabs(m[pm])) << std::endl;
 
 			lams[ifree + iz] = 1 + temp / scale;
-
 		}
 	}
+*/
+
 	if (b) free(b);
+	if (m) free(m);
+	if (n) free(n);
 }
 
 void make_betas_new(double *mu, double *lams, double *beta, double *sigi, int *nnodes, double *z, double *lambdas, gsl_rng *rst) {
 	//	NagError fail;	INIT_FAIL(fail);
 
-	double *w = 0;	w = (double *)malloc(ifree * sizeof(double));
-	double *hba = 0;	hba = (double *)malloc(ifree * sizeof(double));
-	double *fig = 0;	fig = (double *)malloc(indi*ifree * sizeof(double));
-	double *xfig = 0;	xfig = (double *)malloc(ifree*ifree * sizeof(double));
-	double *ba = 0;	ba = (double *)malloc(indi*ifree * sizeof(double));
+	double* w = 0; w = (double*)malloc(ifree * sizeof(double));
+	double* hba = 0; hba = (double*)malloc(ifree * sizeof(double));
+	double* fig = 0; fig = (double*)malloc(indi * ifree * sizeof(double));
+	double* xfig = 0;	xfig = (double*)malloc(ifree * ifree * sizeof(double));
+	double* ba = 0;	ba = (double*)malloc(indi * ifree * sizeof(double));
 #define FIG(T,I) fig[T*ifree+I]
 #define XFIG(I,J) xfig[I*ifree+J]
 #define BA(T,I) ba[T*ifree+I]
@@ -281,23 +395,23 @@ void make_betas_new(double *mu, double *lams, double *beta, double *sigi, int *n
 
 
 	int jj = -1;
-	for (int iz = 0; iz != ifree; iz++) {
-		int ip = free2kern[iz];
+	for (int ip = 0; ip != kernpar; ip++) if (comp[ip]) {
+		int iz = kern2free[ip];
 		for (int t = 0; t != indi; t++) {
 			double figtiz = 0, batiz = 0;
-			double be = equation(t, ip, mu, lams, beta) - BETA(t, iz)*lams[iz];
+			double be = equation(t, ip, mu, lams, beta) - BETA(t, iz) * lams[iz];
 			figtiz += NNODES(t, ip);
 			for (int j = 0; j != NNODES(t, ip); j++) {
 				batiz += (z[++jj] - be);
 			}
-			FIG(t, iz) = figtiz * gsl_pow_2(lams[iz]);
-			BA(t, iz) = batiz * lams[iz];
+			FIG(t, iz) += figtiz * gsl_pow_2(lams[iz]);
+			BA(t, iz) += batiz * lams[iz];
 		}
 	}
 	for (int t = 0; t != indi; t++) {
 		for (int iz = 0; iz != ifree; iz++) {
 			w[iz] = BA(t, iz);
-			for (int jz = ifree; jz != ifree + ilamfree; jz++) w[iz] -= SIGI(iz, jz)*lambdas[t*ilamfree + jz - ifree];
+			for (int jz = ifree; jz != ifree + ilamfree; jz++) w[iz] -= SIGI(iz, jz) * lambdas[t * ilamfree + jz - ifree];
 		}
 		for (int iz = 0; iz != ifree; iz++) {
 			for (int jz = 0; jz != ifree; jz++) if (iz != jz) XFIG(iz, jz) = SIGI(iz, jz); else XFIG(iz, iz) = FIG(t, iz) + SIGI(iz, iz);
@@ -421,7 +535,7 @@ void make_taus_one_trial_new_new(trial one, int itrial, int ipath, double *rhos,
 
 void make_tij_for_one_trial_new(trial one, double *rhos, double *lambdas, double *xlams, double *restpars, double* slams, double *pij) {
 
-	int t = one.person; int itree = one.tree; int j = one.category; double rt = one.rt / 1000.0; int resp = cat2resp[j];
+	int t = one.person; /*int itree = one.tree;*/ int j = one.category; double rt = one.rt / 1000.0; int resp = cat2resp[j];
 
 	double rmu = restpars[t2group[t] * respno + resp] + malpha(t, resp, restpars, slams); double rsig = sqrt(restpars[t + sigalphaoff]);
 
@@ -454,7 +568,7 @@ void make_tij_for_one_trial_new(trial one, double *rhos, double *lambdas, double
 		// 	double lam = lams[0]; pij[k] = (logexgaussian(lam, rmu, rsig, rt));
 		// 	if (DEBUG) {if (pij[k] < 0.0) Rprintf("pij[k] < 0; pf = 1 %g\n", pij[k]);} //std::cout << "pij[k] < 0; pf =1" << pij[k] << std::endl;
 		// }
-		if ((complength == 1) /*&& (PFAD_INDEX(j, k) > -1)*/) {
+		if (complength == 1 /*&& (PFAD_INDEX(j, k) > -1)*/) {
 			// int ipfad = PFAD_INDEX(j, k);
 			// pfadinfo akt_pfad = path_info[ipfad];
 			if (complength != akt_pfad.a) Rprintf("complength != a");
@@ -541,6 +655,7 @@ void gibbs_full_cycle(vector <trial> daten, double *factor, double *mu, double *
 	}
 
 	make_rhos(nnodes, lambdas, lams, taus, rhos, rst);
+	// Rprintf("after make_rhos\n");
 	make_rtau(restpars, taui, slams, rst);
 
 	if (xflag)
@@ -550,32 +665,35 @@ void gibbs_full_cycle(vector <trial> daten, double *factor, double *mu, double *
 				double rsig = sqrt(restpars[sigalphaoff + t]);
 				FACTOR(t, r) = lnnorm(mu / rsig)*NPPR(t, r);
 			}
-
+// Rprintf("after make rhos 2\n");
 	make_rmu(daten, factor, rest, restpars, slams, rst);
 	make_slams(daten, factor, rest, restpars, slams, rst);
 	make_ralpha(daten, factor, rest, restpars, slams, taui, rst);
 	make_rsigalpha(daten, factor, rest, restpars, slams, xflag, rst);
 	make_rsig(daten, rest, restpars, rst);
-
+// Rprintf("after make rhos 3\n");
 
 	make_mu(mu, lams, beta, nnodes, z, rst);
-
+// Rprintf("after make rhos 4\n");
 	int npar = ifree + ilamfree;
 	double *sigi = 0; sigi = (double *)malloc(npar*npar * sizeof(double));
 	sample_sig(beta, lambdas, sig, sigi, rst);
 
 	make_lams(mu, lams, beta, nnodes, z, rst);
-
+// Rprintf("after make rhos 5\n");
 	make_betas_new(mu, lams, beta, sigi, nnodes, z, lambdas, rst);
+	// Rprintf("after make rhos 5.1\n");
 	make_lamb2(nnodes, taus, beta, sigi, rhos, lambdas, lams, rst);
+	// Rprintf("after make rhos 5.2\n");
 	make_lambdas_new(nnodes, taus, beta, sigi, rhos, lambdas, lams, rst);
-
+// Rprintf("after make rhos 6\n");
 	if (x_for_all) free(x_for_all);
 	if (pij) free(pij);
 	if (z) free(z);
 	if (sigi) free(sigi);
 	if (rest) free(rest);
 	if (taui) free(taui);
+	// Rprintf("after make rhos 7\n");
 }
 
 void on_screen3(int n_all_parameters, double *xwbr, double *parmon, double *beta, double rmax, int irun) {
@@ -587,14 +705,14 @@ void on_screen3(int n_all_parameters, double *xwbr, double *parmon, double *beta
 	Rprintf("THETAS\nmean:"); //std::cout << "MUS" << std::endl;
 	jz = -1;
 	for (int ig = 0; ig != igroup; ig++) {
-		for (int jp = 0; jp != kernpar; jp++) if (comp[jp]) { jz++; Rprintf("%15g", gsl_cdf_ugaussian_P(PARMON(1, jz))); /*std::cout << setw(15) << gsl_cdf_ugaussian_P(PARMON(1, jz));*/ }
+		for (int jp = 0; jp != kernpar; jp++) if (comp[jp]) { jz = kern2free[jp] + ig * ifree; Rprintf("%15g", gsl_cdf_ugaussian_P(PARMON(1, jz))); /*std::cout << setw(15) << gsl_cdf_ugaussian_P(PARMON(1, jz));*/ }
 		else Rprintf("%15g", gsl_cdf_ugaussian_P(consts[jp])); //std::cout << setw(15) << gsl_cdf_ugaussian_P(consts[jp]);
 		Rprintf("\n");
 	}
 	Rprintf("Rhat:"); //std::cout << "R-statistic MUS" << std::endl;
 	jz = -1;
 	for (int ig = 0; ig != igroup; ig++) {
-		for (int jp = 0; jp != kernpar; jp++) if (comp[jp]) { jz++; Rprintf("%15g", XWBR(3, jz)); /*std::cout << setw(15) << XWBR(3, jz);*/ }
+		for (int jp = 0; jp != kernpar; jp++) if (comp[jp]) { jz = kern2free[jp] + ig * ifree; Rprintf("%15g", XWBR(3, jz)); /*std::cout << setw(15) << XWBR(3, jz);*/ }
 		else Rprintf("%15g", 0.0); //std::cout << setw(15) << 0.0;
 		Rprintf("\n");
 	}
@@ -603,14 +721,14 @@ void on_screen3(int n_all_parameters, double *xwbr, double *parmon, double *beta
 	Rprintf("LAMBDAS_MINUS\nmean:"); //std::cout << "RHOS MINUS" << std::endl;
 	jz = ifree * igroup;
 	for (int ig = 0; ig != igroup; ig++) {
-		for (int jp = 0; jp != kernpar; jp++) if (comp[jp + kernpar]) { Rprintf("%15g", PARMON(1, jz)); /*std::cout << setw(15) << PARMON(1, jz);*/ jz++; }
+		for (int jp = 0; jp != kernpar; jp++) if (comp[jp + kernpar]) { jz = ifree * igroup + kern2free[kernpar + jp] - ifree + ig * ilamfree; Rprintf("%15g", PARMON(1, jz)); /*std::cout << setw(15) << PARMON(1, jz);*/ jz++; }
 		else Rprintf("%15g", 0.0); //std::cout << setw(15) << 0.0;
 		Rprintf("\n");
 	}
 	Rprintf("Rhat:"); //std::cout << "R-statistic RHOS MINUS" << std::endl;
 	jz = ifree * igroup;
 	for (int ig = 0; ig != igroup; ig++) {
-		for (int jp = 0; jp != kernpar; jp++) if (comp[kernpar + jp]) { Rprintf("%15g", XWBR(3, jz)); /*std::cout << setw(15) << XWBR(3, jz);*/ jz++; }
+		for (int jp = 0; jp != kernpar; jp++) if (comp[kernpar + jp]) { jz = ifree * igroup + kern2free[kernpar + jp] - ifree + ig * ilamfree; Rprintf("%15g", XWBR(3, jz)); /*std::cout << setw(15) << XWBR(3, jz);*/ jz++; }
 		else Rprintf("%15g", 0.0); //std::cout << setw(15) << 0.0;
 		Rprintf("\n");
 	}
@@ -619,14 +737,14 @@ void on_screen3(int n_all_parameters, double *xwbr, double *parmon, double *beta
 	Rprintf("LAMBDAS_PLUS\nmean:"); //std::cout << "RHOS PLUS" << std::endl;
 	int js = jz;
 	for (int ig = 0; ig != igroup; ig++) {
-		for (int jp = 0; jp != kernpar; jp++) if (comp[jp + 2 * kernpar]) { Rprintf("%15g", PARMON(1, jz)); /*std::cout << setw(15) << PARMON(1, jz);*/ jz++; }
+		for (int jp = 0; jp != kernpar; jp++) if (comp[jp + 2 * kernpar]) { jz = ifree * igroup + kern2free[2*kernpar + jp] -ifree + ig * ilamfree; Rprintf("%15g", PARMON(1, jz)); /*std::cout << setw(15) << PARMON(1, jz);*/ jz++; }
 		else Rprintf("%15g", 0.0); //std::cout << setw(15) << 0.0;
 		Rprintf("\n");
 	}
 	Rprintf("Rhat:"); //std::cout << "R-statistic RHOS PLUS" << std::endl;
 	jz = js;
 	for (int ig = 0; ig != igroup; ig++) {
-		for (int jp = 0; jp != kernpar; jp++) if (comp[jp + 2 * kernpar]) { Rprintf("%15g", XWBR(3, jz)); /*std::cout << setw(15) << XWBR(3, jz);*/ jz++; }
+		for (int jp = 0; jp != kernpar; jp++) if (comp[jp + 2 * kernpar]) { jz = ifree * igroup + kern2free[2*kernpar + jp] -ifree + ig * ilamfree; Rprintf("%15g", XWBR(3, jz)); /*std::cout << setw(15) << XWBR(3, jz);*/ jz++; }
 		else Rprintf("%15g", 0.0); //std::cout << setw(15) << 0.0;
 		Rprintf("\n");
 	}
@@ -657,12 +775,15 @@ void on_screen3(int n_all_parameters, double *xwbr, double *parmon, double *beta
 	if (kernpar > igroup*respno) {
 		for (int i = 0; i < kernpar; i++) Rprintf("_______________");
 	} else {
-		for (int i = 0; i < (igroup*respno); i++) Rprintf("_______________"); Rprintf("_______________");
+		for (int i = 0; i < (igroup*respno); i++) Rprintf("_______________");
+		Rprintf("_______________");
 	}
 	Rprintf("\n\n");
 	BURNIN_flag = false;
 
 	if (sig) free(sig);
+
+	R_CheckUserInterrupt();
 } // end on_screen3
 
 void belege_bridge(int ithread, int ix, int n_bridge_store, double *bridge_sample, double *mu, double *lams,
@@ -1016,7 +1137,7 @@ WEITER: irun++;
 		threads[j] = std::thread([=]() {
     // threads[j] = std::thread([j,rst1,rst2,rst3,rst4,rst5,rst6,rst7,rst8,rst9,rst10,rst11,rst12,rst13,rst14,rst15,rst16, save,sample,ntau,ntau_position,nz_position,n_value_store,daten,nnodes,nz,offset,valuestore,parmonstore,xwbr,rmax,free2kern,kern2free,comp,cat2tree, kernpar,kerncat,indi,zweig,branch,nodemax,ar,nodes_per_tree,tree_and_node2par,ilamfree, ifree,ipred,ndrin,drin,path_info,pfad_index,n_all_parameters,nppr,igroup,t2group,ireps,cat2resp,respno,alphaoff,sigalphaoff,restparsno,consts,bridge_sample,n_bridge_store]() {
 
-			double rmax2;
+			double rmax2 = 0;
 			double *mu = 0, *lams = 0, *slams = 0, *beta = 0, *rhos = 0, *lambdas = 0, *restpars = 0, *factor = 0, *parmon2;
 			mu = (double *)malloc(ifree*igroup * sizeof(double));
 			lams = (double *)malloc((ifree + ilamfree) * sizeof(double));

@@ -7,7 +7,7 @@ get_resp <- function(RAW_MODEL, form) {
   
   if (form == 1) {
     
-    resp_values <- RAW_MODEL$resp$RESP
+    resp_values <- RAW_MODEL$resp$MAP
     min_resp <- min(unlist(resp_values))
     for (i in 1:length(resp_values)) responses[i] <- as.numeric(resp_values[i]) - min_resp
     if (max(responses) != (length(unique(responses))-1)) stop("Elements in \"resp\" must range from 0 to max(\"resp\").")
@@ -46,7 +46,7 @@ get_resp <- function(RAW_MODEL, form) {
     
   }
 
-  resp_list$responses$RESP <- responses
+  resp_list$responses$MAP <- responses
   return(resp_list)
   
 }

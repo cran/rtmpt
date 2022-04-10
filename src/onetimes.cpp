@@ -106,7 +106,7 @@ void make_tij_for_one_trial_new_new(trial one, double *lambdas, double rmu, doub
 
 void make_tij_for_repetitions(trial one, double *lambdas, double rmu, double rsig, double xsi, double *pij) {
 
-	int itree = one.tree; int j = one.category; double rt = one.rt / 1000.0;
+	/*int itree = one.tree;*/ int j = one.category; double rt = one.rt / 1000.0;
 
 
 	for (int k = 0; k != branch[j]; k++) {
@@ -298,7 +298,11 @@ void tby_individuals(vector<trial> daten, int kerntree, double *beta, double *la
 
 	double progress = 0.0;
 	int ML_bar = 50;
-	if (!DEBUG) Rprintf("["); for (int i = 0; i < ML_bar; i++) Rprintf(" "); Rprintf("] 0%%");
+	if (!DEBUG) {
+		Rprintf("[");
+		for (int i = 0; i < ML_bar; i++) Rprintf(" ");
+		Rprintf("] 0%%");
+	}
 
 	for (int t = 0; t != indi; t++) {
 		restart = false;

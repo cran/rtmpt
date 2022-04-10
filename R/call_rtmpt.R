@@ -1,5 +1,5 @@
 
-#' Posterior sample, diagnostics and some optional stuff
+#' Posterior sample, diagnostics and some optional stuff for RT-MPT models
 #' 
 #' Given model and data, this function calls an altered version of the C++ program by Klauer and Kellen (2018) to sample from
 #'   the posterior distribution via a Metropolis-Gibbs sampler and storing it in an mcmc.list called \code{samples}. 
@@ -78,8 +78,12 @@
 #'     \item \code{summary} includes posterior mean and median of the main parameters.
 #'   }
 #' @references
-#' Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98. doi:\doi{10.1007/s11336-004-1188-3}
-
+#' Hartmann, R., Johannsen, L., & Klauer, K. C. (2020). rtmpt: An R package for fitting response-time extended multinomial processing tree models. 
+#'   \emph{Behavior Research Methods, 52}(3), 1313–1338. 
+#' 
+#' Hartmann, R., & Klauer, K. C. (2020). Extending RT-MPTs to enable equal process times. \emph{Journal of Mathematical Psychology, 96}, 102340.
+#' 
+#' Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98.
 #' 
 #' Klauer, K. C., & Kellen, D. (2018). RT-MPTs: Process models for response-time distributions based on multinomial processing trees with 
 #'   applications to recognition memory. \emph{Journal of Mathematical Psychology, 82}, 111-130.
@@ -190,7 +194,7 @@ fit_rtmpt <- function(model,
   	  transformation <- temp_data$transformation
   	} else transformation <- list()
     keep_data_path <- TRUE
-  } else if (class(data) == "rtmpt_data") {
+  } else if (inherits(data, "rtmpt_data")) {
     data_frame <- data$data
   	if("transformation" %in% names(data)) {
   	  transformation <- data$transformation
@@ -271,6 +275,11 @@ fit_rtmpt <- function(model,
   shape_omega_sqr <- prior_params$mean_of_omega_sqr * rate_omega_sqr
   add_df_invWish <- prior_params$add_df_to_invWish - 1
 
+  
+  # process names and number of precesses in total
+  proc_names <- names(model$params$probs)
+  nprocs <- length(proc_names)
+  
   # prepare arguments for RTMPT
   CHAR <- c(Data = data_path, 
             Model = infofile, 
@@ -280,19 +289,19 @@ fit_rtmpt <- function(model,
   
   REAL <- c(Rhat_max)
   
-  REAL2 <- sapply(X = model$params$probs, FUN = function(x) {ifelse(is.na(x), -1, x)})  # constants in probs
-  
+  REAL2 <- sapply(X = model$params$probs, FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, -1, x)})  # constants in probs
+
   INTEGER <- c(NoThr = Nchains, 
                BurnIn = Nwarmup, 
                Thin = thin, 
                SampSize = Nchains*Nsamples,
                Irep = Irep,
                nKERN = dim(model$responses)[1], 
-               nRESP = length(unique(model$responses$RESP)))
-  INTEGER2 <- model$responses$RESP  # cat2resp
+               nRESP = length(unique(model$responses$MAP)))
+  INTEGER2 <- model$responses$MAP  # cat2resp
   
-  BOOL1 <- sapply(X = model$params$taus[1,], FUN = function(x) {ifelse(is.na(x), 1, 0)})  # tau minus
-  BOOL2 <- sapply(X = model$params$taus[2,], FUN = function(x) {ifelse(is.na(x), 1, 0)})  # tau plus
+  BOOL1 <- sapply(X = model$params[["taus"]]["minus",], FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, 1, 0)})  # tau minus
+  BOOL2 <- sapply(X = model$params[["taus"]]["plus",], FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, 1, 0)})  # tau plus
   
   BOOL3 <- c(loglik = indices, bridge = FALSE)#bridge)
   
@@ -309,6 +318,45 @@ fit_rtmpt <- function(model,
   
   INTEGER3 <- add_df_invWish
   
+
+  F2K <- integer(3*nprocs)
+  for(i in 1:nprocs) {
+    theta <- model$params$probs[i]
+    F2K[i] <- ifelse(theta %in% proc_names, which(proc_names==as.character(theta)), 
+                     ifelse(is.na(theta), i, -1))
+    tauminus <- model$params[["taus"]]["minus", i]
+    F2K[i+nprocs] <- ifelse(tauminus %in% proc_names, nprocs + which(proc_names==as.character(tauminus)), 
+                            ifelse(BOOL1[i], nprocs + i, -1))
+    tauplus <- model$params[["taus"]]["plus", i]
+    F2K[i+2*nprocs] <- ifelse(tauplus %in% proc_names, 2*nprocs + which(proc_names==as.character(tauplus)), 
+                              ifelse(BOOL2[i], 2*nprocs + i, -1))
+  }
+  INTEGER5 <- unique(F2K[F2K != -1])-1
+
+  
+  K2F <- integer(3*nprocs)
+  cntk2f <- 1
+  for(i in 1:(3*nprocs)) {
+    tmp <- NULL
+    if (i <= nprocs) {
+      tmp <- model$params$probs[i]
+    } else if (i <= 2*nprocs) {
+      tmp <- model$params[["taus"]]["minus", i-nprocs]
+    } else {tmp <- model$params[["taus"]]["plus", i-2*nprocs]}
+    
+    if(is.na(tmp)) {
+      K2F[i] <- cntk2f
+      cntk2f <- cntk2f + 1
+    } else if(tmp == 0 | (tmp < 1 & tmp > 0)) {
+      K2F[i] <- -1
+    } else if(tmp %in% proc_names) {
+      K2F[i] <- K2F[which(proc_names == as.character(tmp)) + (i>nprocs)*nprocs + (i>2*nprocs)*nprocs]
+    }
+  }
+  INTEGER4 <- K2F-1*(K2F!=-1)
+  
+  
+  
   # call C++ function RTMPT
   out <- .Call("rtmpt_fit", 
                as.numeric(REAL), 
@@ -318,6 +366,8 @@ fit_rtmpt <- function(model,
                as.integer(INTEGER), 
                as.integer(INTEGER2),
                as.integer(INTEGER3),
+               as.integer(INTEGER4),
+               as.integer(INTEGER5),
                as.logical(BOOL1), 
                as.logical(BOOL2), 
                as.logical(BOOL3))
@@ -329,7 +379,7 @@ fit_rtmpt <- function(model,
                     Nprobs = sum(is.na(model$params$probs)), 
                     Nminus = sum(is.na(model$params$taus[1,])), 
                     Nplus = sum(is.na(model$params$taus[2,])), 
-                    Nresps = length(unique(model$responses$RESP)), 
+                    Nresps = length(unique(model$responses$MAP)), 
                     # epsilon = 1,
                     probs_string = names(model$params$probs[which(is.na(model$params$probs))]), 
                     minus_string = names(model$params$probs[which(is.na(model$params$taus[1,]))]),

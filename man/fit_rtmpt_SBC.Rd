@@ -2,7 +2,7 @@
 % Please edit documentation in R/SBC_fit_rtmpt.R
 \name{fit_rtmpt_SBC}
 \alias{fit_rtmpt_SBC}
-\title{Simulate data from RT-MPT models}
+\title{Simulation-based calibration for RT-MPT models}
 \usage{
 fit_rtmpt_SBC(
   model,

@@ -39,7 +39,7 @@
 #'
 #' # convergence
 #' ## traceplot and summary of the first six parameters
-#' plot(rtmpt_out$samples[,1:6])
+#' coda::traceplot(rtmpt_out$samples[,1:6])
 #' summary(rtmpt_out)
 #' }
 "SimData"

@@ -76,7 +76,7 @@ make_raw_model <- function(line_char, membership, form) {
         }
       }
       if (i == 3) {
-        model$resp <- data.frame(TREE=rep(NA, length(index)), CAT=NA, MDL=NA, RESP=NA)
+        model$resp <- data.frame(TREE=rep(NA, length(index)), CAT=NA, MDL=NA, MAP=NA)
         len <- max(index) - min(index) + 1
         m$resp <- rep(0, len)
         m$mdl <- rep("", len)
@@ -96,7 +96,7 @@ make_raw_model <- function(line_char, membership, form) {
     ind <- 1; tree_val <- 0; cat_val <- 0; tree <- c()
     for (i in 1:length(m$mdl)) {
       if (m$mdl[i] != "") {
-        model$resp$RESP[ind] <- m$resp[i]
+        model$resp$MAP[ind] <- m$resp[i]
         model$resp$MDL[ind] <- m$mdl[i]
         tree[ind] <- tree_val
         model$resp$CAT[ind] <- cat_val
@@ -140,7 +140,7 @@ make_raw_model <- function(line_char, membership, form) {
         }
       }
       if (i == 3 && length(index) > 0) {
-        model$resp <- data.frame(TREE=NA, CAT=NA, RESP=NA)
+        model$resp <- data.frame(TREE=NA, CAT=NA, MAP=NA)
         for ( ind in 1:length(index) ) {
           row_char <- line_char[index[ind]]
           start <- max(unlist(gregexpr(pattern =":", row_char)))+1

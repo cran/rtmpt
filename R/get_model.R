@@ -1,5 +1,5 @@
 
-#' Create a model list for \code{\link{fit_rtmpt}}
+#' Create a model list to fit an RT-MPT
 #' 
 #' Create a model list of the class \code{rtmpt_model} by providing either \code{eqn_file} or \code{mdl_file}.
 #' If both are provided \code{mdl_file} will be used.
@@ -71,7 +71,7 @@
 #' #   suppress process times:
 #' suppress_process: dn-, do-
 #' 
-#' #     tree ; cat ; RESP
+#' #     tree ; cat ;  MAP
 #' resp:    0 ;   0 ;    0
 #' resp:    0 ;   1 ;    1
 #' resp:    1 ;   2 ;    0
@@ -83,11 +83,8 @@
 #' model
 #' 
 #' @note Within a branch of a (RT-)MPT model it is not allowed to have the same process two or more times.
-#' @seealso 
-#' \itemize{
-#'    \item \code{\link{set_params}}
-#'    \item \code{\link{set_resps}}
-#'   }
+#' @seealso \code{\link{delta2delta}}, \code{\link{theta2const}}, \code{\link{tau2zero}}, \code{\link{theta2theta}}, and \code{\link{tau2tau}} for 
+#'   functions to change the model
 #' @author Raphael Hartmann
 #' @export
 to_rtmpt_model <- function(eqn_file = NULL, mdl_file = NULL) {
@@ -170,25 +167,25 @@ print.rtmpt_model <- function(x, ...) {
   cat("\n* NOTE 1: Each line in the MDL syntax represents one response category.\n")
   cat("----------------------------\n")
   
-  cat("\nProcess probability parameters:\n")
+  cat("\nProcess probability parameters (thetas):\n")
   print(x$params$probs)
   cat("\n* NOTE 1: NA means the parameter will be estimated.\n") 
   cat("* NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.\n")
   cat("* INFO:", length(which(!is.na(x$params$probs))), "of the process probabilities will be held constant.\n")
   cat("-------------------------------\n")
   
-  cat("\nProcess completion time parameters:\n")
+  cat("\nProcess completion time parameters (taus):\n")
   print(x$params$taus)
   cat("\n* NOTE 1: \"minus\" refers to the negative outcome (1-P) and \"plus\" to the positive.\n")
   cat("* NOTE 2: NA means the parameter will be estimated. 0 means it will be suppressed.\n")
   cat("* INFO:", length(which(x$params$taus==0)), "of the process completion times will be suppressed.\n")
   cat("-----------------------------------\n")
   
-  cat("\nNumber and membership of responses:\n")
+  cat("\nMapping of response categories and encoding plus motor execution times (deltas):\n")
   print(x$responses)
   cat("\n* NOTE 1: Unique representation of trees and categories.\n")
-  cat("* NOTE 2: Each response number corresponds to a distinct encoding plus motor execution time.\n")
-  cat("* INFO:", max(x$responses$RESP)+1,"distinct response(s) assumed, namely [", paste(unique(x$responses$RESP), collapse = ", "),"].\n")
+  cat("* NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.\n")
+  cat("* INFO:", max(x$responses$MAP)+1,"distinct delta(s) assumed, namely with mapping [", paste(unique(x$responses$MAP), collapse = ", "),"].\n")
   cat("-----------------------------------\n\n")
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/call_rtmpt.R
 \name{fit_rtmpt}
 \alias{fit_rtmpt}
-\title{Posterior sample, diagnostics and some optional stuff}
+\title{Posterior sample, diagnostics and some optional stuff for RT-MPT models}
 \usage{
 fit_rtmpt(
   model,
@@ -142,7 +142,12 @@ rtmpt_out
 # Type ?SimData for another working example.
 }
 \references{
-Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98. doi:\doi{10.1007/s11336-004-1188-3}
+Hartmann, R., Johannsen, L., & Klauer, K. C. (2020). rtmpt: An R package for fitting response-time extended multinomial processing tree models. 
+  \emph{Behavior Research Methods, 52}(3), 1313–1338. 
+
+Hartmann, R., & Klauer, K. C. (2020). Extending RT-MPTs to enable equal process times. \emph{Journal of Mathematical Psychology, 96}, 102340.
+
+Klauer, K. C. (2010). Hierarchical multinomial processing tree models: A latent-trait approach. \emph{Psychometrika, 75(1)}, 70-98.
 
 Klauer, K. C., & Kellen, D. (2018). RT-MPTs: Process models for response-time distributions based on multinomial processing trees with 
   applications to recognition memory. \emph{Journal of Mathematical Psychology, 82}, 111-130.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/set_resps.R
 \name{set_resps}
 \alias{set_resps}
-\title{Set responses in a \code{rtmpt_model}}
+\title{Set responses in an \code{rtmpt_model}}
 \usage{
 set_resps(model, tree, categories, values = 0)
 }

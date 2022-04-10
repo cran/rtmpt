@@ -71,7 +71,7 @@ model <- set_params(model = model, parameter = "tau_minus",
                     
 }
 \seealso{
-\code{\link{set_resps}}
+\code{\link{delta2delta}}
 }
 \author{
 Raphael Hartmann

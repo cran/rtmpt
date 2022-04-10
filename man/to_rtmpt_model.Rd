@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_model.R
 \name{to_rtmpt_model}
 \alias{to_rtmpt_model}
-\title{Create a model list for \code{\link{fit_rtmpt}}}
+\title{Create a model list to fit an RT-MPT}
 \usage{
 to_rtmpt_model(eqn_file = NULL, mdl_file = NULL)
 }
@@ -76,7 +76,7 @@ const_prob: g=0.5
 #   suppress process times:
 suppress_process: dn-, do-
 
-#     tree ; cat ; RESP
+#     tree ; cat ;  MAP
 resp:    0 ;   0 ;    0
 resp:    0 ;   1 ;    1
 resp:    1 ;   2 ;    0
@@ -99,10 +99,8 @@ Singmann, H., & Kellen, D. (2013). MPTinR: Analysis of multinomial processing tr
   \emph{Behavior Research Methods, 45(2)}, 560-575.
 }
 \seealso{
-\itemize{
-   \item \code{\link{set_params}}
-   \item \code{\link{set_resps}}
-  }
+\code{\link{delta2delta}}, \code{\link{theta2const}}, \code{\link{tau2zero}}, \code{\link{theta2theta}}, and \code{\link{tau2tau}} for 
+  functions to change the model
 }
 \author{
 Raphael Hartmann

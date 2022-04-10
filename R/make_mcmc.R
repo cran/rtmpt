@@ -206,6 +206,7 @@ make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   # source("C:/Users/hartmann/Desktop/UNI_FREIBURG/U_Freiburg/CPP/DBDA2E-utilities.R")
   
   # read text file with chains
+  temp <- c()
   if (is.character(file)) {
     temp <- as.vector(read.table(file=file,header=F,nrows=1))
     dt <- fread(file=file,skip=1)

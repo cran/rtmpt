@@ -196,44 +196,49 @@ void make_pij_for_individual(double *x, double *pij, double *pj) {
 
 
 void make_mu(double *mu, double *lams, double *beta, int *nnodes, double *z, gsl_rng *rst) {
-	double *mean = 0;	mean = (double *)malloc((igroup) * sizeof(double));
-	double *xtx = 0;	xtx = (double *)malloc((igroup) * sizeof(double));
+
+	double *mean = 0;	mean = (double *)calloc((igroup * ifree),  sizeof(double));
+	double *xtx = 0;	xtx = (double *)calloc((igroup * ifree) , sizeof(double));
 
 	int jj = -1;
-	for (int iz = 0; iz != ifree; iz++) {
-		int ip = free2kern[iz];
-		for (int i = 0; i != igroup; i++) { mean[i] = 0.0; xtx[i] = 0.0; }
+
+	for (int ip = 0; ip != kernpar; ip++) if (comp[ip]) {
+		int iz = kern2free[ip];
+		//		for (int i = 0; i != igroup; i++) { mean[i] = 0.0; xtx[i] = 0.0; }
 		for (int t = 0; t != indi; t++) {
 			int itg = t2group[t];
-			xtx[itg] += NNODES(t, ip);
+			xtx[itg * ifree + iz] += NNODES(t, ip);
 			double rest = lams[iz] * BETA(t, iz);
 			for (int j = 0; j != NNODES(t, ip); j++) {
 				jj++;
 				double xh = z[jj] - rest;
-				mean[itg] += xh;
+				mean[itg * ifree + iz] += xh;
 			}
 		}
-
+	}
+	for (int iz = 0; iz!= ifree; iz++) {
 		for (int ix = 0; ix != igroup; ix++) {
-			xtx[ix] += PRIOR;
-			mu[ix*ifree + iz] = mean[ix] / xtx[ix] + onenorm(rst) / sqrt(xtx[ix]);
+			xtx[ix * ifree + iz] += PRIOR;
+			mu[ix * ifree + iz] = mean[ix * ifree + iz] / xtx[ix * ifree + iz] + onenorm(rst) / sqrt(xtx[ix * ifree + iz]);
 		}
 	}
+
 	if (xtx) free(xtx);
 	if (mean) free(mean);
 }
 
 void make_lams(double *mu, double *lams, double *beta, int *nnodes, double *z, gsl_rng *rst) {
 
-	double *w = 0;	w = (double *)malloc(ifree * sizeof(double));
+	double *w = 0;	w = (double *)calloc(ifree , sizeof(double));
 	double *u = 0;	u = (double *)malloc(ifree * sizeof(double));
 
+	for (int iz = 0; iz != ifree; iz++) u[iz] = PRIOR;
 
 
 	int jj = -1;
-	for (int iz = 0; iz != ifree; iz++) {
-		int ip = free2kern[iz];
-		w[iz] = 0.0; u[iz] = PRIOR;
+	for (int ip = 0; ip != kernpar; ip++) if (comp[ip]) {
+		int iz = kern2free[ip];
+//		w[iz] = 0.0; u[iz] = PRIOR;
 		for (int t = 0; t != indi; t++) {
 			double uiz = 0, wiz = 0;
 			double be = equation(t, ip, mu, lams, beta) - BETA(t, iz)*lams[iz];

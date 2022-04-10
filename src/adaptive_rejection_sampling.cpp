@@ -2,6 +2,10 @@
 // authors: Christoph Klauer
 
 #include "rts.h"
+#include <mutex>
+
+std::mutex mtx_R_CUI;
+
 // namespace rtsNS {
 
 	struct piece {
@@ -159,17 +163,22 @@
 		double ub, lb;
 		point high, low;
 		int sign = one.dh > 0 ? 1 : -1;
-		// make ldh >0.5 <5.0
+		// make ldh >2.0 <5.0
 		for (int i = 0; i != 2; i++) {
+			int cnt_while = 0;
 			double dh = sign * one.dh;
-			if ((dh <= 0.5) || (dh >= 5.0))
+			if ((dh <= 2.0) || (dh >= 5.0))
 			{
-				if (dh <= 0.5) {
+				if (dh <= 2.0) {
 					lb = one.x;
-					while (dh <= 0.5) {
+					while (dh <= 2.0) {
 						one.x -= sign * step;
 						gamma_prior(scale, norm, n, one.x, xp, beta, sigi, lambdas, lams, tt, iz, true, one);
 						dh = sign * one.dh;
+						cnt_while++; if (cnt_while % 1024 == 0) {
+						  std::lock_guard<std::mutex> guard(mtx_R_CUI);
+						  R_CheckUserInterrupt();
+						}
 					}
 					ub = one.x;
 				}
@@ -180,16 +189,24 @@
 							one.x += sign * step;
 							gamma_prior(scale, norm, n, one.x, xp, beta, sigi, lambdas, lams, tt, iz, true, one);
 							dh = sign * one.dh;
+							cnt_while++; if (cnt_while % 1024 == 0) {
+						  std::lock_guard<std::mutex> guard(mtx_R_CUI);
+						  R_CheckUserInterrupt();
+						}
 						}
 						lb = one.x;
 					}
 				}
-				while ((dh <= 0.5) || (dh >= 5.0)) {
+				while ((dh <= 2.0) || (dh >= 5.0)) {
 					one.x = (lb + ub) / 2.0;
 					gamma_prior(scale, norm, n, one.x, xp, beta, sigi, lambdas, lams, tt, iz, true, one);
 					dh = sign * one.dh;
-					if (dh <= 0.5) { lb = one.x; }
+					if (dh <= 2.0) { lb = one.x; }
 					if (dh >= 5.0) { ub = one.x; }
+					cnt_while++; if (cnt_while % 1024 == 0) {
+						  std::lock_guard<std::mutex> guard(mtx_R_CUI);
+						  R_CheckUserInterrupt();
+						}
 				}
 			}
 			if (sign == 1) low.x = one.x; else high.x = one.x;

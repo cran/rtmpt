@@ -1,6 +1,8 @@
 ## ---- eval=TRUE---------------------------------------------------------------
 eqn = "
 # CORE MODEL
+## EQN SYNTAX
+
 ## tree ; cat ;          mpt
       0 ;   0 ;           Do
       0 ;   0 ;     (1-Do)*g
@@ -9,47 +11,57 @@ eqn = "
       1 ;   3 ;           Dn
       1 ;   2 ;     (1-Dn)*g
       1 ;   3 ; (1-Dn)*(1-g)
+"
 
-# OPTIONAL RESTRICTIONS / SPECIFICATIONS
-const_prob: g=0.5
+## ---- eval=TRUE---------------------------------------------------------------
+mdl = "
+# CORE MODEL
+## MDL SYNTAX
 
-##   Tree ; Cat ; Resp
-resp:   0 ;   0 ; 0
-resp:   0 ;   1 ; 1
-resp:   1 ;   2 ; 0
-resp:   1 ;   3 ; 1
+### targets
+Do+(1-Do)*g
+(1-Do)*(1-g)
+
+### lure
+(1-Dn)*g
+Dn+(1-Dn)*(1-g)
 "
 
 ## ---- eval=TRUE---------------------------------------------------------------
 library(rtmpt)
-restr_2HTM <- to_rtmpt_model(eqn_file = eqn)
-restr_2HTM
+# using the MDL syntax:
+TwoHTM <- to_rtmpt_model(mdl_file = mdl)
+# using the EQN syntax:
+TwoHTM <- to_rtmpt_model(eqn_file = eqn)
+TwoHTM
+# 
 
 ## ---- eval=TRUE---------------------------------------------------------------
-crazy_model <- restr_2HTM
-# change parameters of the model:
-crazy_model <- set_params(model = crazy_model, parameter = "probs", 
-                            names = "g", values = NA)  # g will now be estimated again
-crazy_model <- set_params(model = crazy_model, parameter = "tau_minus",
-                            names = "Dn", values = 0) # suppress process-completion time for a 
-                                                      # failure to detect a new item as "new"
-# change responses:
-crazy_model <- set_resps(model = crazy_model, tree = 0, categories = 1, values = 0)
-crazy_model <- set_resps(model = crazy_model, tree = 1, categories = 3, values = 0)
-crazy_model
+theta2const(model = TwoHTM, names = "g", constants = 0.5)
 
 ## ---- eval=TRUE---------------------------------------------------------------
-set.seed(2018)
+theta2theta(model = TwoHTM, names = c("Do", "Dn"), keep_consts = FALSE)
+
+## ---- eval=TRUE---------------------------------------------------------------
+tau2zero(model = TwoHTM, names = "g", outcomes = "minus", values = 0)
+
+## ---- eval=TRUE---------------------------------------------------------------
+tau2tau(model = TwoHTM, names = c("Do", "Dn"), keep_zeros = FALSE)
+
+## ---- eval=TRUE---------------------------------------------------------------
+delta2delta(model = TwoHTM, trees = c(0,1), categories = c(1,3), mappings = c(1,1))
+
+## ---- eval=TRUE---------------------------------------------------------------
+set.seed(2021)
 raw_data <- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
                        group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
 raw_data
-data <- to_rtmpt_data(raw_data = raw_data, model = restr_2HTM)
+data <- to_rtmpt_data(raw_data = raw_data, model = TwoHTM)
 data
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  ## do not run
-#  rtmpt_out <- fit_rtmpt(model = restr_2HTM, data = data)
-#  rtmpt_out$diags$R_hat
+#  rtmpt_out <- fit_rtmpt(model = TwoHTM, data = data)
 #  ## end not run
 
 ## ---- eval=FALSE--------------------------------------------------------------
@@ -61,39 +73,21 @@ data
 #                         n.burnin = 200,
 #                         n.thin = 1,
 #                         Rhat_max = 1.05,
-#  					   Irep = 1000,
+#  					             Irep = 1000,
 #                         prior_params = NULL,
 #                         indices = FALSE,
 #                         save_log_lik = FALSE)
 #  ## end not run
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  eqn = "
-#  # CORE MODEL
-#  ## tree ; cat ;          mpt
-#        0 ;   0 ;           Do
-#        0 ;   0 ;     (1-Do)*g
-#        0 ;   1 ; (1-Do)*(1-g)
-#  
-#        1 ;   3 ;           Dn
-#        1 ;   2 ;     (1-Dn)*g
-#        1 ;   3 ; (1-Dn)*(1-g)
-#  
-#  # OPTIONAL RESTRICTIONS / SPECIFICATIONS
-#  const_prob: g=0.5, Dn = .5
-#  suppress_tau: Dn-, Do+
-#  
-#  ##   Tree ; Cat ; Resp
-#  resp:   0 ;   0 ; 0
-#  resp:   0 ;   1 ; 1
-#  resp:   1 ;   2 ; 0
-#  resp:   1 ;   3 ; 1
-#  "
+#  rtmpt_out$diags$R_hat
+#  coda::traceplot(rtmpt_out$samples[, 1:9])
+#  summary(rtmpt_out)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  eqn = "
 #  # CORE MODEL
-#  ## tree ; cat ;          mpt
+#  ## tree ; cat ;         path
 #        0 ;   0 ;           Do
 #        0 ;   0 ;     (1-Do)*g
 #        0 ;   1 ; (1-Do)*(1-g)
@@ -110,29 +104,10 @@ data
 #  Do+(1-Do)*g
 #  (1-Do)*(1-g)
 #  
-#  ## lure
+#  ## lures
 #  (1-Dn)*g
 #  Dn+(1-Dn)*(1-g)
 #  "
-
-## ---- eval=TRUE---------------------------------------------------------------
-mdl = "
-# CORE MODEL
-## MDL         ; RESP
-
-### targets
-Do+(1-Do)*g    ;    0
-(1-Do)*(1-g)   ;    1
-
-### lure
-(1-Dn)*g       ;    0
-Dn+(1-Dn)*(1-g);    1
-
-# OPTIONAL RESTRICTIONS
-const_prob: g=0.5, Dn = .5
-suppress_tau: Dn-, Do+
-"
-to_rtmpt_model(mdl_file = mdl)
 
 ## ---- eval=TRUE---------------------------------------------------------------
 # randomly drawn group-level mean values

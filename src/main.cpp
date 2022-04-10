@@ -182,7 +182,7 @@ void r_statistic(int ido, int n_all_parameters, int istream, int iter, double *p
 }
 
 // MAIN
-int mainx() {
+int mainx(int *k2f, int *f2k) {
 	//std::cout << "L_Test" << setw(12) << 19.2 << setw(12) << 3 << std::endl;
 	//printf ("L_Test %12F%12d \n", 15, 3);
 	// Rprintf ("L_TEST%12.2f%12d", 14.2, 3); Rprintf ("L_TEST%12.2f\n", 14.2);
@@ -372,14 +372,48 @@ int mainx() {
 	consts = (double *)malloc(kernpar * sizeof(double));
 
 	model_design(kerntree, ar, branch, nodes_per_par, nodes_per_tree, tree_and_node2par);
-	extract_pfadinfo(pfad_index, path_info);
 
+	ifree = 0;
+  ilamfree = 0;
+  int ilamfree1 = 0;
+  int ilamfree2 = 0;
+  for (int ip = 0; ip < 3*kernpar; ip++) {
+    if (ip < kernpar) {
+      if (k2f[ip] == ifree) {
+        ifree++;
+      }
+    } else if (ip < 2*kernpar) {
+      if (k2f[ip] == ifree + ilamfree1) {
+        ilamfree1++;
+        ilamfree++;
+      }
+    } else {
+      if (k2f[ip] == ifree + ilamfree1 + ilamfree2) {
+        ilamfree2++;
+        ilamfree++;
+      }
+    }
+  }
 
 
 	free2kern = (int *)malloc((ifree + ilamfree) * sizeof(int));
 	kern2free = (int *)malloc(3 * kernpar * sizeof(int));
-	int iz = 0; for (int ip = 0; ip != 3 * kernpar; ip++) if (comp[ip]) { kern2free[ip] = iz; free2kern[iz] = ip; iz++; }
-	else kern2free[ip] = -1;
+
+	for (int ip = 0; ip != 3 * kernpar; ip++) {
+		kern2free[ip] = k2f[ip];
+	}
+	for (int iz = 0; iz != ifree + ilamfree; iz++) {
+		free2kern[iz] = f2k[iz];
+	}
+
+	// int iz = 0; for (int ip = 0; ip != 3 * kernpar; ip++) if (comp[ip]) { kern2free[ip] = iz; free2kern[iz] = ip; iz++; }
+	// else kern2free[ip] = -1;
+
+
+	extract_pfadinfo(pfad_index, path_info);
+
+
+
 
 		// Analysis by individuals
 

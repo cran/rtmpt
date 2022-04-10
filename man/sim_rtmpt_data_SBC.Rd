@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate_rtmpt_SBC.R
 \name{sim_rtmpt_data_SBC}
 \alias{sim_rtmpt_data_SBC}
-\title{Simulate data from RT-MPT models}
+\title{Simulate data from an RT-MPT model}
 \usage{
 sim_rtmpt_data_SBC(model, seed, n.subj, n.trials, params = NULL)
 }

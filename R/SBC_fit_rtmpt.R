@@ -1,5 +1,5 @@
 
-#' Simulate data from RT-MPT models
+#' Simulation-based calibration for RT-MPT models
 #'
 #' Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for
 #'   simulation-based calibration (SBC; Talts et al., 2018). You can specify the random seed, number of subjects, number of trials, and some
@@ -179,7 +179,7 @@ fit_rtmpt_SBC <- function(model,
   nminus <- sum(is.na(model$params$taus[1,]))
   nplus <- sum(is.na(model$params$taus[2,]))
   npars <- nprobs + nminus + nplus
-  nresp <- length(unique(model$responses$RESP))
+  nresp <- length(unique(model$responses$MAP))
 
   nparams <- length(coda::varnames(fit_list$samples)) - 1
   rankmat <- matrix(NA, ncol = nparams, nrow = 1)

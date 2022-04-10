@@ -2,7 +2,7 @@
 #define MAIN_H
 
 // namespace rtsNS {
-  int mainx(); //int argc, char *argv[]
+  int mainx(int *k2f, int *f2k); //int argc, char *argv[]
 // }
 
 #endif

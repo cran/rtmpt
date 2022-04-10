@@ -96,15 +96,15 @@ get_diags <- function(diag_file, data_info, keep) {
   diag_list$omega2 <- t(save_HDI2list(indices = omega2_ind, names = "omega2", skip = 0))
 
   resps_chars <- paste0("gamma_prm_", 0:(data_info$Nresps-1))
-  TAU_names <- rep(NA, data_info$Nresps*(data_info$Nresps+1)/2)
+  DELTA_names <- rep(NA, data_info$Nresps*(data_info$Nresps+1)/2)
   ind = 0
   for (i in 1:data_info$Nresps) {
     for (j in i:data_info$Nresps) {
       ind = ind + 1
-      TAU_names[ind] <- paste0(resps_chars[i], "..", resps_chars[j])
+      DELTA_names[ind] <- paste0(resps_chars[i], "..", resps_chars[j])
     }
   }
-  diag_list$SD_CORR_Motor <- t(save_HDI2list(indices = TAU_ind, names = TAU_names, skip = 2))
+  diag_list$SD_CORR_Motor <- t(save_HDI2list(indices = TAU_ind, names = DELTA_names, skip = 2))
   diag_list$RT <- as.data.frame(matrix(data = NA, nrow = 1, ncol = 3))
   colnames(diag_list$RT) <- c("mean", "variance", "residual_var")
   val_char <- strsplit(diag_lines[dat_ind[1]], "\\s+")[[1]]
