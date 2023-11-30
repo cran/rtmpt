@@ -42,7 +42,7 @@
 delta2delta <- function(model, trees, categories, mappings = 0) {
   
   
-  if (class(model) != "rtmpt_model") stop("model must be of class \"rtmpt_model\".")
+  if (!inherits(model, "rtmpt_model")) stop("model must be of class \"rtmpt_model\".")
   if (!("lines" %in% names(model)) || !("params" %in% names(model)) || !("responses" %in% names(model))) stop("No valid model file.")
 
   resps_df <- model$responses

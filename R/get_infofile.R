@@ -125,7 +125,7 @@ setGeneric("restrictions", function(object) standardGeneric("restrictions"))
 setMethod("restrictions", "Rmpt.model", function(object) object@restrictions)
 setGeneric("restrictions<-", function(x, value) standardGeneric("restrictions<-"))
 setReplaceMethod("restrictions", "Rmpt.model", function(x, value) {
-  if (class(value) != "restrictions" | is.null(value)) stop("the model restrictions must be of class restrictions or MULL")
+  if (!inherits(value, "restrictions") | is.null(value)) stop("the model restrictions must be of class restrictions or MULL")
   x@restrictions <- value
   x
 })

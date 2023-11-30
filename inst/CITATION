@@ -3,11 +3,11 @@ citHeader("To cite rtmpt in publications use:")
 
 note <- sprintf("R package version %s", meta$Version)
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
          title = "{rtmpt}: {An R} package for fitting response-time extended multinomial processing tree models",
-         author = personList(as.person("Raphael Hartmann"),
-                             as.person("Lea Johannsen"),
-                             as.person("Karl Christoph Klauer")),
+         author = c(person("Raphael Hartmann"),
+                    person("Lea Johannsen"),
+                    person("Karl Christoph Klauer")),
          journal = "Behavior Research Methods",
          year = "2020",
          volume = "52",
@@ -23,10 +23,10 @@ citEntry(entry = "Article",
          )
 
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
          title = "Extending {RT}-{MPTs} to enable equal process times",
-         author = personList(as.person("Raphael Hartmann"),
-                             as.person("Karl Christoph Klauer")),
+         author = c(person("Raphael Hartmann"),
+                    person("Karl Christoph Klauer")),
          journal = "Journal of Mathematical Psychology",
          year = "2020",
          volume = "96",

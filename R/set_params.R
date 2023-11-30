@@ -44,7 +44,7 @@
 #' @export
 theta2const <- function(model, names, constants = NA) {
   
-  if (class(model) != "rtmpt_model") stop("model must be of class \"rtmpt_model\".")
+  if (!inherits(model, "rtmpt_model")) stop("model must be of class \"rtmpt_model\".")
   if (!("lines" %in% names(model)) || !("params" %in% names(model)) || !("responses" %in% names(model))) stop("No valid model file.")
   
   params_list <- model$params
@@ -150,7 +150,7 @@ set_theta_const <- theta2const
 #' @export
 tau2zero <- function(model, names, outcomes, values = 0) {
   
-  if (class(model) != "rtmpt_model") stop("model must be of class \"rtmpt_model\".")
+  if (!inherits(model, "rtmpt_model")) stop("model must be of class \"rtmpt_model\".")
   if (!("lines" %in% names(model)) || !("params" %in% names(model)) || !("responses" %in% names(model))) stop("No valid model file.")
 
   params_list <- model$params
@@ -311,7 +311,7 @@ set_tau_zero <- tau2zero
 #' @export
 theta2theta <- function(model, names, keep_consts = FALSE) {
   
-  if (class(model) != "rtmpt_model") stop("model must be of class \"rtmpt_model\".")
+  if (!inherits(model, "rtmpt_model")) stop("model must be of class \"rtmpt_model\".")
   if (!("lines" %in% names(model)) || !("params" %in% names(model)) || !("responses" %in% names(model))) stop("No valid model file.")
   
   params_list <- model$params
@@ -426,7 +426,7 @@ set_thetas_equal <- theta2theta
 #' @export
 tau2tau <- function(model, names, keep_zeros = FALSE) {
   
-  if (class(model) != "rtmpt_model") stop("model must be of class \"rtmpt_model\".")
+  if (!inherits(model, "rtmpt_model")) stop("model must be of class \"rtmpt_model\".")
   if (!("lines" %in% names(model)) || !("params" %in% names(model)) || !("responses" %in% names(model))) stop("No valid model file.")
   
   params_list <- model$params

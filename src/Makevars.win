@@ -5,4 +5,4 @@ PKG_CFLAGS = -I$(LIB_GSL)/include
 PKG_CXXFLAGS = -I$(LIB_GSL)/include
 PKG_LIBS = -L$(LIB_GSL)/lib -lgsl -lgslcblas -lR
 
-CXX_STD = CXX11
+# CXX_STD = CXX11

@@ -160,7 +160,7 @@ fit_rtmpt_SBC <- function(model,
 
     if (!is.numeric(n.eff_samples) | n.eff_samples%%1!=0 | n.eff_samples<1) stop("\"n.eff_samples\" must be a natural number larger than one.")
 
-    if (class(sim_list) != "rtmpt_sim") stop("\"sim_list\" is not of class \"rtmpt_sim\".")
+    if (!inherits(sim_list, "rtmpt_sim")) stop("\"sim_list\" is not of class \"rtmpt_sim\".")
   }
 
 

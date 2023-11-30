@@ -324,7 +324,7 @@ int mainx(int *k2f, int *f2k) {
 	gsl_rng *rst;   rst = gsl_rng_alloc(T_rng);
 	gsl_rng_memcpy(rst, rst1);
 	// std::cout << gsl_rng_size(rst) << std::endl;
-	if (DEBUG) Rprintf("%d\n", gsl_rng_size(rst));
+	if (DEBUG) Rprintf("%d\n", static_cast<int>(gsl_rng_size(rst)));
 	// std::cout << gsl_rng_name(rst) << std::endl;
 	if (DEBUG) Rprintf("%s\n", gsl_rng_name(rst));
 	// std::cout << gsl_rng_uniform(rst) << std::endl;

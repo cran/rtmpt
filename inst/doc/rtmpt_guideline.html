@@ -1,271 +1,417 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Overview</title>
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Raphael Hartmann" />
+
+<meta name="date" content="2023-11-30" />
+
+<title>rtmpt: Guideline</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
   }
-};
+});
 </script>
 
-<!-- Styles for R syntax highlighter -->
 <style type="text/css">
-   pre .operator,
-   pre .paren {
-     color: rgb(104, 118, 135)
-   }
-
-   pre .literal {
-     color: #990073
-   }
-
-   pre .number {
-     color: #099;
-   }
-
-   pre .comment {
-     color: #998;
-     font-style: italic
-   }
-
-   pre .keyword {
-     color: #900;
-     font-weight: bold
-   }
-
-   pre .identifier {
-     color: rgb(0, 0, 0);
-   }
-
-   pre .string {
-     color: #d14;
-   }
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
 </style>
 
-<!-- R syntax highlighter -->
-<script type="text/javascript">
-var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
-hljs.initHighlightingOnLoad();
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
 </script>
 
 
 
-<style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
-}
 
-body {
-  max-width: 800px;
-  margin: auto;
-  padding: 1em;
-  line-height: 20px;
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
 }
-
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
 }
-
-h1 {
-   font-size:2.2em;
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
 }
-
-h2 {
-   font-size:1.8em;
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
 }
-
-h3 {
-   font-size:1.4em;
+#TOC ul ul {
+margin-left: -2em;
 }
-
-h4 {
-   font-size:1.0em;
+#TOC li {
+line-height: 16px;
 }
-
-h5 {
-   font-size:0.9em;
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
 }
-
-h6 {
-   font-size:0.8em;
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
 }
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
 }
-
-pre, img {
-  max-width: 100%;
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
 }
 pre {
-  overflow-x: auto;
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
 }
-pre code {
-   display: block; padding: 0.5em;
+pre:not([class]) {
+background-color: #f7f7f7;
 }
-
 code {
-  font-size: 92%;
-  border: 1px solid #ccc;
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
 }
-
-code[class] {
-  background-color: #F8F8F8;
+p > code, li > code {
+padding: 2px 0px;
 }
-
-table, td, th {
-  border: none;
+div.figure {
+text-align: center;
 }
-
-blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
 }
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
 }
-
-@media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
 }
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
+
 
 
 
 </head>
 
 <body>
+
+
+
+
+<h1 class="title toc-ignore">rtmpt: Guideline</h1>
+<h4 class="author">Raphael Hartmann</h4>
+<h4 class="date">2023-11-30</h4>
+
+
+
+<div id="overview" class="section level1">
 <h1>Overview</h1>
-
-<p>Given a data file (text file, <code>data.frame</code>) with the correct variable names (see section 1.3) and a model file (see section 1.1 and 2) the steps needed to fit the RT-MPT model (Hartmann et al., 2020; Hartmann &amp; Klauer, 2020; Klauer &amp; Kellen, 2018) to the data is described in Section 1:</p>
-
-<p>1.1 Convert the equation/model file to a <code>rtmpt_model</code> via the <code>to_rtmpt_model()</code> function
-1.2 If necessary, specify some restrictions
-1.3 Convert the data file to a <code>rtmpt_data</code> format via the <code>to_rtmpt_data()</code> function
-1.4 Fit the specified model to the data via the <code>fit_rtmpt()</code> function
+<p>Given a data file (text file, <code>data.frame</code>) with the
+correct variable names (see section 1.3) and a model file (see section
+1.1 and 2) the steps needed to fit the RT-MPT model (Hartmann et al.,
+2020; Hartmann &amp; Klauer, 2020; Klauer &amp; Kellen, 2018) to the
+data is described in Section 1:</p>
+<p>1.1 Convert the equation/model file to a <code>rtmpt_model</code> via
+the <code>to_rtmpt_model()</code> function 1.2 If necessary, specify
+some restrictions 1.3 Convert the data file to a <code>rtmpt_data</code>
+format via the <code>to_rtmpt_data()</code> function 1.4 Fit the
+specified model to the data via the <code>fit_rtmpt()</code> function
 1.5 Check convergence of the model parameters and getting a summary</p>
-
-<p>In Section 2, 3, and 4 more information about the equation/model files, the data and additional functions is provided.</p>
-
+<p>In Section 2, 3, and 4 more information about the equation/model
+files, the data and additional functions is provided.</p>
+</div>
+<div id="detailed-explanation-of-the-steps" class="section level1">
 <h1>1 Detailed explanation of the steps</h1>
-
+<div id="model-converter" class="section level2">
 <h2>1.1 Model converter</h2>
-
-<p>The equation/model file can be provided by a text file or directly like the following. One might use a syntax that is comparable to the <code>EQN</code> syntax by Heck, Arnold, and Arnold (2018) or Hu (1999) or a syntax that is comparable to the <code>MDL</code> syntax by Singmann and Kellen (2013). In the <code>EQN</code> syntax you can separate trees, categories and paths either by using semicolons (like in the example below) or commas, but not mixed:</p>
-
-<pre><code class="r">eqn = &quot;
-# CORE MODEL
-## EQN SYNTAX
-
-## tree ; cat ;          mpt
-      0 ;   0 ;           Do
-      0 ;   0 ;     (1-Do)*g
-      0 ;   1 ; (1-Do)*(1-g)
-
-      1 ;   3 ;           Dn
-      1 ;   2 ;     (1-Dn)*g
-      1 ;   3 ; (1-Dn)*(1-g)
-&quot;
-</code></pre>
-
-<p>In this <code>eqn</code> object we specify a Two-High Threshold (2HT) model. Comments can be done with a <code>#</code> symbol at the beginning of a line.</p>
-
+<p>The equation/model file can be provided by a text file or directly
+like the following. One might use a syntax that is comparable to the
+<code>EQN</code> syntax by Heck, Arnold, and Arnold (2018) or Hu (1999)
+or a syntax that is comparable to the <code>MDL</code> syntax by
+Singmann and Kellen (2013). In the <code>EQN</code> syntax you can
+separate trees, categories and paths either by using semicolons (like in
+the example below) or commas, but not mixed:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">## EQN SYNTAX</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">## tree ; cat ;          mpt</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>In this <code>eqn</code> object we specify a Two-High Threshold (2HT)
+model. Comments can be done with a <code>#</code> symbol at the
+beginning of a line.</p>
 <p>The same model can be specified with the <code>MDL</code> syntax:</p>
-
-<pre><code class="r">mdl = &quot;
-# CORE MODEL
-## MDL SYNTAX
-
-### targets
-Do+(1-Do)*g
-(1-Do)*(1-g)
-
-### lure
-(1-Dn)*g
-Dn+(1-Dn)*(1-g)
-&quot;
-</code></pre>
-
-<p>All paths that lead to the same response category will be added together with a <code>+</code> symbol. </p>
-
-<p>More information about these two syntaxes are written in Section 2.</p>
-
-<p>The conversion to an <code>rtmpt_model</code> list can then be done by the <code>to_rtmpt_model()</code> function:</p>
-
-<pre><code class="r">library(rtmpt)
-# using the MDL syntax:
-TwoHTM &lt;- to_rtmpt_model(mdl_file = mdl)
-# using the EQN syntax:
-TwoHTM &lt;- to_rtmpt_model(eqn_file = eqn)
-TwoHTM
-</code></pre>
-
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">## MDL SYNTAX</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">### targets</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">### lure</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>All paths that lead to the same response category will be added
+together with a <code>+</code> symbol.</p>
+<p>More information about these two syntaxes are written in Section
+2.</p>
+<p>The conversion to an <code>rtmpt_model</code> list can then be done
+by the <code>to_rtmpt_model()</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtmpt)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using the MDL syntax:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TwoHTM <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># using the EQN syntax:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>TwoHTM <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>TwoHTM</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -312,23 +458,24 @@ TwoHTM
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
-## -----------------------------------
-</code></pre>
-
-<pre><code class="r"># 
-</code></pre>
-
+## -----------------------------------</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div>
+</div>
+<div id="model-restrictions" class="section level2">
 <h2>1.2 Model restrictions</h2>
-
-<p>There are five functions with which an <code>rtmpt_model</code> object can be changed. Two functions can be used to hold a process probability parameter (theta) constant or to make some process probability parameters equal. Two functions can be used to suppress process completion times (taus), which means the process times are set to zero, or to make some process completion times equal. The last function handles how many different motor and execution times (deltas) are used in the model.</p>
-
+<p>There are five functions with which an <code>rtmpt_model</code>
+object can be changed. Two functions can be used to hold a process
+probability parameter (theta) constant or to make some process
+probability parameters equal. Two functions can be used to suppress
+process completion times (taus), which means the process times are set
+to zero, or to make some process completion times equal. The last
+function handles how many different motor and execution times (deltas)
+are used in the model.</p>
+<div id="modifying-process-probabilities" class="section level3">
 <h3>Modifying process probabilities</h3>
-
-<p>To hold a process probability constant you can use <code>theta2const()</code> like this:</p>
-
-<pre><code class="r">theta2const(model = TwoHTM, names = &quot;g&quot;, constants = 0.5)
-</code></pre>
-
+<p>To hold a process probability constant you can use
+<code>theta2const()</code> like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2const</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -375,16 +522,15 @@ TwoHTM
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
-## -----------------------------------
-</code></pre>
-
-<p>Here, <code>&quot;g&quot;</code> will be set to be equal to 0.5 and will not be estimated therefore.,You might also use this function with a vector of <code>names</code> (and a vector of <code>constants</code>). Note that the new model is not saved because we did not assign it to an R object.</p>
-
-<p>To set two or more process probabilities equal you can use <code>theta2theta()</code> like this:</p>
-
-<pre><code class="r">theta2theta(model = TwoHTM, names = c(&quot;Do&quot;, &quot;Dn&quot;), keep_consts = FALSE)
-</code></pre>
-
+## -----------------------------------</code></pre>
+<p>Here, <code>&quot;g&quot;</code> will be set to be equal to 0.5 and will not be
+estimated therefore.,You might also use this function with a vector of
+<code>names</code> (and a vector of <code>constants</code>). Note that
+the new model is not saved because we did not assign it to an R
+object.</p>
+<p>To set two or more process probabilities equal you can use
+<code>theta2theta()</code> like this:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2theta</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -431,18 +577,22 @@ TwoHTM
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
-## -----------------------------------
-</code></pre>
-
-<p>The process probabilities for all processes specified in <code>names</code> are set equal. The first of the process <code>names</code> in alphabetical order (here <code>&quot;dn&quot;</code>) denotes the reference probability that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process probability. The <code>keep_consts</code> argument can be used, if you want to keep constants that you already specified and all other process probabilities should have the same constant but we suggest to use <code>theta2const()</code> for that.</p>
-
+## -----------------------------------</code></pre>
+<p>The process probabilities for all processes specified in
+<code>names</code> are set equal. The first of the process
+<code>names</code> in alphabetical order (here <code>&quot;dn&quot;</code>)
+denotes the reference probability that will be estimated. The other(s)
+will not be estimated but will be set to be equal to the reference
+process probability. The <code>keep_consts</code> argument can be used,
+if you want to keep constants that you already specified and all other
+process probabilities should have the same constant but we suggest to
+use <code>theta2const()</code> for that.</p>
+</div>
+<div id="modifying-process-completion-times" class="section level3">
 <h3>Modifying process completion times</h3>
-
-<p>To suppress a process completion time (i.e., set it to zero) you can use <code>tau2zero()</code> like this:</p>
-
-<pre><code class="r">tau2zero(model = TwoHTM, names = &quot;g&quot;, outcomes = &quot;minus&quot;, values = 0)
-</code></pre>
-
+<p>To suppress a process completion time (i.e., set it to zero) you can
+use <code>tau2zero()</code> like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2zero</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">outcomes =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">values =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -489,16 +639,14 @@ TwoHTM
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
-## -----------------------------------
-</code></pre>
-
-<p>Here, the process completion time of <code>&quot;g&quot;</code> with outcome <code>&quot;minus&quot;</code> (meaning the time for 1-g) is set to zero and will not be estimated therefore (which typically does not make sense to do). Also this function can be used with vectors.</p>
-
-<p>To set two or more process completion times with the same outcome equal you can use <code>theta2theta()</code> like this:</p>
-
-<pre><code class="r">tau2tau(model = TwoHTM, names = c(&quot;Do&quot;, &quot;Dn&quot;), keep_zeros = FALSE)
-</code></pre>
-
+## -----------------------------------</code></pre>
+<p>Here, the process completion time of <code>&quot;g&quot;</code> with outcome
+<code>&quot;minus&quot;</code> (meaning the time for 1-g) is set to zero and will
+not be estimated therefore (which typically does not make sense to do).
+Also this function can be used with vectors.</p>
+<p>To set two or more process completion times with the same outcome
+equal you can use <code>theta2theta()</code> like this:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2tau</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_zeros =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -545,18 +693,31 @@ TwoHTM
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
-## -----------------------------------
-</code></pre>
-
-<p>The process completion times for all processes specified in <code>names</code> are set equal (i.e., all process completion times in minus-direction will be equal and all process completion times in plus-direction will be equal). The first of the process <code>names</code> in alphabetical order (here <code>&quot;dn&quot;</code>) denotes the reference process times (in minus and plus direction) that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process times. The <code>keep_zeros</code> argument can be used, if you want to keep the zeros that you already specified and all other process times with the same outcome should be zero as well. Also here we suggest using the <code>tau2zero()</code> function.</p>
-
+## -----------------------------------</code></pre>
+<p>The process completion times for all processes specified in
+<code>names</code> are set equal (i.e., all process completion times in
+minus-direction will be equal and all process completion times in
+plus-direction will be equal). The first of the process
+<code>names</code> in alphabetical order (here <code>&quot;dn&quot;</code>)
+denotes the reference process times (in minus and plus direction) that
+will be estimated. The other(s) will not be estimated but will be set to
+be equal to the reference process times. The <code>keep_zeros</code>
+argument can be used, if you want to keep the zeros that you already
+specified and all other process times with the same outcome should be
+zero as well. Also here we suggest using the <code>tau2zero()</code>
+function.</p>
+</div>
+<div id="modifying-motor-and-exectution-times" class="section level3">
 <h3>Modifying motor and exectution times</h3>
-
-<p>You can choose which categories of the (RT-)MPT model should have the same encoding plus motor execution time. Unlike the processes the motor plus execution times have no names which we can use to set them equal. Therefore a mapping is used in the function <code>delta2delta()</code> where the response categories (<code>categories</code>) can be mapped to encoding plus motor execution times by using a mapping argument (<code>mappings</code>). Because the response categories are not always unique the tree (<code>trees</code>) has to be provided as well.</p>
-
-<pre><code class="r">delta2delta(model = TwoHTM, trees = c(0,1), categories = c(1,3), mappings = c(1,1))
-</code></pre>
-
+<p>You can choose which categories of the (RT-)MPT model should have the
+same encoding plus motor execution time. Unlike the processes the motor
+plus execution times have no names which we can use to set them equal.
+Therefore a mapping is used in the function <code>delta2delta()</code>
+where the response categories (<code>categories</code>) can be mapped to
+encoding plus motor execution times by using a mapping argument
+(<code>mappings</code>). Because the response categories are not always
+unique the tree (<code>trees</code>) has to be provided as well.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">delta2delta</span>(<span class="at">model =</span> TwoHTM, <span class="at">trees =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">categories =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">mappings =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -603,34 +764,50 @@ TwoHTM
 ## * NOTE 1: Unique representation of trees and categories.
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 2 distinct delta(s) assumed, namely with mapping [ 0, 1 ].
-## -----------------------------------
-</code></pre>
-
-<p>The numbers for the mappings have to start at zero and no whole number can be skipped. For example in the above code the <code>mappings</code> cannot be <code>c(2,2)</code> since the number 1 would be missing then in the mappings. </p>
-
+## -----------------------------------</code></pre>
+<p>The numbers for the mappings have to start at zero and no whole
+number can be skipped. For example in the above code the
+<code>mappings</code> cannot be <code>c(2,2)</code> since the number 1
+would be missing then in the mappings.</p>
+</div>
+</div>
+<div id="the-right-data-format" class="section level2">
 <h2>1.3 The right data format</h2>
-
-<p>The data should be provided with the following variables in this order: <code>subj</code>, <code>group</code>, <code>tree</code>, <code>cat</code>, and <code>rt</code>. All of these variables except <code>rt</code> should have values from zero to the number of unique values minus one. This will get clear with an example; if we have 60 subjects, two groups, two trees and four categories we would have the following values in the variables:</p>
-
+<p>The data should be provided with the following variables in this
+order: <code>subj</code>, <code>group</code>, <code>tree</code>,
+<code>cat</code>, and <code>rt</code>. All of these variables except
+<code>rt</code> should have values from zero to the number of unique
+values minus one. This will get clear with an example; if we have 60
+subjects, two groups, two trees and four categories we would have the
+following values in the variables:</p>
 <ul>
-<li><code>subj = {0,1,2,...,58,59}</code>, </li>
-<li><code>group = {0,1}</code>, </li>
-<li><code>tree = {0,1}</code>, and </li>
+<li><code>subj = {0,1,2,...,58,59}</code>,</li>
+<li><code>group = {0,1}</code>,</li>
+<li><code>tree = {0,1}</code>, and</li>
 <li><code>cat = {0,1,2,3}</code>.</li>
 </ul>
-
-<p><code>rt</code> should be provided in milliseconds and as integers. If it has decimal places it will be rounded to a whole number.</p>
-
-<p>Given the right order of the variables and the right values one can use a <code>data.frame</code> or a path to a text file containing the variable names in the first line. If not, the <code>to_rtmpt_data()</code> function can be used to reorder the variables and transform the values of those variables. Next to the new <code>data.frame</code> the transformation that is used will be saved in an <code>rtmpt_data</code> list. Note that <strong>at least</strong> the variable names should be correctly provided in order to make <code>to_rtmpt_data()</code> work. The <code>to_rtmpt_data()</code> function is also used automatically in the <code>fit_rtmpt()</code> function, but should be used at least once, when the model is specified the first time, to check whether the data is transformed according to the equation/model file.</p>
-
-<p>Here is an example of a data set with unordered variables and wrong values (not starting from zero) and a transformation of this data set:</p>
-
-<pre><code class="r">set.seed(2021)
-raw_data &lt;- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
-                       group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
-raw_data
-</code></pre>
-
+<p><code>rt</code> should be provided in milliseconds and as integers.
+If it has decimal places it will be rounded to a whole number.</p>
+<p>Given the right order of the variables and the right values one can
+use a <code>data.frame</code> or a path to a text file containing the
+variable names in the first line. If not, the
+<code>to_rtmpt_data()</code> function can be used to reorder the
+variables and transform the values of those variables. Next to the new
+<code>data.frame</code> the transformation that is used will be saved in
+an <code>rtmpt_data</code> list. Note that <strong>at least</strong> the
+variable names should be correctly provided in order to make
+<code>to_rtmpt_data()</code> work. The <code>to_rtmpt_data()</code>
+function is also used automatically in the <code>fit_rtmpt()</code>
+function, but should be used at least once, when the model is specified
+the first time, to check whether the data is transformed according to
+the equation/model file.</p>
+<p>Here is an example of a data set with unordered variables and wrong
+values (not starting from zero) and a transformation of this data
+set:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tree =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="at">rt =</span> <span class="fu">round</span>(<span class="dv">1000</span><span class="sc">*</span>(<span class="fu">runif</span>(<span class="dv">16</span>)<span class="sc">+</span>.<span class="dv">3</span>)), </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">group =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">8</span>), <span class="at">subj =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> <span class="dv">4</span>), <span class="at">cat =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>raw_data</span></code></pre></div>
 <pre><code>##    tree   rt group subj cat
 ## 1     1  751     1    1   1
 ## 2     2 1084     1    1   2
@@ -647,13 +824,9 @@ raw_data
 ## 13    1  903     2    4   1
 ## 14    2  867     2    4   2
 ## 15    1 1120     2    4   3
-## 16    2  552     2    4   4
-</code></pre>
-
-<pre><code class="r">data &lt;- to_rtmpt_data(raw_data = raw_data, model = TwoHTM)
-data
-</code></pre>
-
+## 16    2  552     2    4   4</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_data</span>(<span class="at">raw_data =</span> raw_data, <span class="at">model =</span> TwoHTM)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
 <pre><code>## 
 ## DATA TRANSFORMATION OVERVIEW
 ## 
@@ -690,160 +863,228 @@ data
 ## 4   4   3
 ## 
 ## * NOTE: &quot;old&quot; refers to the used labels and &quot;new&quot; to the ones that will be used.
-## ------------------------
-</code></pre>
-
-<p>Note that it is never a good idea to specify the tree and category labels/numbers differently from the data file, or vice versa. It is bad practice to define a model with tree and category values starting from zero and using a data set with tree and category values starting from one; Make sure the labels or numbers match for these two match.</p>
-
+## ------------------------</code></pre>
+<p>Note that it is never a good idea to specify the tree and category
+labels/numbers differently from the data file, or vice versa. It is bad
+practice to define a model with tree and category values starting from
+zero and using a data set with tree and category values starting from
+one; Make sure the labels or numbers match for these two match.</p>
+</div>
+<div id="model-fitting" class="section level2">
 <h2>1.4 Model fitting</h2>
-
-<p>Finally, with the function <code>fit_rtmpt()</code> one can fit the model to the data. This code should not be run. There are way too few data points.</p>
-
-<pre><code class="r">## do not run
-rtmpt_out &lt;- fit_rtmpt(model = TwoHTM, data = data)
-## end not run
-</code></pre>
-
-<p>In this function call we used the default values for all the parameters that are not listed in the call. <code>model</code> and <code>data</code> do not have default values. The full call of the function would look like this:</p>
-
-<pre><code class="r">## do not run
-rtmpt_out &lt;- fit_rtmpt(model = restr_2HTM, 
-                       data = data, 
-                       n.chains = 4, 
-                       n.iter = 5000, 
-                       n.burnin = 200,
-                       n.thin = 1, 
-                       Rhat_max = 1.05, 
-                                 Irep = 1000, 
-                       prior_params = NULL,
-                       indices = FALSE,
-                       save_log_lik = FALSE)
-## end not run
-</code></pre>
-
-<p><code>n.chains</code> is the number of chains with a maximum of 16, <code>n.iter</code> is the number of samples to draw from the posterior distribution, <code>n.burnin</code> is analogue to the burn-in phase for R package <code>rjags</code>, <code>Rhat_max</code> is a threshold for the potential scale reduction factor and forces the sampling to start only when the maximal potential scale reduction factor of the parameters is lower or equal to this value, <code>n.thin</code> is the thinning parameter, <code>Irep</code> is the number of samples until the next summary is printed, <code>prior_params</code> is a list of some prior parameter specifications, <code>indices</code> is a logical parameter with which one can allow to compute the WAIC and LOO, and <code>save_log_lik</code> is a logical parameter that allows one to save the log-likelihood for each posterior sample and data point.</p>
-
+<p>Finally, with the function <code>fit_rtmpt()</code> one can fit the
+model to the data. This code should not be run. There are way too few
+data points.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_rtmpt</span>(<span class="at">model =</span> TwoHTM, <span class="at">data =</span> data)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<p>In this function call we used the default values for all the
+parameters that are not listed in the call. <code>model</code> and
+<code>data</code> do not have default values. The full call of the
+function would look like this:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>rtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_rtmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> data, </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.iter =</span> <span class="dv">5000</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.burnin =</span> <span class="dv">200</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">indices =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">save_log_lik =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<p><code>n.chains</code> is the number of chains with a maximum of 16,
+<code>n.iter</code> is the number of samples to draw from the posterior
+distribution, <code>n.burnin</code> is analogue to the burn-in phase for
+R package <code>rjags</code>, <code>Rhat_max</code> is a threshold for
+the potential scale reduction factor and forces the sampling to start
+only when the maximal potential scale reduction factor of the parameters
+is lower or equal to this value, <code>n.thin</code> is the thinning
+parameter, <code>Irep</code> is the number of samples until the next
+summary is printed, <code>prior_params</code> is a list of some prior
+parameter specifications, <code>indices</code> is a logical parameter
+with which one can allow to compute the WAIC and LOO, and
+<code>save_log_lik</code> is a logical parameter that allows one to save
+the log-likelihood for each posterior sample and data point.</p>
+</div>
+<div id="checking-model-convergence-and-getting-a-summary" class="section level2">
 <h2>1.5 Checking model convergence and getting a summary</h2>
-
-<p>Convergence of the model can be checked by using the fitted object (here <code>rtmpt_out</code>). Just get the diagnostics and then R-hat. In order to get a traceplot one can use the <code>traceplot()</code> function from <code>coda</code>. You can also use the <code>summary()</code> function to get a summary of the estimates.</p>
-
-<pre><code class="r">rtmpt_out$diags$R_hat
-coda::traceplot(rtmpt_out$samples[, 1:9])
-summary(rtmpt_out)
-</code></pre>
-
+<p>Convergence of the model can be checked by using the fitted object
+(here <code>rtmpt_out</code>). Just get the diagnostics and then R-hat.
+In order to get a traceplot one can use the <code>traceplot()</code>
+function from <code>coda</code>. You can also use the
+<code>summary()</code> function to get a summary of the estimates.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rtmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(rtmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rtmpt_out)</span></code></pre></div>
+</div>
+</div>
+<div id="equation-and-model-files" class="section level1">
 <h1>2 Equation and model files</h1>
-
-<p>In previous versions it was possible to set some restrictions directly in the equation/model file, but due to the number of restrictions that are possible we decided to use now functions instead (see Subsection 1.2).</p>
-
+<p>In previous versions it was possible to set some restrictions
+directly in the equation/model file, but due to the number of
+restrictions that are possible we decided to use now functions instead
+(see Subsection 1.2).</p>
+<div id="equation-files" class="section level2">
 <h2>2.1 Equation files</h2>
-
-<p>As we have seen above one can specify an equation file (<code>eqn_file</code>) like this:</p>
-
-<pre><code class="r">eqn = &quot;
-# CORE MODEL
-## tree ; cat ;         path
-      0 ;   0 ;           Do
-      0 ;   0 ;     (1-Do)*g
-      0 ;   1 ; (1-Do)*(1-g)
-
-      1 ;   3 ;           Dn
-      1 ;   2 ;     (1-Dn)*g
-      1 ;   3 ; (1-Dn)*(1-g)
-&quot;
-</code></pre>
-
-<p>The trees, categories, and paths need to be separated by a semi-colon or a comma, but should not be mixed. As mentioned above the <code>eqn_file</code> can be provided by a text file through a path to the file or written directly in R/Rstudio like above.</p>
-
+<p>As we have seen above one can specify an equation file
+(<code>eqn_file</code>) like this:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="st">## tree ; cat ;         path</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>The trees, categories, and paths need to be separated by a semi-colon
+or a comma, but should not be mixed. As mentioned above the
+<code>eqn_file</code> can be provided by a text file through a path to
+the file or written directly in R/Rstudio like above.</p>
+</div>
+<div id="model-files" class="section level2">
 <h2>2.2 Model files</h2>
-
-<p>Another way of specifying the same model is by providing a model file (<code>mdl_file</code>). This is also not yet the model itself as needed for the <code>fit_rtmpt()</code> call, but much closer. It is based on the syntax developed by Singmann and Kellen (2013).</p>
-
-<pre><code class="r">mdl = &quot;
-# CORE MODEL
-## targets:
-Do+(1-Do)*g
-(1-Do)*(1-g)
-
-## lures
-(1-Dn)*g
-Dn+(1-Dn)*(1-g)
-&quot;
-</code></pre>
-
-<p>Between two trees (here targets and lures) there must be an empty line. All paths which lead to the same response category are added together on one line by a <code>+</code> symbol.</p>
-
-<p>Internally an <code>eqn_file</code> will be converted to an <code>mdl_file</code>. From that a text file will be written locally onto your computer, used by the <code>fit_rtmpt()</code> call, and removed afterwards. </p>
-
+<p>Another way of specifying the same model is by providing a model file
+(<code>mdl_file</code>). This is also not yet the model itself as needed
+for the <code>fit_rtmpt()</code> call, but much closer. It is based on
+the syntax developed by Singmann and Kellen (2013).</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">## targets:</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">## lures</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>Between two trees (here targets and lures) there must be an empty
+line. All paths which lead to the same response category are added
+together on one line by a <code>+</code> symbol.</p>
+<p>Internally an <code>eqn_file</code> will be converted to an
+<code>mdl_file</code>. From that a text file will be written locally
+onto your computer, used by the <code>fit_rtmpt()</code> call, and
+removed afterwards.</p>
+</div>
+</div>
+<div id="data-transformation" class="section level1">
 <h1>3 Data transformation</h1>
-
+<div id="labels-in-data-file" class="section level2">
 <h2>3.1 Labels in data file</h2>
-
-<p>When labels are used in the data set one has to be cautious when specifying the equation file. The labels of the trees and categories in the equation file must match those of the data. For example, if the tree labels &ldquo;target&rdquo; and &ldquo;lure&rdquo; are used in the data set, one has to use those also in the equation file (<code>eqn_file</code>). If you specify a model file (<code>mdl_file</code>) instead of the equation file the labels in the data set need to be changed to numerics. Otherwise no mapping between those can be done.</p>
-
+<p>When labels are used in the data set one has to be cautious when
+specifying the equation file. The labels of the trees and categories in
+the equation file must match those of the data. For example, if the tree
+labels “target” and “lure” are used in the data set, one has to use
+those also in the equation file (<code>eqn_file</code>). If you specify
+a model file (<code>mdl_file</code>) instead of the equation file the
+labels in the data set need to be changed to numerics. Otherwise no
+mapping between those can be done.</p>
+</div>
+<div id="numbers-in-data-file" class="section level2">
 <h2>3.2 Numbers in data file</h2>
-
-<p>When numbers are used in the data set for the trees and categories it is best to also check that they match with the ones used in the equation / model file, but the program checks for the order. So for example, if you are using the numbers {1, 2, 3, 4} for your four trees in the data set and {0, 1, 2, 3} in the equation file (which is the standard for model files anyway) they will be mapped through the order. The new data, that can be used, will have a zero instead of a one, a one instead of a two, and so on.</p>
-
-<p>One could use labels in the equation file even though you are using numbers in the data file, but it is <strong>strongly advised against</strong> it. It will be assumed, that the order in which you specify the equations matches the order of the numbers in the data file starting from the lowest to the highest. So if you are using again {1, 2, 3, 4} for the four trees, then the first tree you need to define in the equation files (no matter what label you use) must correspond to tree 1 in the data and so on.</p>
-
+<p>When numbers are used in the data set for the trees and categories it
+is best to also check that they match with the ones used in the equation
+/ model file, but the program checks for the order. So for example, if
+you are using the numbers {1, 2, 3, 4} for your four trees in the data
+set and {0, 1, 2, 3} in the equation file (which is the standard for
+model files anyway) they will be mapped through the order. The new data,
+that can be used, will have a zero instead of a one, a one instead of a
+two, and so on.</p>
+<p>One could use labels in the equation file even though you are using
+numbers in the data file, but it is <strong>strongly advised
+against</strong> it. It will be assumed, that the order in which you
+specify the equations matches the order of the numbers in the data file
+starting from the lowest to the highest. So if you are using again {1,
+2, 3, 4} for the four trees, then the first tree you need to define in
+the equation files (no matter what label you use) must correspond to
+tree 1 in the data and so on.</p>
+</div>
+</div>
+<div id="data-simulation-and-simulation-based-calibration" class="section level1">
 <h1>4 Data simulation and simulation-based calibration</h1>
-
+<div id="data-simulation" class="section level2">
 <h2>Data simulation</h2>
-
-<p>With the function <code>sim_rtmpt_data()</code> it is possible to generate data from an RT-MPT model. Required is a model object generated with the function <code>to_rtmpt_model()</code>, a random seed number, the number of subjects, the number of trials per tree in the model, and a named list of parameters. Here it is also possible to set the mean of <code>mean_of_mu_alpha</code>; A value of zero refers to the probability of <code>0.5</code>. If a given probability is desired, say <code>0.4</code>, then one might specify <code>params &lt;- list(mean_of_mu_alpha = qnorm(.4))</code>. If a mean process time of <code>200</code> ms is required, one might specify <code>params &lt;- list(mean_of_exp_mu_beta = 1000/200)</code>. The mean parameter of the motor times is easier to transform, since they are already on the second scale; Just write <code>500/1000</code> if your mean motor time should be <code>500</code> ms. The code below shows a more or less good balance between too large variances (leading to too many extreme values like probabilities of zero and one and RTs of zero) and too small variances (unrealistic data).</p>
-
-<p>Important: If no variances are specified in the <code>params</code> argument, then the corresponding mean values are fixed, else they will be randomly drawn.</p>
-
-<pre><code class="r"># randomly drawn group-level mean values
-mdl_2HTM &lt;- &quot;
-# targets
-do+(1-do)*g     ; 0
-(1-do)*(1-g)    ; 1
-
-# lures
-(1-dn)*g        ; 0
-dn+(1-dn)*(1-g) ; 1
-
-# do: detect old; dn: detect new; g: guess
-&quot;
-
-model &lt;- to_rtmpt_model(mdl_file = mdl_2HTM)
-
-# random group-level parameters
-params &lt;- list(mean_of_mu_alpha = 0, 
-               var_of_mu_alpha = 1,         # delete this line to fix mean_of_mu_alpha to 0
-               mean_of_exp_mu_beta = 10, 
-               var_of_exp_mu_beta = 10,     # delete this line to fix mean_of_exp_mu_beta to 10
-               mean_of_mu_gamma = 0.5, 
-               var_of_mu_gamma = 0.0025,    # delete this line to fix mean_of_mu_gamma to 0.5
-               mean_of_omega_sqr = 0.005, 
-               var_of_omega_sqr = 0.000025, # delete this line to fix mean_of_omega_sqr to 0.005
-               df_of_sigma_sqr = 10, 
-               sf_of_scale_matrix_SIGMA = 0.1, 
-               sf_of_scale_matrix_GAMMA = 0.01, 
-               prec_epsilon = 10,
-               add_df_to_invWish = 5)
-
-sim_dat &lt;- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
-head(sim_dat$data_frame)
-</code></pre>
-
+<p>With the function <code>sim_rtmpt_data()</code> it is possible to
+generate data from an RT-MPT model. Required is a model object generated
+with the function <code>to_rtmpt_model()</code>, a random seed number,
+the number of subjects, the number of trials per tree in the model, and
+a named list of parameters. Here it is also possible to set the mean of
+<code>mean_of_mu_alpha</code>; A value of zero refers to the probability
+of <code>0.5</code>. If a given probability is desired, say
+<code>0.4</code>, then one might specify
+<code>params &lt;- list(mean_of_mu_alpha = qnorm(.4))</code>. If a mean
+process time of <code>200</code> ms is required, one might specify
+<code>params &lt;- list(mean_of_exp_mu_beta = 1000/200)</code>. The mean
+parameter of the motor times is easier to transform, since they are
+already on the second scale; Just write <code>500/1000</code> if your
+mean motor time should be <code>500</code> ms. The code below shows a
+more or less good balance between too large variances (leading to too
+many extreme values like probabilities of zero and one and RTs of zero)
+and too small variances (unrealistic data).</p>
+<p>Important: If no variances are specified in the <code>params</code>
+argument, then the corresponding mean values are fixed, else they will
+be randomly drawn.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drawn group-level mean values</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mdl_2HTM <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="st"># targets</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="st">do+(1-do)*g     ; 0</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-do)*(1-g)    ; 1</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="st"># lures</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-dn)*g        ; 0</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="st">dn+(1-dn)*(1-g) ; 1</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="st"># do: detect old; dn: detect new; g: guess</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_model</span>(<span class="at">mdl_file =</span> mdl_2HTM)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># random group-level parameters</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_of_mu_alpha =</span> <span class="dv">0</span>, </span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_alpha =</span> <span class="dv">1</span>,         <span class="co"># delete this line to fix mean_of_mu_alpha to 0</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_exp_mu_beta =</span> <span class="dv">10</span>, </span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_exp_mu_beta =</span> <span class="dv">10</span>,     <span class="co"># delete this line to fix mean_of_exp_mu_beta to 10</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_mu_gamma =</span> <span class="fl">0.5</span>, </span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_gamma =</span> <span class="fl">0.0025</span>,    <span class="co"># delete this line to fix mean_of_mu_gamma to 0.5</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_omega_sqr =</span> <span class="fl">0.005</span>, </span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_omega_sqr =</span> <span class="fl">0.000025</span>, <span class="co"># delete this line to fix mean_of_omega_sqr to 0.005</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">df_of_sigma_sqr =</span> <span class="dv">10</span>, </span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_SIGMA =</span> <span class="fl">0.1</span>, </span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_GAMMA =</span> <span class="fl">0.01</span>, </span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>               <span class="at">prec_epsilon =</span> <span class="dv">10</span>,</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">add_df_to_invWish =</span> <span class="dv">5</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_rtmpt_data</span>(model, <span class="at">seed =</span> <span class="dv">123</span>, <span class="at">n.subj =</span> <span class="dv">40</span>, <span class="at">n.trials =</span> <span class="dv">30</span>, <span class="at">params =</span> params)</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data_frame)</span></code></pre></div>
 <pre><code>##   subj group tree cat  rt
 ## 1    0     0    0   0 560
 ## 2    0     0    0   0 456
 ## 3    0     0    0   0 538
 ## 4    0     0    0   0 427
 ## 5    0     0    0   1 420
-## 6    0     0    0   0 574
-</code></pre>
-
+## 6    0     0    0   0 574</code></pre>
+</div>
+<div id="simulation-based-calibration" class="section level2">
 <h2>4.1 Simulation-based calibration</h2>
-
-<p>With the function <code>fit_rtmpt_SBC()</code> it is possible to generate data and fit the model to that data using the same priors / ground truths. The main output of this function will be the rank statistic for each parameter in the model, which is needed for the simulation-based calibration (SBC) method by Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). For example, if this function is repeated, say <code>2000</code> times, with different <code>seeds</code> one might add all the rank statistics to a matrix (<code>2000</code> rows and number of parameters as columns) and then calculate the pearsons&#39; chi-squared statistic. This allows one to test for how many of the parameters the rank statistics are not uniformly distributed. A value of about <code>0.05</code> is typical for a test with an alpha level of <code>0.05</code>.</p>
-
+<p>With the function <code>fit_rtmpt_SBC()</code> it is possible to
+generate data and fit the model to that data using the same priors /
+ground truths. The main output of this function will be the rank
+statistic for each parameter in the model, which is needed for the
+simulation-based calibration (SBC) method by Talts, Betancourt, Simpson,
+Vehtari, and Gelman (2018). For example, if this function is repeated,
+say <code>2000</code> times, with different <code>seeds</code> one might
+add all the rank statistics to a matrix (<code>2000</code> rows and
+number of parameters as columns) and then calculate the pearsons’
+chi-squared statistic. This allows one to test for how many of the
+parameters the rank statistics are not uniformly distributed. A value of
+about <code>0.05</code> is typical for a test with an alpha level of
+<code>0.05</code>.</p>
 <p>Here is an example of one replication of the SBC procedure:</p>
-
 <pre><code>mdl_2HTM &lt;- &quot;
 # targets
 d+(1-d)*g     ; 0
@@ -872,11 +1113,11 @@ params &lt;- list(mean_of_exp_mu_beta = 10,
 
 SBC_out &lt;- fit_rtmpt_SBC(model, seed = 123, prior_params = params)
 SBC_out$ranks
-
 </code></pre>
-
-<p>With the following code it would essentially be possible to calculate the rank statistics of each parameter and then test it with the pearsons&#39; chi-squared test, but much is not considered here (e.g. the convergence and the effective sample size).</p>
-
+<p>With the following code it would essentially be possible to calculate
+the rank statistics of each parameter and then test it with the
+pearsons’ chi-squared test, but much is not considered here (e.g. the
+convergence and the effective sample size).</p>
 <pre><code># For 2000 replications
 ## This takes too long to run and in addition, Rhat should always be 
 ## checked as well as the effective sample size.
@@ -893,37 +1134,64 @@ x &lt;- apply(rank_mat[1:R,], 2, table)
 expect &lt;- R/100 # 100 = number of bins/cells (0:99)
 pearson &lt;- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
 z95 &lt;- qchisq(0.95, 99) # 99 = degrees of freedom
-sum(pearson&gt;z95) / length(pearson)
-</code></pre>
-
-<p>With the following code a rank matrix is generated from a uniform distribution and then tested for uniformity:</p>
-
-<pre><code class="r">R &lt;- 2000
-rand_rankmat &lt;- matrix(data = sample(0:99, R*393, replace=TRUE), nrow = R, ncol = 393)
-
-## pearsons&#39; chi-square for testing uniformity
-x &lt;- apply(rand_rankmat[1:R,], 2, table)
-expect &lt;- R/100 # 100 = number of bins/cells (0:99)
-pearson &lt;- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)})
-z95 &lt;- qchisq(0.95, 99) # 99 = degrees of freedom
-sum(pearson&gt;z95) / length(pearson)
-</code></pre>
-
-<pre><code>## [1] 0.05343511
-</code></pre>
-
+sum(pearson&gt;z95) / length(pearson)</code></pre>
+<p>With the following code a rank matrix is generated from a uniform
+distribution and then tested for uniformity:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>rand_rankmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>, R<span class="sc">*</span><span class="dv">393</span>, <span class="at">replace=</span><span class="cn">TRUE</span>), <span class="at">nrow =</span> R, <span class="at">ncol =</span> <span class="dv">393</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="do">## pearsons&#39; chi-square for testing uniformity</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">apply</span>(rand_rankmat[<span class="dv">1</span><span class="sc">:</span>R,], <span class="dv">2</span>, table)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>expect <span class="ot">&lt;-</span> R<span class="sc">/</span><span class="dv">100</span> <span class="co"># 100 = number of bins/cells (0:99)</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>pearson <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> x, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> <span class="cf">function</span>(x) {<span class="fu">sum</span>((x<span class="sc">-</span>expect)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>expect)})</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>z95 <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="dv">99</span>) <span class="co"># 99 = degrees of freedom</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pearson<span class="sc">&gt;</span>z95) <span class="sc">/</span> <span class="fu">length</span>(pearson)</span></code></pre></div>
+<pre><code>## [1] 0.05343511</code></pre>
+</div>
+</div>
+<div id="references" class="section level1">
 <h1>References</h1>
-
 <ul>
-<li>Hartmann, R., Johannsen, L., &amp; Klauer, K. C. (2020). rtmpt: An R package for fitting response-time extended multinomial processing tree models. <em>Behavior Research Methods, 52</em>(3), 1313-1338. doi:10.3758/s13428-019-01318-x</li>
-<li>Hartmann, R., &amp; Klauer, K. C. (2020). Extending RT-MPTs to enable equal process times. <em>Journal of Mathematical Psychology, 96</em>, 102340. doi:10.1016/j.jmp.2020.102340</li>
-<li>Heck, D. W., Arnold, N. R., &amp; Arnold, D. (2018). TreeBUGS: An R package for hierarchical multinomial-processing-tree modeling. <em>Behavior Research Methods, 50</em>(1), 264-284. doi:10.3758/s13428-017-0869-7</li>
-<li>Hu, X. (1999). Multinomial processing tree models: An implementation. <em>Behavior Research Methods, Instruments, &amp; Computers, 31</em>(4), 689-695. doi:10.3758/BF03207714</li>
-<li>Klauer, K. C., &amp; Kellen, D. (2018). RT-MPTs: Process models for response-time distributions based on multinomial processing trees with applications to recognition memory. <em>Journal of Mathematical Psychology, 82</em>, 111-130. doi:10.1016/j.jmp.2017.12.003</li>
-<li>Singmann, H., &amp; Kellen, D. (2013). MPTinR: Analysis of multinomial processing tree models in R. <em>Behavior Research Methods, 45</em>(2), 560-575. doi:10.3758/s13428-012-0259-0</li>
-<li>Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2018). Validating Bayesian inference algorithms with simulation-based calibration. <em>arXiv preprint arXiv:1804.06788</em>.</li>
+<li>Hartmann, R., Johannsen, L., &amp; Klauer, K. C. (2020). rtmpt: An R
+package for fitting response-time extended multinomial processing tree
+models. <em>Behavior Research Methods, 52</em>(3), 1313-1338. <a href="doi:10.3758/s13428-019-01318-x" class="uri">doi:10.3758/s13428-019-01318-x</a></li>
+<li>Hartmann, R., &amp; Klauer, K. C. (2020). Extending RT-MPTs to
+enable equal process times. <em>Journal of Mathematical Psychology,
+96</em>, 102340. <a href="doi:10.1016/j.jmp.2020.102340" class="uri">doi:10.1016/j.jmp.2020.102340</a></li>
+<li>Heck, D. W., Arnold, N. R., &amp; Arnold, D. (2018). TreeBUGS: An R
+package for hierarchical multinomial-processing-tree modeling.
+<em>Behavior Research Methods, 50</em>(1), 264-284. <a href="doi:10.3758/s13428-017-0869-7" class="uri">doi:10.3758/s13428-017-0869-7</a></li>
+<li>Hu, X. (1999). Multinomial processing tree models: An
+implementation. <em>Behavior Research Methods, Instruments, &amp;
+Computers, 31</em>(4), 689-695. <a href="doi:10.3758/BF03207714" class="uri">doi:10.3758/BF03207714</a></li>
+<li>Klauer, K. C., &amp; Kellen, D. (2018). RT-MPTs: Process models for
+response-time distributions based on multinomial processing trees with
+applications to recognition memory. <em>Journal of Mathematical
+Psychology, 82</em>, 111-130. <a href="doi:10.1016/j.jmp.2017.12.003" class="uri">doi:10.1016/j.jmp.2017.12.003</a></li>
+<li>Singmann, H., &amp; Kellen, D. (2013). MPTinR: Analysis of
+multinomial processing tree models in R. <em>Behavior Research Methods,
+45</em>(2), 560-575. <a href="doi:10.3758/s13428-012-0259-0" class="uri">doi:10.3758/s13428-012-0259-0</a></li>
+<li>Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman,
+A. (2018). Validating Bayesian inference algorithms with
+simulation-based calibration. <em>arXiv preprint
+arXiv:1804.06788</em>.</li>
 </ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 </body>
-
 </html>
