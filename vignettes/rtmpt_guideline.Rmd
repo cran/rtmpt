@@ -11,12 +11,12 @@ vignette: >
 
 # Overview
 
-Given a data file (text file, `data.frame`) with the correct variable names (see section 1.3) and a model file (see section 1.1 and 2) the steps needed to fit the RT-MPT model (Hartmann et al., 2020; Hartmann \& Klauer, 2020; Klauer \& Kellen, 2018) to the data is described in Section 1:
+Given a data file (text file or `data.frame`) with the correct variable names (see section 1.3) and a model file (see section 1.1 and 2) the steps needed to fit either an exponential RT-MPT model (Hartmann et al., 2020; Hartmann \& Klauer, 2020; Klauer \& Kellen, 2018) or a diffusion RT-MPT model (Klauer et al., submitted) to the data is described in Section 1:
 
-1.1 Convert the equation/model file to a `rtmpt_model` via the `to_rtmpt_model()` function
+1.1 Convert the equation/model file to an `ertmpt_model` or `drtmpt_model` via the `to_ertmpt_model()` or `to_drtmpt_model()` function
 1.2 If necessary, specify some restrictions
-1.3 Convert the data file to a `rtmpt_data` format via the `to_rtmpt_data()` function
-1.4 Fit the specified model to the data via the `fit_rtmpt()` function
+1.3 Convert the data file to an `ertmpt_data` or `drtmpt_data` object via the `to_ertmpt_data()` or `to_drtmpt_data()` function
+1.4 Fit the specified model to the data via the `fit_ertmpt()` or `fit_drtmpt()` function
 1.5 Check convergence of the model parameters and getting a summary
 
 In Section 2, 3, and 4 more information about the equation/model files, the data and additional functions is provided.
@@ -59,62 +59,145 @@ Do+(1-Do)*g
 Dn+(1-Dn)*(1-g)
 "
 ```
-All paths that lead to the same response category will be added together with a `+` symbol. 
+All paths/branches that lead to the same response category will be added together with a `+` symbol. 
 
 More information about these two syntaxes are written in Section 2.
 
-The conversion to an `rtmpt_model` list can then be done by the `to_rtmpt_model()` function:
+The conversion to an `ertmpt_model` or `drtmpt_model` list can then be done by the `to_ertmpt_model()` or `to_drtmpt_model()`, respectively, function:
 ```{r, eval=TRUE}
 library(rtmpt)
-# using the MDL syntax:
-TwoHTM <- to_rtmpt_model(mdl_file = mdl)
-# using the EQN syntax:
-TwoHTM <- to_rtmpt_model(eqn_file = eqn)
-TwoHTM
+# MAKING AN ERTMPT MODEL
+#   using the MDL syntax:
+e2HTM <- to_ertmpt_model(mdl_file = mdl)
+#   using the EQN syntax:
+e2HTM <- to_ertmpt_model(eqn_file = eqn)
+e2HTM
+
+# MAKING A DRTMPT MODEL
+#   using the MDL syntax:
+d2HTM <- to_drtmpt_model(mdl_file = mdl)
+#   using the EQN syntax:
+d2HTM <- to_drtmpt_model(eqn_file = eqn)
+d2HTM
 # 
 ```
 
+## 1.2 Model specifications
 
-## 1.2 Model restrictions
+Next we discuss model restrictions for an `ertmpt_model` (1.2.1) and a `drtmpt_model` (1.2.2), and the response mapping if more than one encoding plus motor execution time is wanted (1.2.3).
 
-There are five functions with which an `rtmpt_model` object can be changed. Two functions can be used to hold a process probability parameter (theta) constant or to make some process probability parameters equal. Two functions can be used to suppress process completion times (taus), which means the process times are set to zero, or to make some process completion times equal. The last function handles how many different motor and execution times (deltas) are used in the model.
+### 1.2.1 Model restrictions of ertmpt models
 
-### Modifying process probabilities
+There are four functions with which the process parameters of an `ertmpt_model` object can be changed. Two functions can be used to hold a process probability parameter (theta) constant or to make some process probability parameters equal. Two functions can be used to suppress process completion times (taus), which means the process times are set to zero, or to make some process completion times equal.
+
+#### Modifying process probabilities
 
 To hold a process probability constant you can use `theta2const()` like this:
 ```{r, eval=TRUE}
-theta2const(model = TwoHTM, names = "g", constants = 0.5)
+theta2const(model = e2HTM, names = "g", constants = 0.5)
 ```
-Here, `"g"` will be set to be equal to 0.5 and will not be estimated therefore.,You might also use this function with a vector of `names` (and a vector of `constants`). Note that the new model is not saved because we did not assign it to an R object.
+Here, `"g"` will be set to 0.5 and will, therefore, not be estimated. You might also use this function with a vector of `names` (and a vector of `constants`). Note that the new model is not saved because we did not assign it to an R object.
 
-To set two or more process probabilities equal you can use `theta2theta()` like this:
+An alias for this function is `set_theta_const()`.
+
+To set two or more process probabilities equal, you can use `theta2theta()` like this:
 ```{r, eval=TRUE}
-theta2theta(model = TwoHTM, names = c("Do", "Dn"), keep_consts = FALSE)
+theta2theta(model = e2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
 ```
-The process probabilities for all processes specified in `names` are set equal. The first of the process `names` in alphabetical order (here `"dn"`) denotes the reference probability that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process probability. The `keep_consts` argument can be used, if you want to keep constants that you already specified and all other process probabilities should have the same constant but we suggest to use `theta2const()` for that.
+The process probabilities for all processes specified in `names` are set equal. The first of the process `names` in alphabetical order (here `"Dn"`) denotes the reference probability that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process probability. The `keep_consts` argument can be used, if you want to keep constants that you already specified and all other process probabilities should have the same constant, but we suggest to use `theta2const()` for that.
 
-### Modifying process completion times
+An alias for this function is `set_thetas_equal()`.
+
+#### Modifying process completion times
 
 To suppress a process completion time (i.e., set it to zero) you can use `tau2zero()` like this:
 ```{r, eval=TRUE}
-tau2zero(model = TwoHTM, names = "g", outcomes = "minus", values = 0)
+tau2zero(model = e2HTM, names = "g", outcomes = "minus", values = 0)
 ```
-Here, the process completion time of `"g"` with outcome `"minus"` (meaning the time for 1-g) is set to zero and will not be estimated therefore (which typically does not make sense to do). Also this function can be used with vectors.
+Here, the process completion time of `"g"` with outcome `"minus"` (meaning the time for 1-g) is set to zero and, therefore, will not be estimated (which typically does not make sense to do). Also this function can be used with vectors. 
+
+An alias for this function is `set_tau_zero()`.
 
 To set two or more process completion times with the same outcome equal you can use `theta2theta()` like this:
 ```{r, eval=TRUE}
-tau2tau(model = TwoHTM, names = c("Do", "Dn"), keep_zeros = FALSE)
+tau2tau(model = e2HTM, names = c("Do", "Dn"), outcome = "minus", keep_zeros = FALSE)
 ```
-The process completion times for all processes specified in `names` are set equal (i.e., all process completion times in minus-direction will be equal and all process completion times in plus-direction will be equal). The first of the process `names` in alphabetical order (here `"dn"`) denotes the reference process times (in minus and plus direction) that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process times. The `keep_zeros` argument can be used, if you want to keep the zeros that you already specified and all other process times with the same outcome should be zero as well. Also here we suggest using the `tau2zero()` function.
+The process completion times for all processes specified in `names` are set equal (i.e., all process completion times in minus-direction will be equal, but all process completion times in plus-direction will still be estimated, unless you set `outcome` to "both"). The first of the process `names` in alphabetical order (here `"Dn"`) denotes the reference process times in minus direction (and/or plus direction) that will be estimated. The other(s) will not be estimated, but will be set to be equal to the reference process time(s). The `keep_zeros` argument can be used, if you want to keep the zeros that you already specified and all other process times with the same outcome should be zero as well. Also here we suggest using the `tau2zero()` function. 
 
-### Modifying motor and exectution times
+An alias for this function is `set_taus_equal()`.
 
-You can choose which categories of the (RT-)MPT model should have the same encoding plus motor execution time. Unlike the processes the motor plus execution times have no names which we can use to set them equal. Therefore a mapping is used in the function `delta2delta()` where the response categories (`categories`) can be mapped to encoding plus motor execution times by using a mapping argument (`mappings`). Because the response categories are not always unique the tree (`trees`) has to be provided as well.
+
+### 1.2.2 Model restrictions of drtmpt models
+
+There are six functions with which the process parameters of a `drtmpt_model` object can be changed. Three functions can be used to set some process parameters to constants and three functions can be used to make some process parameters equal.
+
+#### Modifying the threshold parameter in a process
+
+To hold a process threshold constant you can use `a2const()` like this:
 ```{r, eval=TRUE}
-delta2delta(model = TwoHTM, trees = c(0,1), categories = c(1,3), mappings = c(1,1))
+a2const(model = d2HTM, names = "g", constants = 1)
 ```
+Here, the threshold for `"g"` will be set to 1.0 and, therefore, will not be estimated. You might also use this function with a vector of `names` (and a vector of `constants`). Note that the new model is not saved because we did not assign it to an R object.
 
-The numbers for the mappings have to start at zero and no whole number can be skipped. For example in the above code the `mappings` cannot be `c(2,2)` since the number 1 would be missing then in the mappings. 
+An alias for this function is `set_a_equal()`.
+
+To set two or more process thresholds equal you can use `a2a()` like this:
+```{r, eval=TRUE}
+a2a(model = d2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
+```
+The process thresholds for all processes specified in `names` are set equal. The first of the process `names` in alphabetical order (here `"Dn"`) denotes the reference probability that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process threshold. The `keep_consts` argument can be used, if you want to keep constants that you already specified and all other process thresholds should have the same constant, but we suggest to use `a2const()` for that.
+
+An alias for this function is `set_a_equal()`.
+
+
+#### Modifying the drif rate parameter in a process
+
+To hold a process drift-rate constant you can use `nu2const()` like this:
+```{r, eval=TRUE}
+nu2const(model = d2HTM, names = "g", constants = 1)
+```
+Here, the drift rate for `"g"` will be set to 1.0 and, therefore, will not be estimated. You might also use this function with a vector of `names` (and a vector of `constants`). Note that the new model is not saved because we did not assign it to an R object.
+
+An alias for this function is `set_nu_equal()`.
+
+To set two or more process drift-rates equal you can use `nu2nu()` like this:
+```{r, eval=TRUE}
+nu2nu(model = d2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
+```
+The process drift-rates for all processes specified in `names` are set equal. The first of the process `names` in alphabetical order (here `"Dn"`) denotes the reference probability that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process drift-rate The `keep_consts` argument can be used, if you want to keep constants that you already specified and all other process drift-rates should have the same constant, but we suggest to use `nu2const()` for that.
+
+An alias for this function is `set_nus_equal()`.
+
+
+#### Modifying the relative starting point parameter in a process
+
+To hold a process relative-starting-point constant you can use `omega2const()` like this:
+```{r, eval=TRUE}
+omega2const(model = d2HTM, names = "g", constants = 0.5)
+```
+Here, the relative starting point for `"g"` will be set to 0.5 and, therefore, will not be estimated. You might also use this function with a vector of `names` (and a vector of `constants`). Note that the new model is not saved because we did not assign it to an R object.
+
+An alias for this function is `set_omega_equal()`.
+
+To set two or more process relative-starting-points equal you can use `omega2omega()` like this:
+```{r, eval=TRUE}
+omega2omega(model = d2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
+```
+The process relative-starting-points for all processes specified in `names` are set equal. The first of the process `names` in alphabetical order (here `"Dn"`) denotes the reference probability that will be estimated. The other(s) will not be estimated but will be set to be equal to the reference process threshold. The `keep_consts` argument can be used, if you want to keep constants that you already specified and all other process relative-starting-points should have the same constant, but we suggest to use `omega2const()` for that.
+
+An alias for this function is `set_omegas_equal()`.
+
+
+
+### 1.2.3 Modifying motor and exectution times
+
+You can choose which categories of the exponential/diffusion RT-MPT model should have the same encoding plus motor execution time. Unlike the processes the motor plus execution times have no names which we can use to set them equal. Therefore a mapping is used in the function `delta2delta()` where the response categories (`categories`) can be mapped to encoding plus motor execution times by using a mapping argument (`mappings`). Because the response categories are not always unique the tree (`trees`) has to be provided as well.
+```{r, eval=TRUE}
+delta2delta(model = e2HTM, trees = c(0,1), categories = c(1,3), mappings = c(1,1))
+```
+The numbers for the mappings have to start at zero and no whole number can be skipped. For example in the above code the `mappings` cannot be `c(2,2)` since the number 1 would be missing then in the mappings.
+
+An alias for this function is `set_deltas_equal()`.
 
 
 ## 1.3 The right data format
@@ -128,7 +211,7 @@ The data should be provided with the following variables in this order: `subj`, 
 
 `rt` should be provided in milliseconds and as integers. If it has decimal places it will be rounded to a whole number.
 
-Given the right order of the variables and the right values one can use a `data.frame` or a path to a text file containing the variable names in the first line. If not, the `to_rtmpt_data()` function can be used to reorder the variables and transform the values of those variables. Next to the new `data.frame` the transformation that is used will be saved in an `rtmpt_data` list. Note that **at least** the variable names should be correctly provided in order to make `to_rtmpt_data()` work. The `to_rtmpt_data()` function is also used automatically in the `fit_rtmpt()` function, but should be used at least once, when the model is specified the first time, to check whether the data is transformed according to the equation/model file.
+Given the right order of the variables and the right values one can use a `data.frame` or a path to a text file containing the variable names in the first line. If not, the `to_ertmpt_data()` or `to_drtmpt_data()` function can be used to reorder the variables and transform the values of those variables. Next to the new `data.frame` the transformation that is used will be saved in an `ertmpt_data` or `drtmpt_data` list. Note that **at least** the variable names should be correctly provided in order to make `to_ertmpt_data()` or `to_drtmpt_data()` work. These functions are also used automatically in the `fit_ertmpt()` or `fit_drtmpt()` function, but should be used at least once, when the model is specified the first time, to check whether the data is transformed according to the equation/model file.
 
 Here is an example of a data set with unordered variables and wrong values (not starting from zero) and a transformation of this data set:
 ```{r, eval=TRUE}
@@ -136,46 +219,82 @@ set.seed(2021)
 raw_data <- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
                        group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
 raw_data
-data <- to_rtmpt_data(raw_data = raw_data, model = TwoHTM)
+data <- to_ertmpt_data(raw_data = raw_data, model = e2HTM)
 data
 ```
-Note that it is never a good idea to specify the tree and category labels/numbers differently from the data file, or vice versa. It is bad practice to define a model with tree and category values starting from zero and using a data set with tree and category values starting from one; Make sure the labels or numbers match for these two match.
+Note that it is never a good idea to specify the tree and category labels/numbers differently from the data file, or vice versa. It is not recommended to define a model with tree and category values starting from zero and using a data set with tree and category values starting from one; Make sure the labels or numbers for these two match.
 
 ## 1.4 Model fitting
 
-Finally, with the function `fit_rtmpt()` one can fit the model to the data. This code should not be run. There are way too few data points.
+Finally, with the function `fit_ertmpt()` or `fit_drtmpt()` one can fit the model to the data. This code should not be run. There are way too few data points.
 ```{r, eval=FALSE}
 ## do not run
-rtmpt_out <- fit_rtmpt(model = TwoHTM, data = data)
+ertmpt_out <- fit_ertmpt(model = e2HTM, data = data)
 ## end not run
 ```
 
 In this function call we used the default values for all the parameters that are not listed in the call. `model` and `data` do not have default values. The full call of the function would look like this:
 ```{r, eval=FALSE}
 ## do not run
-rtmpt_out <- fit_rtmpt(model = restr_2HTM, 
-                       data = data, 
-                       n.chains = 4, 
-                       n.iter = 5000, 
-                       n.burnin = 200,
-                       n.thin = 1, 
-                       Rhat_max = 1.05, 
-					             Irep = 1000, 
-                       prior_params = NULL,
-                       indices = FALSE,
-                       save_log_lik = FALSE)
+ertmpt_out <- fit_ertmpt(model = restr_2HTM, 
+                         data = data, 
+                         n.chains = 4, 
+                         n.iter = 5000, 
+                         n.burnin = 200,
+                         n.thin = 1, 
+                         Rhat_max = 1.05, 
+					               Irep = 1000, 
+                         prior_params = NULL,
+                         indices = FALSE,
+                         save_log_lik = FALSE)
 ## end not run
 ```
 
-`n.chains` is the number of chains with a maximum of 16, `n.iter` is the number of samples to draw from the posterior distribution, `n.burnin` is analogue to the burn-in phase for R package `rjags`, `Rhat_max` is a threshold for the potential scale reduction factor and forces the sampling to start only when the maximal potential scale reduction factor of the parameters is lower or equal to this value, `n.thin` is the thinning parameter, `Irep` is the number of samples until the next summary is printed, `prior_params` is a list of some prior parameter specifications, `indices` is a logical parameter with which one can allow to compute the WAIC and LOO, and `save_log_lik` is a logical parameter that allows one to save the log-likelihood for each posterior sample and data point.
+`n.chains` is the number of chains with a maximum of 16, `n.iter` is the number of samples to draw from the posterior distribution, `n.burnin` is analogue to the burn-in phase for R package `rjags` and denotes the number of warm-up sampling, `n.thin` is the thinning parameter, `Rhat_max` is a threshold for the potential scale reduction factor and forces the sampling to start only when the maximal potential scale reduction factor of the parameters is lower or equal to this value, `Irep` is the number of samples until the next summary is printed, `prior_params` is a list of some prior parameter specifications, `indices` is a logical parameter with which one can allow to compute the WAIC and LOO, and `save_log_lik` is a logical parameter that allows one to save the log-likelihood for each posterior sample and data point.
+
+The equivalent for the `drtmpt` is
+```{r, eval=FALSE}
+## do not run
+drtmpt_out <- fit_drtmpt(model = d2HTM, data = data)
+## end not run
+```
+
+Where also the the default values for all the parameters are used. Also here, `model` and `data` do not have default values. The full call of the function would look like this:
+```{r, eval=FALSE}
+## do not run
+drtmpt_out <- fit_drtmpt(model = restr_2HTM, 
+                         data = data, 
+                         n.chains = 4, 
+                         n.iter = 1000, 
+                         n.phase1 = 1000,
+                         n.phase1 = 2000,
+                         n.thin = 1, 
+                         Rhat_max = 1.05, 
+					               Irep = 1000, 
+                         prior_params = NULL,
+                         flags = NULL,
+					               control = NULL)
+## end not run
+```
+
+`n.chains`, `n.iter`, `n.thin`, `Rhat_max`, and `Irep`, are the same as for `fit_ertmpt()`. `prior_params` is still a list of some prior parameter specifications, but with other prior parameters than in `fit_drtmpt` (see section 4 for more details). `n.phase1` and `n.phase2` are similar to `n.burnin`, but are for the adaptation of the Hamiltonian algorithm and the estimation of the covariance matrix of all parameters, respectively. `flags` should be a list of four logical variables, namely `old_label` (the equivalent of the argument in `fit_ertmpt()`), `indices` (also an equivalent of the argument in `fit_ertmpt()`), `log_lik` (the equivalent of the `save_log_lik` argument in `fit_ertmpt()`), and `random_init` (which asks whether the initial value of the MCMC algorithm should be random or estimated by maximum likelihood). Finaly, `control` is a list of numeric variables which gives the user some control over the algorithm and its speed, namely `maxthreads` (number of maximal number of threads for multithreading), `maxtreedepth1_3` (number of tree depth of the no-U-turn algorithm in phase 1 and 3), and `maxtreedepth4` (number of tree depth of the no-U-turn algorithm in phase 4).
 
 ## 1.5 Checking model convergence and getting a summary
 
-Convergence of the model can be checked by using the fitted object (here `rtmpt_out`). Just get the diagnostics and then R-hat. In order to get a traceplot one can use the `traceplot()` function from `coda`. You can also use the `summary()` function to get a summary of the estimates.
+Convergence of the model can be checked by using the fitted object. Just get the diagnostics and then R-hat. In order to get a traceplot one can use the `traceplot()` function from `coda`. You can also use the `summary()` function to get a summary of the estimates.
+
+Here a code snippet for `ertmpt`
 ```{r, eval=FALSE}
-rtmpt_out$diags$R_hat
-coda::traceplot(rtmpt_out$samples[, 1:9])
-summary(rtmpt_out)
+ertmpt_out$diags$R_hat
+coda::traceplot(ertmpt_out$samples[, 1:9])
+summary(ertmpt_out)
+```
+
+or `drtmpt`
+```{r, eval=FALSE}
+drtmpt_out$diags$R_hat
+coda::traceplot(drtmpt_out$samples[, 1:9])
+summary(drtmpt_out)
 ```
 
 
@@ -220,26 +339,26 @@ Dn+(1-Dn)*(1-g)
 ```
 Between two trees (here targets and lures) there must be an empty line. All paths which lead to the same response category are added together on one line by a `+` symbol.
 
-Internally an `eqn_file` will be converted to an `mdl_file`. From that a text file will be written locally onto your computer, used by the `fit_rtmpt()` call, and removed afterwards. 
+Internally an `eqn_file` will be converted to an `mdl_file`. From that a text file will be written locally onto your computer (in a temporary file within a temporary folder created by the R session), used by the `fit_ertmpt()` or `fit_drtmpt()` call, and removed afterwards. 
 
 
 
 # 3 Data transformation
 
-## 3.1 Labels in data file
+## 3.1 Labels in a data file
 When labels are used in the data set one has to be cautious when specifying the equation file. The labels of the trees and categories in the equation file must match those of the data. For example, if the tree labels "target" and "lure" are used in the data set, one has to use those also in the equation file (`eqn_file`). If you specify a model file (`mdl_file`) instead of the equation file the labels in the data set need to be changed to numerics. Otherwise no mapping between those can be done.
 
-## 3.2 Numbers in data file
+## 3.2 Numbers in a data file
 When numbers are used in the data set for the trees and categories it is best to also check that they match with the ones used in the equation / model file, but the program checks for the order. So for example, if you are using the numbers \{1, 2, 3, 4\} for your four trees in the data set and \{0, 1, 2, 3\} in the equation file (which is the standard for model files anyway) they will be mapped through the order. The new data, that can be used, will have a zero instead of a one, a one instead of a two, and so on.
 
-One could use labels in the equation file even though you are using numbers in the data file, but it is **strongly advised against** it. It will be assumed, that the order in which you specify the equations matches the order of the numbers in the data file starting from the lowest to the highest. So if you are using again \{1, 2, 3, 4\} for the four trees, then the first tree you need to define in the equation files (no matter what label you use) must correspond to tree 1 in the data and so on.
+One could use labels in the equation file even though you are using numbers in the data file, but it is **strongly advised against** it. It will be assumed, that the order in which you specify the equations matches the order of the numbers in the data file starting from the lowest to the highest. So if you are using again \{1, 2, 3, 4\} for the four trees, then the first tree you need to define in the equation file (no matter what label you use) must correspond to tree 1 in the data and so on.
 
 
 
 # 4 Data simulation and simulation-based calibration
 
 ## Data simulation
-With the function `sim_rtmpt_data()` it is possible to generate data from an RT-MPT model. Required is a model object generated with the function `to_rtmpt_model()`, a random seed number, the number of subjects, the number of trials per tree in the model, and a named list of parameters. Here it is also possible to set the mean of `mean_of_mu_alpha`; A value of zero refers to the probability of `0.5`. If a given probability is desired, say `0.4`, then one might specify `params <- list(mean_of_mu_alpha = qnorm(.4))`. If a mean process time of `200` ms is required, one might specify `params <- list(mean_of_exp_mu_beta = 1000/200)`. The mean parameter of the motor times is easier to transform, since they are already on the second scale; Just write `500/1000` if your mean motor time should be `500` ms. The code below shows a more or less good balance between too large variances (leading to too many extreme values like probabilities of zero and one and RTs of zero) and too small variances (unrealistic data).
+With the function `sim_ertmpt_data()` (so far no `sim_drtmpt_data()` is available) it is possible to generate data from an exponential RT-MPT model. Required is a model object generated with the function `to_ertmpt_model()`, a random seed number, the number of subjects, the number of trials per tree in the model, and a named list of parameters. Here it is also possible to set the mean of `mean_of_mu_alpha`; A value of zero refers to the probability of `0.5`. If a given probability is desired, say `0.4`, then one might specify `params <- list(mean_of_mu_alpha = qnorm(.4))`. If a mean process time of `200` ms is required, one might specify `params <- list(mean_of_exp_mu_beta = 1000/200)`. The mean parameter of the evidence plus motor times is easier to transform, since they are already on the seconds scale; Just write `500/1000` if your mean encoding plus motor time should be `500` ms. The code below shows a more or less good balance between too large variances (leading to too many extreme values like probabilities of zero and one and RTs of zero) and too small variances (unrealistic data).
 
 Important: If no variances are specified in the `params` argument, then the corresponding mean values are fixed, else they will be randomly drawn.
 ```{r, eval=TRUE}
@@ -256,7 +375,7 @@ dn+(1-dn)*(1-g) ; 1
 # do: detect old; dn: detect new; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 # random group-level parameters
 params <- list(mean_of_mu_alpha = 0, 
@@ -273,13 +392,13 @@ params <- list(mean_of_mu_alpha = 0,
                prec_epsilon = 10,
                add_df_to_invWish = 5)
 
-sim_dat <- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
+sim_dat <- sim_ertmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
 head(sim_dat$data_frame)
 
 ```
 
 ## 4.1 Simulation-based calibration
-With the function `fit_rtmpt_SBC()` it is possible to generate data and fit the model to that data using the same priors / ground truths. The main output of this function will be the rank statistic for each parameter in the model, which is needed for the simulation-based calibration (SBC) method by Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). For example, if this function is repeated, say `2000` times, with different `seeds` one might add all the rank statistics to a matrix (`2000` rows and number of parameters as columns) and then calculate the pearsons' chi-squared statistic. This allows one to test for how many of the parameters the rank statistics are not uniformly distributed. A value of about `0.05` is typical for a test with an alpha level of `0.05`.
+With the function `fit_ertmpt_SBC()` it is possible to generate data and fit the model to that data using the same priors / ground truths. The main output of this function will be the rank statistic for each parameter in the model, which is needed for the simulation-based calibration (SBC) method by Talts, Betancourt, Simpson, Vehtari, and Gelman (2018). For example, if this function is repeated, say `2000` times, with different `seeds` one might add all the rank statistics to a matrix (`2000` rows and number of parameters as columns) and then calculate the pearsons' chi-squared statistic. This allows one to test for how many of the parameters the rank statistics are not uniformly distributed. A value of about `0.05` is expected for a test with an alpha level of `0.05`.
 
 Here is an example of one replication of the SBC procedure:
 ```
@@ -295,7 +414,7 @@ d+(1-d)*(1-g) ; 1
 # d: detect; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 params <- list(mean_of_exp_mu_beta = 10, 
                var_of_exp_mu_beta = 10, 
@@ -309,7 +428,7 @@ params <- list(mean_of_exp_mu_beta = 10,
                prec_epsilon = 10,
                add_df_to_invWish = 5)
 
-SBC_out <- fit_rtmpt_SBC(model, seed = 123, prior_params = params)
+SBC_out <- fit_ertmpt_SBC(model, seed = 123, prior_params = params)
 SBC_out$ranks
 
 ```
@@ -323,7 +442,7 @@ R = 2000
 rank_mat <- data.frame()
 
 for (r in 1:R) {
-  SBC_out <- fit_rtmpt_SBC(model, seed = r*123, prior_params = params, n.eff_samples = 99)
+  SBC_out <- fit_ertmpt_SBC(model, seed = r*123, prior_params = params, n.eff_samples = 99)
   rank_mat <- rbind(rank_mat, SBC_out$ranks)
 }
 
@@ -347,6 +466,9 @@ pearson <- apply(X = x, MARGIN = 2, FUN = function(x) {sum((x-expect)^2/expect)}
 z95 <- qchisq(0.95, 99) # 99 = degrees of freedom
 sum(pearson>z95) / length(pearson)
 ```
+
+
+
 
 # References
 * Hartmann, R., Johannsen, L., & Klauer, K. C. (2020). rtmpt: An R package for fitting response-time extended multinomial processing tree models. *Behavior Research Methods, 52*(3), 1313-1338. doi:10.3758/s13428-019-01318-x

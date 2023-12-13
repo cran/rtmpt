@@ -29,60 +29,112 @@ Dn+(1-Dn)*(1-g)
 
 ## ---- eval=TRUE---------------------------------------------------------------
 library(rtmpt)
-# using the MDL syntax:
-TwoHTM <- to_rtmpt_model(mdl_file = mdl)
-# using the EQN syntax:
-TwoHTM <- to_rtmpt_model(eqn_file = eqn)
-TwoHTM
+# MAKING AN ERTMPT MODEL
+#   using the MDL syntax:
+e2HTM <- to_ertmpt_model(mdl_file = mdl)
+#   using the EQN syntax:
+e2HTM <- to_ertmpt_model(eqn_file = eqn)
+e2HTM
+
+# MAKING A DRTMPT MODEL
+#   using the MDL syntax:
+d2HTM <- to_drtmpt_model(mdl_file = mdl)
+#   using the EQN syntax:
+d2HTM <- to_drtmpt_model(eqn_file = eqn)
+d2HTM
 # 
 
 ## ---- eval=TRUE---------------------------------------------------------------
-theta2const(model = TwoHTM, names = "g", constants = 0.5)
+theta2const(model = e2HTM, names = "g", constants = 0.5)
 
 ## ---- eval=TRUE---------------------------------------------------------------
-theta2theta(model = TwoHTM, names = c("Do", "Dn"), keep_consts = FALSE)
+theta2theta(model = e2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
 
 ## ---- eval=TRUE---------------------------------------------------------------
-tau2zero(model = TwoHTM, names = "g", outcomes = "minus", values = 0)
+tau2zero(model = e2HTM, names = "g", outcomes = "minus", values = 0)
 
 ## ---- eval=TRUE---------------------------------------------------------------
-tau2tau(model = TwoHTM, names = c("Do", "Dn"), keep_zeros = FALSE)
+tau2tau(model = e2HTM, names = c("Do", "Dn"), outcome = "minus", keep_zeros = FALSE)
 
 ## ---- eval=TRUE---------------------------------------------------------------
-delta2delta(model = TwoHTM, trees = c(0,1), categories = c(1,3), mappings = c(1,1))
+a2const(model = d2HTM, names = "g", constants = 1)
+
+## ---- eval=TRUE---------------------------------------------------------------
+a2a(model = d2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
+
+## ---- eval=TRUE---------------------------------------------------------------
+nu2const(model = d2HTM, names = "g", constants = 1)
+
+## ---- eval=TRUE---------------------------------------------------------------
+nu2nu(model = d2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
+
+## ---- eval=TRUE---------------------------------------------------------------
+omega2const(model = d2HTM, names = "g", constants = 0.5)
+
+## ---- eval=TRUE---------------------------------------------------------------
+omega2omega(model = d2HTM, names = c("Do", "Dn"), keep_consts = FALSE)
+
+## ---- eval=TRUE---------------------------------------------------------------
+delta2delta(model = e2HTM, trees = c(0,1), categories = c(1,3), mappings = c(1,1))
 
 ## ---- eval=TRUE---------------------------------------------------------------
 set.seed(2021)
 raw_data <- data.frame(tree = rep(1:2, 8), rt = round(1000*(runif(16)+.3)), 
                        group = rep(1:2, each=8), subj = rep(1:4, each = 4), cat = rep(1:4, 4))
 raw_data
-data <- to_rtmpt_data(raw_data = raw_data, model = TwoHTM)
+data <- to_ertmpt_data(raw_data = raw_data, model = e2HTM)
 data
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  ## do not run
-#  rtmpt_out <- fit_rtmpt(model = TwoHTM, data = data)
+#  ertmpt_out <- fit_ertmpt(model = e2HTM, data = data)
 #  ## end not run
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  ## do not run
-#  rtmpt_out <- fit_rtmpt(model = restr_2HTM,
-#                         data = data,
-#                         n.chains = 4,
-#                         n.iter = 5000,
-#                         n.burnin = 200,
-#                         n.thin = 1,
-#                         Rhat_max = 1.05,
-#  					             Irep = 1000,
-#                         prior_params = NULL,
-#                         indices = FALSE,
-#                         save_log_lik = FALSE)
+#  ertmpt_out <- fit_ertmpt(model = restr_2HTM,
+#                           data = data,
+#                           n.chains = 4,
+#                           n.iter = 5000,
+#                           n.burnin = 200,
+#                           n.thin = 1,
+#                           Rhat_max = 1.05,
+#  					               Irep = 1000,
+#                           prior_params = NULL,
+#                           indices = FALSE,
+#                           save_log_lik = FALSE)
 #  ## end not run
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  rtmpt_out$diags$R_hat
-#  coda::traceplot(rtmpt_out$samples[, 1:9])
-#  summary(rtmpt_out)
+#  ## do not run
+#  drtmpt_out <- fit_drtmpt(model = d2HTM, data = data)
+#  ## end not run
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  ## do not run
+#  drtmpt_out <- fit_drtmpt(model = restr_2HTM,
+#                           data = data,
+#                           n.chains = 4,
+#                           n.iter = 1000,
+#                           n.phase1 = 1000,
+#                           n.phase1 = 2000,
+#                           n.thin = 1,
+#                           Rhat_max = 1.05,
+#  					               Irep = 1000,
+#                           prior_params = NULL,
+#                           flags = NULL,
+#  					               control = NULL)
+#  ## end not run
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  ertmpt_out$diags$R_hat
+#  coda::traceplot(ertmpt_out$samples[, 1:9])
+#  summary(ertmpt_out)
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  drtmpt_out$diags$R_hat
+#  coda::traceplot(drtmpt_out$samples[, 1:9])
+#  summary(drtmpt_out)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  eqn = "
@@ -123,7 +175,7 @@ dn+(1-dn)*(1-g) ; 1
 # do: detect old; dn: detect new; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 # random group-level parameters
 params <- list(mean_of_mu_alpha = 0, 
@@ -140,7 +192,7 @@ params <- list(mean_of_mu_alpha = 0,
                prec_epsilon = 10,
                add_df_to_invWish = 5)
 
-sim_dat <- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
+sim_dat <- sim_ertmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
 head(sim_dat$data_frame)
 
 

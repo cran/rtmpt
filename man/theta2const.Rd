@@ -10,7 +10,7 @@ theta2const(model, names, constants = NA)
 set_theta_const(model, names, constants = NA)
 }
 \arguments{
-\item{model}{An object of the class \code{rtmpt_model}.}
+\item{model}{An object of the class \code{ertmpt_model}.}
 
 \item{names}{Character vector with process names.}
 
@@ -21,7 +21,7 @@ set_theta_const(model, names, constants = NA)
 }}
 }
 \value{
-An object of the class \code{rtmpt_model}.
+An object of the class \code{ertmpt_model}.
 }
 \description{
 Setting process probabilities (thetas) to constants or change it back to be estimated.
@@ -45,7 +45,7 @@ dn+(1-dn)*(1-g)
 # do: detect old; dn: detect new; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 ## setting g to a constant (0.5):
 new_model <- theta2const(model = model, names = c("g"), constants = c(0.5))

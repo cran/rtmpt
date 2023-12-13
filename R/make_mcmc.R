@@ -86,6 +86,99 @@ labelnames <- function(data_info) {
 
 }
 
+labelnames_d <- function(data_info) {
+  
+  Gr <- data_info$Ngroups
+  
+  thresh_string <- data_info$thresh_string
+  drift_string <- data_info$drift_string
+  start_string <- data_info$start_string
+  
+  Pt <- length(thresh_string)
+  Pd <- length(drift_string)
+  Ps <- length(start_string)
+  
+  Ptot <- Pt+Pd+Ps
+  
+  S <- data_info$Nsubj
+  R <- data_info$Nresps
+  
+  
+  # lable variables
+  sig <- c("a", "nu", "omega")
+  Prime <- c("a_prime", "nu_prime", "omega_prime")
+  all_string <- c(thresh_string, drift_string, start_string)
+  
+  
+  label <- c()
+  index <- 0
+  
+  ## prepare group labels
+  if (Gr > 1) {
+    gr_labels_t <- paste0("[", rep(0:(Gr-1), each = Pt), "]")
+    gr_labels_d <- paste0("[", rep(0:(Gr-1), each = Pd), "]")
+    gr_labels_s <- paste0("[", rep(0:(Gr-1), each = Ps), "]")
+    gr_labels_r <- paste0("[", rep(0:(Gr-1), each = R), "]")
+  } else {
+    gr_labels_t <- rep("", Pt)
+    gr_labels_d <- rep("", Pd)
+    gr_labels_s <- rep("", Ps)
+    gr_labels_r <- rep("", R)
+  }
+  
+  ## prepare subject labels
+  subj_labels <- paste0("[", 0:(S-1), "]")
+  
+  ## group mean thresholds
+  if (Pt) label <- paste0("mu_a_", rep(thresh_string, Gr), gr_labels_t)
+  
+  ## group mean drift rates
+  if (Pd) label <- c(label, paste0("mu_nu_", rep(drift_string, Gr), gr_labels_d))
+  
+  ## group mean starting points
+  if (Ps) label <- c(label, paste0("mu_omega_", rep(start_string, Gr), gr_labels_s))
+  
+  ## person-level process params
+  label <- c(label, as.vector(sapply(1:S, FUN = function(x) {
+    c(if (Pt) {paste0(Prime[1], "_", thresh_string, subj_labels[x])},
+      if (Pd) {paste0(Prime[2], "_", drift_string, subj_labels[x])},
+      if (Ps) {paste0(Prime[3], "_", start_string, subj_labels[x])})
+  }, simplify = TRUE)))
+  
+  ## group mean motor times
+  label <- c(label, paste0("mu_gamma_R", if(R>1) rep(paste0("_R", 0:(R-1)), Gr), gr_labels_r))
+  
+  ## person-level motor params
+  label <- c(label, as.vector(sapply(1:S, FUN = function(x) {
+    paste0("gamma_prime_R", if (R > 1) {0:(R-1)}, subj_labels[x])
+  }, simplify = TRUE)))
+  
+  ## scale params
+  label <- c(label, paste0("log(sigma", subj_labels, ")"))
+  
+  ## SIGMA
+  s1 <- rep(unlist(sapply(1:3, function(i) rep(Prime[i], c(Pt, Pd, Ps)[i]))), Ptot)
+  s2 <- rep(all_string, Ptot)
+  s3 <- unlist(sapply(1:3, function(i) rep(Prime[i], (Ptot*c(Pt, Pd, Ps))[i])))
+  s4 <- rep(all_string, each = Ptot)
+  label <- c(label,
+             matrix(paste0("s_", s1, "_", s2, "__", s3, "_", s4), ncol = Ptot)[lower.tri(x = matrix(NA, ncol = Ptot, nrow = Ptot), diag = TRUE)])
+  
+  ## GAMMA
+  g2 <- rep(0:(R-1), R)
+  g4 <- rep(0:(R-1), each = R)
+  label <- c(label,
+             matrix(paste0("g_gamma_prime_", g2, "__", "gamma_prime_", g4), ncol = R)[lower.tri(x = matrix(NA, ncol = R, nrow = R), diag = TRUE)])
+  
+  ## OMEGA2
+  label <- c(label, "Omega2")
+  
+  # label <- c(label, "log_lik")
+  
+  return(label)
+  
+}
+
 labelnames_keep <- function(data_info) {
   
   Gr <- data_info$Ngroups
@@ -197,25 +290,135 @@ labelnames_keep <- function(data_info) {
 }
 
 
-
-
-
-make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
+labelnames_keep_d <- function(data_info) {
   
-  # load necessary r-package and source
-  # source("C:/Users/hartmann/Desktop/UNI_FREIBURG/U_Freiburg/CPP/DBDA2E-utilities.R")
+  Gr <- data_info$Ngroups
+  
+  thresh_string <- data_info$thresh_string
+  drift_string <- data_info$drift_string
+  start_string <- data_info$start_string
+  
+  Pt <- length(thresh_string)
+  Pd <- length(drift_string)
+  Ps <- length(start_string)
+  
+  Ptot <- Pt+Pd+Ps
+  
+  S <- data_info$Nsubj
+  R <- data_info$Nresps
+  
+  
+  # lable variables
+  sig <- c("a", "nu", "omega")
+  Prime <- c("a_prime", "nu_prime", "omega_prime")
+  all_string <- c(thresh_string, drift_string, start_string)
+  
+  group_flag <- FALSE
+  if (exists("group", data_info$transformation)) {
+    group_flag <- TRUE
+  }
+  subj_flag <- FALSE
+  if (exists("subj", data_info$transformation)) {
+    subj_flag <- TRUE
+  }
+  
+  
+  label <- c()
+  index <- 0
+  
+  ## prepare group labels
+  if (Gr > 1 && group_flag) {
+    gr_labels_t <- paste0("[", rep(data_info$transformation$group$old, each = Pt), "]")
+    gr_labels_d <- paste0("[", rep(data_info$transformation$group$old, each = Pd), "]")
+    gr_labels_s <- paste0("[", rep(data_info$transformation$group$old, each = Ps), "]")
+    gr_labels_r <- paste0("[", rep(data_info$transformation$group$old, each = R), "]")
+  } else if (Gr > 1 && !group_flag) {
+    gr_labels_t <- paste0("[", rep(0:(Gr-1), each = Pt), "]")
+    gr_labels_d <- paste0("[", rep(0:(Gr-1), each = Pd), "]")
+    gr_labels_s <- paste0("[", rep(0:(Gr-1), each = Ps), "]")
+    gr_labels_r <- paste0("[", rep(0:(Gr-1), each = R), "]")
+  } else if (Gr <= 1) {
+    gr_labels_t <- rep("", Pt)
+    gr_labels_d <- rep("", Pd)
+    gr_labels_s <- rep("", Ps)
+    gr_labels_r <- rep("", R)
+  }
+  
+  ## prepare subject labels
+  if (group_flag) {
+    subj_labels <- paste0("[", data_info$transformation$subj$old, "]")
+  } else {
+    subj_labels <- paste0("[", 0:(S-1), "]")
+  }
+  
+  ## group mean thresholds
+  if (Pt) label <- paste0("mu_a_", rep(thresh_string, Gr), gr_labels_t)
+  
+  ## group mean drift rates
+  if (Pd) label <- c(label, paste0("mu_nu_", rep(drift_string, Gr), gr_labels_d))
+  
+  ## group mean starting points
+  if (Ps) label <- c(label, paste0("mu_omega_", rep(start_string, Gr), gr_labels_s))
+  
+  ## person-level process params
+  label <- c(label, as.vector(sapply(1:S, FUN = function(x) {
+    c(if (Pt) {paste0(Prime[1], "_", thresh_string, subj_labels[x])},
+      if (Pd) {paste0(Prime[2], "_", drift_string, subj_labels[x])},
+      if (Ps) {paste0(Prime[3], "_", start_string, subj_labels[x])})
+  }, simplify = TRUE)))
+  
+  ## group mean motor times
+  label <- c(label, paste0("mu_gamma_R", if(R>1) rep(paste0("_R", 0:(R-1)), Gr), gr_labels_r))
+  
+  ## person-level motor params
+  label <- c(label, as.vector(sapply(1:S, FUN = function(x) {
+    paste0("gamma_prime_R", if (R > 1) {0:(R-1)}, subj_labels[x])
+  }, simplify = TRUE)))
+  
+  ## scale params
+  label <- c(label, paste0("log(sigma", subj_labels, ")"))
+  
+  ## SIGMA
+  s1 <- rep(unlist(sapply(1:3, function(i) rep(Prime[i], c(Pt, Pd, Ps)[i]))), Ptot)
+  s2 <- rep(all_string, Ptot)
+  s3 <- unlist(sapply(1:3, function(i) rep(Prime[i], (Ptot*c(Pt, Pd, Ps))[i])))
+  s4 <- rep(all_string, each = Ptot)
+  label <- c(label,
+             matrix(paste0("s_", s1, "_", s2, "__", s3, "_", s4), ncol = Ptot)[lower.tri(x = matrix(NA, ncol = Ptot, nrow = Ptot), diag = TRUE)])
+  
+  ## GAMMA
+  g2 <- rep(0:(R-1), R)
+  g4 <- rep(0:(R-1), each = R)
+  label <- c(label,
+             matrix(paste0("g_gamma_prime_", g2, "__", "gamma_prime_", g4), ncol = R)[lower.tri(x = matrix(NA, ncol = R, nrow = R), diag = TRUE)])
+  
+  ## OMEGA2
+  label <- c(label, "Omega2")
+  
+  # label <- c(label, "log_lik")
+  
+  return(label)
+  
+}
+
+
+
+
+#' @importFrom data.table as.data.table
+#' @importFrom coda as.mcmc
+make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   
   # read text file with chains
   temp <- c()
   if (is.character(file)) {
-    temp <- as.vector(read.table(file=file,header=F,nrows=1))
+    temp <- as.vector(read.table(file = file, header = FALSE, nrows = 1))
     dt <- fread(file=file,skip=1)
   } else if (is.data.frame(file) || is.matrix(file)) {
     temp <- dim(file)
     dt <- as.data.table(file)
   }
-  
-  
+  rm(file); gc()
+
   
   # specify parameters used in MCMC
   start <- 1
@@ -223,15 +426,15 @@ make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   npar <- temp[2]
   
   
-  
   # generate MCMC-list for coda
-  vec <- vector("list",Nchains)
+  vec <- vector("list", Nchains)
   for (i in 1:Nchains) {
     vec[[i]] <- dt[(i-1)*end + start:end]
-    vec[[i]] <- as.mcmc(vec[[i]],start=start,end=end,thin=1)
+    vec[[i]] <- as.mcmc(vec[[i]], start = start, end = end, thin = 1)
   }
-  samples <- as.mcmc.list(vec,start=start,end=end,thin=1)
-  rm(vec)
+  rm(dt); gc()
+  samples <- as.mcmc.list(vec, start = start, end = end, thin = 1)
+  rm(vec); gc()
   
   
   # name chain columns
@@ -252,14 +455,68 @@ make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   # change beta_prime to log-scale
   for (nc in 1:Nchains) {
     for (ind in label_list$beta_ind) {
-	  samples[[nc]][,ind] <- log(samples[[nc]][,ind])
-	}
+	    samples[[nc]][,ind] <- log(samples[[nc]][,ind])
+  	}
   }
-  
-  
+  gc()
   return(samples)
   
 }
 
 
+
+#' @importFrom data.table as.data.table fread setnames
+#' @importFrom coda as.mcmc
+make_mcmc_list_d <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
+  
+  # label the samples
+  dt_colnames <- NULL
+  if (keep) {
+    dt_colnames <- labelnames_keep_d(data_info = data_info)
+  } else {
+    dt_colnames <- labelnames_d(data_info = data_info)
+  }
+  gc()
+  
+  
+  # read text file with chains
+  temp <- c()
+  if (is.character(file)) {
+    temp <- as.vector(read.table(file = file, header = FALSE, nrows = 1))
+    dt <- fread(file=file, skip=1, header = FALSE, col.names = dt_colnames)
+  } else if (is.data.frame(file) || is.matrix(file)) {
+    temp <- dim(file)
+    dt <- as.data.table(file)
+    setnames(dt, dt_colnames)
+  }
+  rm(file); gc()
+  
+  
+  # read text file with chains
+  # temp <- as.vector(read.table(file = file, header = FALSE, nrows = 1))
+  # dt <- fread(file = file, skip = 1, header = FALSE, col.names = dt_colnames, blank.lines.skip = TRUE)
+  # gc()
+  
+  
+  # specify parameters used in MCMC
+  factor <- nrow(dt)/Nsamples/Nchains
+  start <- 1 + (factor-1)*Nsamples
+  end <- Nsamples + (factor-1)*Nsamples
+  npar <- temp[2]
+  
+  
+  # generate MCMC-list for coda
+  vec <- vector("list", Nchains)
+  for (i in 1:Nchains) {
+    vec[[i]] <- dt[(i-1)*end + start:end]
+    vec[[i]] <- as.mcmc(vec[[i]], start = start, end = end, thin = 1)
+  }
+  rm(dt); gc()
+  samples <- as.mcmc.list(vec, start = start, end = end, thin = 1)
+  rm(vec); gc()
+  
+  
+  return(samples)
+  
+}
 

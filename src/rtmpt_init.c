@@ -8,14 +8,16 @@
 */
 
 /* .Call calls */
-extern SEXP rtmpt_fit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP ertmpt_fit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP drtmpt_fit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"rtmpt_fit", (DL_FUNC) &rtmpt_fit, 12},
+    {"ertmpt_fit", (DL_FUNC) &ertmpt_fit, 12},
+    {"drtmpt_fit", (DL_FUNC) &drtmpt_fit, 10},
     {NULL, NULL, 0}
 };
 
-void R_init_rtmpt(DllInfo *dll)
+void R_init_ertmpt(DllInfo *dll)
 {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);

@@ -10,7 +10,7 @@ theta2theta(model, names, keep_consts = FALSE)
 set_thetas_equal(model, names, keep_consts = FALSE)
 }
 \arguments{
-\item{model}{A list of the class \code{rtmpt_model}.}
+\item{model}{A list of the class \code{ertmpt_model}.}
 
 \item{names}{Character vector giving the names of the processes for which the process probabilities should be equal. If 
 \code{length(names) = 1} then the corresponding process probability will be estimates (i.e., it will be set to NA)}
@@ -26,7 +26,7 @@ set_thetas_equal(model, names, keep_consts = FALSE)
 }}
 }
 \value{
-A list of the class \code{rtmpt_model}.
+A list of the class \code{ertmpt_model}.
 }
 \description{
 Setting multiple process probabilities (thetas) equal. One of the process probabilities will be estimated and
@@ -56,7 +56,7 @@ dn+(1-dn)*(1-g)
 # do: detect old; dn: detect new; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 ## make do = dn
 new_model <- theta2theta(model = model, names = c("do", "dn"))

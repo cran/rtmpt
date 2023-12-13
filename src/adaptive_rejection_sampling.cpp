@@ -4,9 +4,10 @@
 #include "rts.h"
 #include <mutex>
 
-std::mutex mtx_R_CUI;
 
-// namespace rtsNS {
+namespace ertmpt {
+
+  std::mutex mtx_R_CUI;
 
 	struct piece {
 		double z;
@@ -18,7 +19,7 @@ std::mutex mtx_R_CUI;
 
 
 
-	void generate_intervals(double totallow, vector<point> h, vector<piece> &lower, vector<piece> &upper) {
+	void generate_intervals(double totallow, std::vector<point> h, std::vector<piece> &lower, std::vector<piece> &upper) {
 		int k = static_cast<int>(h.size());
 
 		lower.clear(); upper.clear(); piece low, up;
@@ -36,8 +37,8 @@ std::mutex mtx_R_CUI;
 		low.z = h[k - 1].x; lower.push_back(low);
 	}
 
-	void update_intervals(double totallow, point new_point, vector<point> &h, vector<piece> &lower, vector<piece> &upper) {
-		vector<point> temp; temp.clear();
+	void update_intervals(double totallow, point new_point, std::vector<point> &h, std::vector<piece> &lower, std::vector<piece> &upper) {
+		std::vector<point> temp; temp.clear();
 		double x = new_point.x;
 		int i = 0; int k = static_cast<int>(h.size());
 		while ((i != k) && (x > h[i].x))  i++;
@@ -63,7 +64,7 @@ std::mutex mtx_R_CUI;
 		}
 	}
 
-	double fun_upper(double x, vector<piece> upper) {
+	double fun_upper(double x, std::vector<piece> upper) {
 		int i = 1; int k = static_cast<int>(upper.size());
 		while ((i != k) && (x >= upper[i].z)) i++;
 		i = i - 1;
@@ -71,7 +72,7 @@ std::mutex mtx_R_CUI;
 		return t;
 	}
 
-	double fun_lower(double x, vector<point> h, vector<piece> lower) {
+	double fun_lower(double x, std::vector<point> h, std::vector<piece> lower) {
 		int i = 1; int k = static_cast<int>(lower.size());
 		while ((i != k) && (x >= lower[i].z)) i++;
 		i = i - 1; double t;
@@ -99,8 +100,8 @@ std::mutex mtx_R_CUI;
 		return result;
 	}
 
-	double inverse_distribution(double xstar, vector<piece> upper, bool &flag) {
-		double sum = 0, t; vector<double> s;
+	double inverse_distribution(double xstar, std::vector<piece> upper, bool &flag) {
+		double sum = 0, t; std::vector<double> s;
 		int k = static_cast<int>(upper.size());
 		for (int i = 0; i != k; i++) {
 			if (i == 0) t = fun_upper(upper[i + 1].z, upper);
@@ -152,7 +153,7 @@ std::mutex mtx_R_CUI;
 		double norm = 0.0;
 	NEW:
 		bool flag = false;
-		vector<point> h; vector<piece> lower, upper; h.clear(); lower.clear(); upper.clear();
+		std::vector<point> h; std::vector<piece> lower, upper; h.clear(); lower.clear(); upper.clear();
 		double w, t, xstar;
 		point one;
 		one.x = start;
@@ -239,4 +240,4 @@ std::mutex mtx_R_CUI;
 
 	}
 
-// }
+}

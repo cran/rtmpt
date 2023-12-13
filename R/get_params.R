@@ -78,4 +78,24 @@ get_taus <- function(RAW_MODEL, ordered_probs) {
   
   
 
+get_thresholds <- function(RAW_MODEL, ordered_probs) {
+  thresh_df <- data.frame(matrix(rep(NA, length(ordered_probs)), ncol = length(ordered_probs), nrow = 1))
+  colnames(thresh_df) <- ordered_probs
+  return(thresh_df)
+}
+
+get_driftrate <- function(RAW_MODEL, ordered_probs) {
+  drift_df <- data.frame(matrix(rep(NA, length(ordered_probs)), ncol = length(ordered_probs), nrow = 1))
+  colnames(drift_df) <- ordered_probs
+  return(drift_df)
+}
+
+get_startpoint <- function(RAW_MODEL, ordered_probs) {
+  start_df <- data.frame(matrix(rep(NA, length(ordered_probs)), ncol = length(ordered_probs), nrow = 1))
+  colnames(start_df) <- ordered_probs
+  return(start_df)
+}
+
+
+
 

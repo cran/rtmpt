@@ -10,7 +10,7 @@ tau2zero(model, names, outcomes, values = 0)
 set_tau_zero(model, names, outcomes, values = 0)
 }
 \arguments{
-\item{model}{A list of the class \code{rtmpt_model}.}
+\item{model}{A list of the class \code{ertmpt_model}.}
 
 \item{names}{Character vector with process names.}
 
@@ -28,7 +28,7 @@ be zero or changed back to be estimated. Allowed characters are:
 }}
 }
 \value{
-A list of the class \code{rtmpt_model}.
+A list of the class \code{ertmpt_model}.
 }
 \description{
 Setting process completion times (taus) to zero or change it back to be estimated.
@@ -52,7 +52,7 @@ dn+(1-dn)*(1-g)
 # do: detect old; dn: detect new; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 ## removing the process times (tau) for the failed (="minus") detection ("do" and "dn") 
 new_model <- tau2zero(model = model, names = c("dn", "do"),

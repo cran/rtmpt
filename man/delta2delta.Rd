@@ -10,7 +10,7 @@ delta2delta(model, trees, categories, mappings = 0)
 set_deltas_equal(model, trees, categories, mappings = 0)
 }
 \arguments{
-\item{model}{A list of the class \code{rtmpt_model}.}
+\item{model}{A list of the class \code{ertmpt_model} or \code{drtmpt_model}.}
 
 \item{trees}{Character or numerical vector giving the trees}
 
@@ -20,7 +20,7 @@ the specified \code{trees} for which the deltas should be changed.}
 \item{mappings}{Numerical vector of length \code{length(categories)} providing the mappings. Default is 0.}
 }
 \value{
-A list of the class \code{rtmpt_model}.
+A list of the class \code{ertmpt_model}.
 }
 \description{
 Mapping response categories with encoding and motor execution times (deltas). Unlike the processes there are no names for 
@@ -44,7 +44,16 @@ dn+(1-dn)*(1-g)
 # do: detect old; dn: detect new; g: guess
 "
 
-model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+model <- to_ertmpt_model(mdl_file = mdl_2HTM)
+
+## changing the model to have two different encoding and motor execution 
+## times for "old" and "new" responses.
+new_model <- delta2delta(model = model, trees = c(0, 1), 
+                         categories = c(1,3), mappings = c(1,1))
+new_model
+
+
+model <- to_drtmpt_model(mdl_file = mdl_2HTM)
 
 ## changing the model to have two different encoding and motor execution 
 ## times for "old" and "new" responses.

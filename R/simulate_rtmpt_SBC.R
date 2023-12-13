@@ -1,16 +1,16 @@
 
 #' Simulate data from an RT-MPT model
 #' 
-#' Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for 
+#' Simulate data from RT-MPT models using \code{ertmpt_model} objects. The difference to \code{\link{sim_ertmpt_data}} is that here only scalars are allowed. This makes it usable for 
 #'   simulation-based calibration (SBC; Talts et al., 2018). You can specify the random seed, number of subjects, number of trials, and some
-#'   parameters (same as \code{prior_params} from \code{\link{fit_rtmpt}}).
+#'   parameters (same as \code{prior_params} from \code{\link{fit_ertmpt}}).
 #'
-#' @param model A list of the class \code{rtmpt_model}.
+#' @param model A list of the class \code{ertmpt_model}.
 #' @param seed Random seed number.
 #' @param n.subj <- Number of subjects.
 #' @param n.trials <- Number of trials per tree.
 #' @param params Named list of parameters from which the data will be generated. This must be the same named list as \code{prior_params} from 
-#'   \code{\link{fit_rtmpt}} and has the same defaults. It is not recommended to use the defaults since they lead to many probabilities close or 
+#'   \code{\link{fit_ertmpt}} and has the same defaults. It is not recommended to use the defaults since they lead to many probabilities close or 
 #'   equal to \code{0} and/or \code{1} and to RTs close or equal to \code{0}. Allowed parameters are:
 #'   \itemize{
 #'     \item \code{mean_of_exp_mu_beta}: This is the expected exponential rate (\code{E(exp(beta)) = E(lambda)}) and 
@@ -42,7 +42,7 @@
 #'           \code{DF = P + add_df_to_invWish}. The default for \code{add_df_to_invWish} is \code{1}, such that the correlations are uniformly 
 #'           distributed within \code{[-1, 1]}.
 #'   }
-#' @return A list of the class \code{rtmpt_sim} containing 
+#' @return A list of the class \code{ertmpt_sim} containing 
 #'   \itemize{
 #'     \item \code{data}: the data.frame with the simulated data,
 #'     \item \code{gen_list}: a list containing lists of the group-level and subject-specific parameters for the process-related parameters and the motor-related
@@ -69,7 +69,7 @@
 #' # do: detect old; dn: detect new; g: guess
 #' "
 #' 
-#' model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+#' model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 #' 
 #' params <- list(mean_of_exp_mu_beta = 10, 
 #'                var_of_exp_mu_beta = 10, 
@@ -83,13 +83,13 @@
 #'                prec_epsilon = 10,
 #'                add_df_to_invWish = 5)
 #' 
-#' sim_dat <- rtmpt:::sim_rtmpt_data_SBC(model, seed = 123, n.subj = 40, 
+#' sim_dat <- rtmpt:::sim_ertmpt_data_SBC(model, seed = 123, n.subj = 40, 
 #'                                       n.trials = 30, params = params)
 #' 
 #' @author Raphael Hartmann
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom stats rgamma rnorm pnorm rexp
-sim_rtmpt_data_SBC<- function(model, 
+sim_ertmpt_data_SBC<- function(model, 
                               seed,
                               n.subj,
                               n.trials,
@@ -620,7 +620,7 @@ sim_rtmpt_data_SBC<- function(model,
   
   sim_list <- list(data_frame = DF, gen_list = gen_list, specs = specs)
   
-  class(sim_list) <- "rtmpt_sim"
+  class(sim_list) <- "ertmpt_sim"
   
   return(sim_list)
   

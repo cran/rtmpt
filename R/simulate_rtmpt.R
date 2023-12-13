@@ -176,16 +176,16 @@ readinfofile <- function(infofile) {
   
 #' Simulate data from RT-MPT models
 #' 
-#' Simulate data from RT-MPT models using \code{rtmpt_model} objects. 
+#' Simulate data from RT-MPT models using \code{ertmpt_model} objects. 
 #'   You can specify the random seed, number of subjects, number of trials per tree, and some
-#'   parameters (mainly the same as \code{prior_params} from \code{\link{fit_rtmpt}}).
+#'   parameters (mainly the same as \code{prior_params} from \code{\link{fit_ertmpt}}).
 #'
-#' @param model A list of the class \code{rtmpt_model}.
+#' @param model A list of the class \code{ertmpt_model}.
 #' @param seed Random seed number.
 #' @param n.subj Number of subjects.
 #' @param n.trials Number of trials per tree.
 #' @param params Named list of parameters from which the data will be generated. This must be the same named list as \code{prior_params} from 
-#'   \code{\link{fit_rtmpt}}, except for "mean_of_mu_alpha" and "var_of_mu_alpha", and has the same defaults. The difference to \code{prior_params} 
+#'   \code{\link{fit_ertmpt}}, except for "mean_of_mu_alpha" and "var_of_mu_alpha", and has the same defaults. The difference to \code{prior_params} 
 #'   is, that vectors are allowed, but must match the length of the parameters in the \code{model}. It is not recommended to use the defaults 
 #'   since they lead to many probabilities close or equal to \code{0} and/or \code{1} and to RTs close or equal to \code{0}. Allowed parameters are:
 #'   \itemize{
@@ -241,7 +241,7 @@ readinfofile <- function(infofile) {
 #'           \code{sf_of_scale_matrix_GAMMA}, and xi (randomly generated from N(\code{1, 1/prec_epsilon})) are the scaling factors for the scaled inverse wishart distribution.
 #'           If \code{GAMMA} is used, \code{sf_of_scale_matrix_GAMMA} and \code{add_df_to_invWish} will be ignored for the motor time parameters.
 #'   }
-#' @return A list of the class \code{rtmpt_sim} containing 
+#' @return A list of the class \code{ertmpt_sim} containing 
 #'   \itemize{
 #'     \item \code{data}: the data.frame with the simulated data,
 #'     \item \code{gen_list}: a list containing lists of the group-level and subject-specific parameters for the process-related parameters and the motor-related
@@ -267,7 +267,7 @@ readinfofile <- function(infofile) {
 #' # do: detect old; dn: detect new; g: guess
 #' "
 #' 
-#' model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+#' model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 #' 
 #' # random group-level parameters
 #' params <- list(mean_of_mu_alpha = 0, 
@@ -284,7 +284,7 @@ readinfofile <- function(infofile) {
 #'                prec_epsilon = 10,
 #'                add_df_to_invWish = 5)
 #' 
-#' sim_dat <- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
+#' sim_dat <- sim_ertmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
 #' 
 #' # fixed group-level parameters
 #' params <- list(mean_of_mu_alpha = 0, 
@@ -299,13 +299,13 @@ readinfofile <- function(infofile) {
 #'                SIGMA = diag(9),   # independent process-related params
 #'                GAMMA = diag(2))   # independent motor time params
 #' 
-#' sim_dat <- sim_rtmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
+#' sim_dat <- sim_ertmpt_data(model, seed = 123, n.subj = 40, n.trials = 30, params = params)
 #' 
 #' @author Raphael Hartmann
 #' @export
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom stats rgamma rnorm pnorm rexp
-sim_rtmpt_data <- function(model, 
+sim_ertmpt_data <- function(model, 
                            seed,
                            n.subj,
                            n.trials,
@@ -921,7 +921,7 @@ sim_rtmpt_data <- function(model,
   
   sim_list <- list(data_frame = DF, gen_list = gen_list, specs = specs)
   
-  class(sim_list) <- "rtmpt_sim"
+  class(sim_list) <- "ertmpt_sim"
   
   return(sim_list)
   

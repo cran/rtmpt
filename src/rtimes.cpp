@@ -1,10 +1,12 @@
-#include "rts.h"
+
 // authors: Christoph Klauer
-//#include "norminc.h"
 
-// namespace rtsNS {
+#include "rts.h"
 
-	#define NNODES(I,J) nnodes[I*kernpar+J]
+
+namespace ertmpt {
+
+	//#define NNODES(I,J) nnodes[I*kernpar+J]
 	#define NPPR(T,R) nppr[(T)*respno + R]
 	#define FACTOR(T,R) factor[T*respno+R]
 
@@ -34,7 +36,7 @@
 		if (tau) free(tau);
 	}
 
-	void make_rsigalpha(vector<trial> daten, double* factor, double *rest, double *restpar, double* slams, bool xflag, gsl_rng *rst) {
+	void make_rsigalpha(std::vector<trial> daten, double* factor, double *rest, double *restpar, double* slams, bool xflag, gsl_rng *rst) {
 
 		double *u = 0; u = (double *)malloc(indi * sizeof(double));
 		double *fn = 0; fn = (double *)malloc(respno * sizeof(double));
@@ -97,7 +99,7 @@
 
 
 
-	void make_ralpha(vector<trial> daten, double* factor, double *rest, double *restpars, double* slams, double *taui, gsl_rng *rst) {
+	void make_ralpha(std::vector<trial> daten, double* factor, double *rest, double *restpars, double* slams, double *taui, gsl_rng *rst) {
 
 
 
@@ -177,7 +179,7 @@
 	}
 
 
-	void make_slams(vector<trial> daten, double* factor, double *rest, double *restpars, double *slams, gsl_rng *rst) {
+	void make_slams(std::vector<trial> daten, double* factor, double *rest, double *restpars, double *slams, gsl_rng *rst) {
 
 		double *fig = 0;	fig = (double *)malloc(indi*respno * sizeof(double));
 		double *ba = 0;	ba = (double *)malloc(indi*respno * sizeof(double));
@@ -229,11 +231,7 @@
 
 
 
-
-
-
-
-	void make_rmu(vector<trial> daten, double* factor, double *rest, double *restpar, double *slams, gsl_rng *rst) {
+	void make_rmu(std::vector<trial> daten, double* factor, double *rest, double *restpar, double *slams, gsl_rng *rst) {
 
 		int no_trials = static_cast<int>(daten.size()); double sig_prior = pr_var_mu_gamma;//1.0 / 0.1;
 		double *u = 0; u = (double *)malloc(igroup*respno * sizeof(double));
@@ -309,7 +307,7 @@
 		free(keepold);
 	}
 
-	void make_rsig(vector<trial> daten, double *rest, double *restpar, gsl_rng *rst) {
+	void make_rsig(std::vector<trial> daten, double *rest, double *restpar, gsl_rng *rst) {
 
 		// double prior_gamma = 0.0;
 		double s = 0.0;
@@ -327,4 +325,4 @@
 		}
 	}
 
-// }
+}

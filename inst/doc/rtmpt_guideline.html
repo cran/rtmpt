@@ -12,7 +12,7 @@
 
 <meta name="author" content="Raphael Hartmann" />
 
-<meta name="date" content="2023-11-30" />
+<meta name="date" content="2023-12-13" />
 
 <title>rtmpt: Guideline</title>
 
@@ -340,23 +340,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rtmpt: Guideline</h1>
 <h4 class="author">Raphael Hartmann</h4>
-<h4 class="date">2023-11-30</h4>
+<h4 class="date">2023-12-13</h4>
 
 
 
 <div id="overview" class="section level1">
 <h1>Overview</h1>
-<p>Given a data file (text file, <code>data.frame</code>) with the
+<p>Given a data file (text file or <code>data.frame</code>) with the
 correct variable names (see section 1.3) and a model file (see section
-1.1 and 2) the steps needed to fit the RT-MPT model (Hartmann et al.,
-2020; Hartmann &amp; Klauer, 2020; Klauer &amp; Kellen, 2018) to the
-data is described in Section 1:</p>
-<p>1.1 Convert the equation/model file to a <code>rtmpt_model</code> via
-the <code>to_rtmpt_model()</code> function 1.2 If necessary, specify
-some restrictions 1.3 Convert the data file to a <code>rtmpt_data</code>
-format via the <code>to_rtmpt_data()</code> function 1.4 Fit the
-specified model to the data via the <code>fit_rtmpt()</code> function
-1.5 Check convergence of the model parameters and getting a summary</p>
+1.1 and 2) the steps needed to fit either an exponential RT-MPT model
+(Hartmann et al., 2020; Hartmann &amp; Klauer, 2020; Klauer &amp;
+Kellen, 2018) or a diffusion RT-MPT model (Klauer et al., submitted) to
+the data is described in Section 1:</p>
+<p>1.1 Convert the equation/model file to an <code>ertmpt_model</code>
+or <code>drtmpt_model</code> via the <code>to_ertmpt_model()</code> or
+<code>to_drtmpt_model()</code> function 1.2 If necessary, specify some
+restrictions 1.3 Convert the data file to an <code>ertmpt_data</code> or
+<code>drtmpt_data</code> object via the <code>to_ertmpt_data()</code> or
+<code>to_drtmpt_data()</code> function 1.4 Fit the specified model to
+the data via the <code>fit_ertmpt()</code> or <code>fit_drtmpt()</code>
+function 1.5 Check convergence of the model parameters and getting a
+summary</p>
 <p>In Section 2, 3, and 4 more information about the equation/model
 files, the data and additional functions is provided.</p>
 </div>
@@ -400,18 +404,21 @@ beginning of a line.</p>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
-<p>All paths that lead to the same response category will be added
-together with a <code>+</code> symbol.</p>
+<p>All paths/branches that lead to the same response category will be
+added together with a <code>+</code> symbol.</p>
 <p>More information about these two syntaxes are written in Section
 2.</p>
-<p>The conversion to an <code>rtmpt_model</code> list can then be done
-by the <code>to_rtmpt_model()</code> function:</p>
+<p>The conversion to an <code>ertmpt_model</code> or
+<code>drtmpt_model</code> list can then be done by the
+<code>to_ertmpt_model()</code> or <code>to_drtmpt_model()</code>,
+respectively, function:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtmpt)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using the MDL syntax:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TwoHTM <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># using the EQN syntax:</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>TwoHTM <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>TwoHTM</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># MAKING AN ERTMPT MODEL</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the MDL syntax:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>e2HTM <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the EQN syntax:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>e2HTM <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>e2HTM</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -459,23 +466,88 @@ by the <code>to_rtmpt_model()</code> function:</p>
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
 ## -----------------------------------</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MAKING A DRTMPT MODEL</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the MDL syntax:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>d2HTM <span class="ot">&lt;-</span> <span class="fu">to_drtmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the EQN syntax:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>d2HTM <span class="ot">&lt;-</span> <span class="fu">to_drtmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>d2HTM</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 0 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 0 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 0 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div>
 </div>
-<div id="model-restrictions" class="section level2">
-<h2>1.2 Model restrictions</h2>
-<p>There are five functions with which an <code>rtmpt_model</code>
-object can be changed. Two functions can be used to hold a process
-probability parameter (theta) constant or to make some process
-probability parameters equal. Two functions can be used to suppress
-process completion times (taus), which means the process times are set
-to zero, or to make some process completion times equal. The last
-function handles how many different motor and execution times (deltas)
-are used in the model.</p>
-<div id="modifying-process-probabilities" class="section level3">
-<h3>Modifying process probabilities</h3>
+<div id="model-specifications" class="section level2">
+<h2>1.2 Model specifications</h2>
+<p>Next we discuss model restrictions for an <code>ertmpt_model</code>
+(1.2.1) and a <code>drtmpt_model</code> (1.2.2), and the response
+mapping if more than one encoding plus motor execution time is wanted
+(1.2.3).</p>
+<div id="model-restrictions-of-ertmpt-models" class="section level3">
+<h3>1.2.1 Model restrictions of ertmpt models</h3>
+<p>There are four functions with which the process parameters of an
+<code>ertmpt_model</code> object can be changed. Two functions can be
+used to hold a process probability parameter (theta) constant or to make
+some process probability parameters equal. Two functions can be used to
+suppress process completion times (taus), which means the process times
+are set to zero, or to make some process completion times equal.</p>
+<div id="modifying-process-probabilities" class="section level4">
+<h4>Modifying process probabilities</h4>
 <p>To hold a process probability constant you can use
 <code>theta2const()</code> like this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2const</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2const</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -523,14 +595,15 @@ are used in the model.</p>
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
 ## -----------------------------------</code></pre>
-<p>Here, <code>&quot;g&quot;</code> will be set to be equal to 0.5 and will not be
-estimated therefore.,You might also use this function with a vector of
+<p>Here, <code>&quot;g&quot;</code> will be set to 0.5 and will, therefore, not be
+estimated. You might also use this function with a vector of
 <code>names</code> (and a vector of <code>constants</code>). Note that
 the new model is not saved because we did not assign it to an R
 object.</p>
-<p>To set two or more process probabilities equal you can use
+<p>An alias for this function is <code>set_theta_const()</code>.</p>
+<p>To set two or more process probabilities equal, you can use
 <code>theta2theta()</code> like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2theta</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2theta</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -580,19 +653,20 @@ object.</p>
 ## -----------------------------------</code></pre>
 <p>The process probabilities for all processes specified in
 <code>names</code> are set equal. The first of the process
-<code>names</code> in alphabetical order (here <code>&quot;dn&quot;</code>)
+<code>names</code> in alphabetical order (here <code>&quot;Dn&quot;</code>)
 denotes the reference probability that will be estimated. The other(s)
 will not be estimated but will be set to be equal to the reference
 process probability. The <code>keep_consts</code> argument can be used,
 if you want to keep constants that you already specified and all other
-process probabilities should have the same constant but we suggest to
+process probabilities should have the same constant, but we suggest to
 use <code>theta2const()</code> for that.</p>
+<p>An alias for this function is <code>set_thetas_equal()</code>.</p>
 </div>
-<div id="modifying-process-completion-times" class="section level3">
-<h3>Modifying process completion times</h3>
+<div id="modifying-process-completion-times" class="section level4">
+<h4>Modifying process completion times</h4>
 <p>To suppress a process completion time (i.e., set it to zero) you can
 use <code>tau2zero()</code> like this:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2zero</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">outcomes =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">values =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2zero</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">outcomes =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">values =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -641,12 +715,13 @@ use <code>tau2zero()</code> like this:</p>
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
 ## -----------------------------------</code></pre>
 <p>Here, the process completion time of <code>&quot;g&quot;</code> with outcome
-<code>&quot;minus&quot;</code> (meaning the time for 1-g) is set to zero and will
-not be estimated therefore (which typically does not make sense to do).
-Also this function can be used with vectors.</p>
+<code>&quot;minus&quot;</code> (meaning the time for 1-g) is set to zero and,
+therefore, will not be estimated (which typically does not make sense to
+do). Also this function can be used with vectors.</p>
+<p>An alias for this function is <code>set_tau_zero()</code>.</p>
 <p>To set two or more process completion times with the same outcome
 equal you can use <code>theta2theta()</code> like this:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2tau</span>(<span class="at">model =</span> TwoHTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_zeros =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2tau</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">outcome =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">keep_zeros =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -674,9 +749,9 @@ equal you can use <code>theta2theta()</code> like this:</p>
 ## -------------------------------
 ## 
 ## Process completion time parameters (taus):
-##       Dn Do  g
-## minus NA Dn NA
-## plus  NA Dn NA
+##         Dn   Do  g
+## minus &lt;NA&gt;   Dn NA
+## plus  &lt;NA&gt; &lt;NA&gt; NA
 ## 
 ## * NOTE 1: &quot;minus&quot; refers to the negative outcome (1-P) and &quot;plus&quot; to the positive.
 ## * NOTE 2: NA means the parameter will be estimated. 0 means it will be suppressed.
@@ -696,28 +771,444 @@ equal you can use <code>theta2theta()</code> like this:</p>
 ## -----------------------------------</code></pre>
 <p>The process completion times for all processes specified in
 <code>names</code> are set equal (i.e., all process completion times in
-minus-direction will be equal and all process completion times in
-plus-direction will be equal). The first of the process
-<code>names</code> in alphabetical order (here <code>&quot;dn&quot;</code>)
-denotes the reference process times (in minus and plus direction) that
-will be estimated. The other(s) will not be estimated but will be set to
-be equal to the reference process times. The <code>keep_zeros</code>
-argument can be used, if you want to keep the zeros that you already
-specified and all other process times with the same outcome should be
-zero as well. Also here we suggest using the <code>tau2zero()</code>
-function.</p>
+minus-direction will be equal, but all process completion times in
+plus-direction will still be estimated, unless you set
+<code>outcome</code> to “both”). The first of the process
+<code>names</code> in alphabetical order (here <code>&quot;Dn&quot;</code>)
+denotes the reference process times in minus direction (and/or plus
+direction) that will be estimated. The other(s) will not be estimated,
+but will be set to be equal to the reference process time(s). The
+<code>keep_zeros</code> argument can be used, if you want to keep the
+zeros that you already specified and all other process times with the
+same outcome should be zero as well. Also here we suggest using the
+<code>tau2zero()</code> function.</p>
+<p>An alias for this function is <code>set_taus_equal()</code>.</p>
+</div>
+</div>
+<div id="model-restrictions-of-drtmpt-models" class="section level3">
+<h3>1.2.2 Model restrictions of drtmpt models</h3>
+<p>There are six functions with which the process parameters of a
+<code>drtmpt_model</code> object can be changed. Three functions can be
+used to set some process parameters to constants and three functions can
+be used to make some process parameters equal.</p>
+<div id="modifying-the-threshold-parameter-in-a-process" class="section level4">
+<h4>Modifying the threshold parameter in a process</h4>
+<p>To hold a process threshold constant you can use
+<code>a2const()</code> like this:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">a2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do g
+## 1 NA NA 1
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 1 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 0 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 0 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<p>Here, the threshold for <code>&quot;g&quot;</code> will be set to 1.0 and,
+therefore, will not be estimated. You might also use this function with
+a vector of <code>names</code> (and a vector of <code>constants</code>).
+Note that the new model is not saved because we did not assign it to an
+R object.</p>
+<p>An alias for this function is <code>set_a_equal()</code>.</p>
+<p>To set two or more process thresholds equal you can use
+<code>a2a()</code> like this:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">a2a</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do  g
+## 1 NA Dn NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 1 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 0 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 0 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<p>The process thresholds for all processes specified in
+<code>names</code> are set equal. The first of the process
+<code>names</code> in alphabetical order (here <code>&quot;Dn&quot;</code>)
+denotes the reference probability that will be estimated. The other(s)
+will not be estimated but will be set to be equal to the reference
+process threshold. The <code>keep_consts</code> argument can be used, if
+you want to keep constants that you already specified and all other
+process thresholds should have the same constant, but we suggest to use
+<code>a2const()</code> for that.</p>
+<p>An alias for this function is <code>set_a_equal()</code>.</p>
+</div>
+<div id="modifying-the-drif-rate-parameter-in-a-process" class="section level4">
+<h4>Modifying the drif rate parameter in a process</h4>
+<p>To hold a process drift-rate constant you can use
+<code>nu2const()</code> like this:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nu2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 0 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do g
+## 1 NA NA 1
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 1 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 0 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<p>Here, the drift rate for <code>&quot;g&quot;</code> will be set to 1.0 and,
+therefore, will not be estimated. You might also use this function with
+a vector of <code>names</code> (and a vector of <code>constants</code>).
+Note that the new model is not saved because we did not assign it to an
+R object.</p>
+<p>An alias for this function is <code>set_nu_equal()</code>.</p>
+<p>To set two or more process drift-rates equal you can use
+<code>nu2nu()</code> like this:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nu2nu</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 0 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do  g
+## 1 NA Dn NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 1 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 0 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<p>The process drift-rates for all processes specified in
+<code>names</code> are set equal. The first of the process
+<code>names</code> in alphabetical order (here <code>&quot;Dn&quot;</code>)
+denotes the reference probability that will be estimated. The other(s)
+will not be estimated but will be set to be equal to the reference
+process drift-rate The <code>keep_consts</code> argument can be used, if
+you want to keep constants that you already specified and all other
+process drift-rates should have the same constant, but we suggest to use
+<code>nu2const()</code> for that.</p>
+<p>An alias for this function is <code>set_nus_equal()</code>.</p>
+</div>
+<div id="modifying-the-relative-starting-point-parameter-in-a-process" class="section level4">
+<h4>Modifying the relative starting point parameter in a process</h4>
+<p>To hold a process relative-starting-point constant you can use
+<code>omega2const()</code> like this:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">omega2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 0 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 0 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do   g
+## 1 NA NA 0.5
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 1 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<p>Here, the relative starting point for <code>&quot;g&quot;</code> will be set to
+0.5 and, therefore, will not be estimated. You might also use this
+function with a vector of <code>names</code> (and a vector of
+<code>constants</code>). Note that the new model is not saved because we
+did not assign it to an R object.</p>
+<p>An alias for this function is <code>set_omega_equal()</code>.</p>
+<p>To set two or more process relative-starting-points equal you can use
+<code>omega2omega()</code> like this:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">omega2omega</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+## MODEL OVERVIEW
+## 
+## 
+## MDL syntax for the MPT part:
+##         MDL_lines
+## 1   # 0 [ 0 , 1 ]
+## 2     Do+(1-Do)*g
+## 3    (1-Do)*(1-g)
+## 4                
+## 5   # 1 [ 2 , 3 ]
+## 6        (1-Dn)*g
+## 7 Dn+(1-Dn)*(1-g)
+## 
+## * NOTE 1: Each line in the MDL syntax represents one response category.
+## ----------------------------
+## 
+## Threshold parameters (a):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 means it will be held constant.
+## * INFO: 0 of the process thresholds will be held constant.
+## -------------------------------
+## 
+## Drift rate parameters (nu):
+##   Dn Do  g
+## 1 NA NA NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value between -Inf and Inf means it will be held constant.
+## * INFO: 0 of the process drift rates will be held constant.
+## -----------------------------------
+## 
+## Relative starting point parameters (omega):
+##   Dn Do  g
+## 1 NA Dn NA
+## 
+## * NOTE 1: NA means the parameter will be estimated.
+## * NOTE 2: A value larger than 0 and smaller than 1 means it will be held constant.
+## * INFO: 1 of the process relative starting points will be held constant.
+## -------------------------------
+## 
+## Mapping of response categories and encoding plus motor execution times (deltas):
+##   TREE CAT MAP
+## 1    0   0   0
+## 3    0   1   0
+## 5    1   2   0
+## 4    1   3   0
+## 
+## * NOTE 1: Unique representation of trees and categories.
+## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
+## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
+## -----------------------------------</code></pre>
+<p>The process relative-starting-points for all processes specified in
+<code>names</code> are set equal. The first of the process
+<code>names</code> in alphabetical order (here <code>&quot;Dn&quot;</code>)
+denotes the reference probability that will be estimated. The other(s)
+will not be estimated but will be set to be equal to the reference
+process threshold. The <code>keep_consts</code> argument can be used, if
+you want to keep constants that you already specified and all other
+process relative-starting-points should have the same constant, but we
+suggest to use <code>omega2const()</code> for that.</p>
+<p>An alias for this function is <code>set_omegas_equal()</code>.</p>
+</div>
 </div>
 <div id="modifying-motor-and-exectution-times" class="section level3">
-<h3>Modifying motor and exectution times</h3>
-<p>You can choose which categories of the (RT-)MPT model should have the
-same encoding plus motor execution time. Unlike the processes the motor
-plus execution times have no names which we can use to set them equal.
-Therefore a mapping is used in the function <code>delta2delta()</code>
-where the response categories (<code>categories</code>) can be mapped to
-encoding plus motor execution times by using a mapping argument
-(<code>mappings</code>). Because the response categories are not always
-unique the tree (<code>trees</code>) has to be provided as well.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">delta2delta</span>(<span class="at">model =</span> TwoHTM, <span class="at">trees =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">categories =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">mappings =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<h3>1.2.3 Modifying motor and exectution times</h3>
+<p>You can choose which categories of the exponential/diffusion RT-MPT
+model should have the same encoding plus motor execution time. Unlike
+the processes the motor plus execution times have no names which we can
+use to set them equal. Therefore a mapping is used in the function
+<code>delta2delta()</code> where the response categories
+(<code>categories</code>) can be mapped to encoding plus motor execution
+times by using a mapping argument (<code>mappings</code>). Because the
+response categories are not always unique the tree (<code>trees</code>)
+has to be provided as well.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">delta2delta</span>(<span class="at">model =</span> e2HTM, <span class="at">trees =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">categories =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">mappings =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -769,6 +1260,7 @@ unique the tree (<code>trees</code>) has to be provided as well.</p>
 number can be skipped. For example in the above code the
 <code>mappings</code> cannot be <code>c(2,2)</code> since the number 1
 would be missing then in the mappings.</p>
+<p>An alias for this function is <code>set_deltas_equal()</code>.</p>
 </div>
 </div>
 <div id="the-right-data-format" class="section level2">
@@ -791,23 +1283,25 @@ If it has decimal places it will be rounded to a whole number.</p>
 <p>Given the right order of the variables and the right values one can
 use a <code>data.frame</code> or a path to a text file containing the
 variable names in the first line. If not, the
-<code>to_rtmpt_data()</code> function can be used to reorder the
-variables and transform the values of those variables. Next to the new
-<code>data.frame</code> the transformation that is used will be saved in
-an <code>rtmpt_data</code> list. Note that <strong>at least</strong> the
+<code>to_ertmpt_data()</code> or <code>to_drtmpt_data()</code> function
+can be used to reorder the variables and transform the values of those
+variables. Next to the new <code>data.frame</code> the transformation
+that is used will be saved in an <code>ertmpt_data</code> or
+<code>drtmpt_data</code> list. Note that <strong>at least</strong> the
 variable names should be correctly provided in order to make
-<code>to_rtmpt_data()</code> work. The <code>to_rtmpt_data()</code>
-function is also used automatically in the <code>fit_rtmpt()</code>
-function, but should be used at least once, when the model is specified
-the first time, to check whether the data is transformed according to
-the equation/model file.</p>
+<code>to_ertmpt_data()</code> or <code>to_drtmpt_data()</code> work.
+These functions are also used automatically in the
+<code>fit_ertmpt()</code> or <code>fit_drtmpt()</code> function, but
+should be used at least once, when the model is specified the first
+time, to check whether the data is transformed according to the
+equation/model file.</p>
 <p>Here is an example of a data set with unordered variables and wrong
 values (not starting from zero) and a transformation of this data
 set:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tree =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="at">rt =</span> <span class="fu">round</span>(<span class="dv">1000</span><span class="sc">*</span>(<span class="fu">runif</span>(<span class="dv">16</span>)<span class="sc">+</span>.<span class="dv">3</span>)), </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">group =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">8</span>), <span class="at">subj =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> <span class="dv">4</span>), <span class="at">cat =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>raw_data</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tree =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="at">rt =</span> <span class="fu">round</span>(<span class="dv">1000</span><span class="sc">*</span>(<span class="fu">runif</span>(<span class="dv">16</span>)<span class="sc">+</span>.<span class="dv">3</span>)), </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">group =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">8</span>), <span class="at">subj =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> <span class="dv">4</span>), <span class="at">cat =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>raw_data</span></code></pre></div>
 <pre><code>##    tree   rt group subj cat
 ## 1     1  751     1    1   1
 ## 2     2 1084     1    1   2
@@ -825,8 +1319,8 @@ set:</p>
 ## 14    2  867     2    4   2
 ## 15    1 1120     2    4   3
 ## 16    2  552     2    4   4</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_data</span>(<span class="at">raw_data =</span> raw_data, <span class="at">model =</span> TwoHTM)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_data</span>(<span class="at">raw_data =</span> raw_data, <span class="at">model =</span> e2HTM)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
 <pre><code>## 
 ## DATA TRANSFORMATION OVERVIEW
 ## 
@@ -865,60 +1359,109 @@ set:</p>
 ## * NOTE: &quot;old&quot; refers to the used labels and &quot;new&quot; to the ones that will be used.
 ## ------------------------</code></pre>
 <p>Note that it is never a good idea to specify the tree and category
-labels/numbers differently from the data file, or vice versa. It is bad
-practice to define a model with tree and category values starting from
-zero and using a data set with tree and category values starting from
-one; Make sure the labels or numbers match for these two match.</p>
+labels/numbers differently from the data file, or vice versa. It is not
+recommended to define a model with tree and category values starting
+from zero and using a data set with tree and category values starting
+from one; Make sure the labels or numbers for these two match.</p>
 </div>
 <div id="model-fitting" class="section level2">
 <h2>1.4 Model fitting</h2>
-<p>Finally, with the function <code>fit_rtmpt()</code> one can fit the
-model to the data. This code should not be run. There are way too few
-data points.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_rtmpt</span>(<span class="at">model =</span> TwoHTM, <span class="at">data =</span> data)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<p>Finally, with the function <code>fit_ertmpt()</code> or
+<code>fit_drtmpt()</code> one can fit the model to the data. This code
+should not be run. There are way too few data points.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>ertmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_ertmpt</span>(<span class="at">model =</span> e2HTM, <span class="at">data =</span> data)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
 <p>In this function call we used the default values for all the
 parameters that are not listed in the call. <code>model</code> and
 <code>data</code> do not have default values. The full call of the
 function would look like this:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>rtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_rtmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> data, </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.iter =</span> <span class="dv">5000</span>, </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.burnin =</span> <span class="dv">200</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">indices =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">save_log_lik =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>ertmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_ertmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> data, </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.iter =</span> <span class="dv">5000</span>, </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.burnin =</span> <span class="dv">200</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">indices =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">save_log_lik =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
 <p><code>n.chains</code> is the number of chains with a maximum of 16,
 <code>n.iter</code> is the number of samples to draw from the posterior
 distribution, <code>n.burnin</code> is analogue to the burn-in phase for
-R package <code>rjags</code>, <code>Rhat_max</code> is a threshold for
-the potential scale reduction factor and forces the sampling to start
-only when the maximal potential scale reduction factor of the parameters
-is lower or equal to this value, <code>n.thin</code> is the thinning
-parameter, <code>Irep</code> is the number of samples until the next
-summary is printed, <code>prior_params</code> is a list of some prior
-parameter specifications, <code>indices</code> is a logical parameter
-with which one can allow to compute the WAIC and LOO, and
-<code>save_log_lik</code> is a logical parameter that allows one to save
-the log-likelihood for each posterior sample and data point.</p>
+R package <code>rjags</code> and denotes the number of warm-up sampling,
+<code>n.thin</code> is the thinning parameter, <code>Rhat_max</code> is
+a threshold for the potential scale reduction factor and forces the
+sampling to start only when the maximal potential scale reduction factor
+of the parameters is lower or equal to this value, <code>Irep</code> is
+the number of samples until the next summary is printed,
+<code>prior_params</code> is a list of some prior parameter
+specifications, <code>indices</code> is a logical parameter with which
+one can allow to compute the WAIC and LOO, and <code>save_log_lik</code>
+is a logical parameter that allows one to save the log-likelihood for
+each posterior sample and data point.</p>
+<p>The equivalent for the <code>drtmpt</code> is</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>drtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_drtmpt</span>(<span class="at">model =</span> d2HTM, <span class="at">data =</span> data)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<p>Where also the the default values for all the parameters are used.
+Also here, <code>model</code> and <code>data</code> do not have default
+values. The full call of the function would look like this:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>drtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_drtmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> data, </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.iter =</span> <span class="dv">1000</span>, </span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.phase1 =</span> <span class="dv">1000</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.phase1 =</span> <span class="dv">2000</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">flags =</span> <span class="cn">NULL</span>,</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">control =</span> <span class="cn">NULL</span>)</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<p><code>n.chains</code>, <code>n.iter</code>, <code>n.thin</code>,
+<code>Rhat_max</code>, and <code>Irep</code>, are the same as for
+<code>fit_ertmpt()</code>. <code>prior_params</code> is still a list of
+some prior parameter specifications, but with other prior parameters
+than in <code>fit_drtmpt</code> (see section 4 for more details).
+<code>n.phase1</code> and <code>n.phase2</code> are similar to
+<code>n.burnin</code>, but are for the adaptation of the Hamiltonian
+algorithm and the estimation of the covariance matrix of all parameters,
+respectively. <code>flags</code> should be a list of four logical
+variables, namely <code>old_label</code> (the equivalent of the argument
+in <code>fit_ertmpt()</code>), <code>indices</code> (also an equivalent
+of the argument in <code>fit_ertmpt()</code>), <code>log_lik</code> (the
+equivalent of the <code>save_log_lik</code> argument in
+<code>fit_ertmpt()</code>), and <code>random_init</code> (which asks
+whether the initial value of the MCMC algorithm should be random or
+estimated by maximum likelihood). Finaly, <code>control</code> is a list
+of numeric variables which gives the user some control over the
+algorithm and its speed, namely <code>maxthreads</code> (number of
+maximal number of threads for multithreading),
+<code>maxtreedepth1_3</code> (number of tree depth of the no-U-turn
+algorithm in phase 1 and 3), and <code>maxtreedepth4</code> (number of
+tree depth of the no-U-turn algorithm in phase 4).</p>
 </div>
 <div id="checking-model-convergence-and-getting-a-summary" class="section level2">
 <h2>1.5 Checking model convergence and getting a summary</h2>
-<p>Convergence of the model can be checked by using the fitted object
-(here <code>rtmpt_out</code>). Just get the diagnostics and then R-hat.
-In order to get a traceplot one can use the <code>traceplot()</code>
-function from <code>coda</code>. You can also use the
-<code>summary()</code> function to get a summary of the estimates.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rtmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(rtmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(rtmpt_out)</span></code></pre></div>
+<p>Convergence of the model can be checked by using the fitted object.
+Just get the diagnostics and then R-hat. In order to get a traceplot one
+can use the <code>traceplot()</code> function from <code>coda</code>.
+You can also use the <code>summary()</code> function to get a summary of
+the estimates.</p>
+<p>Here a code snippet for <code>ertmpt</code></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ertmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(ertmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ertmpt_out)</span></code></pre></div>
+<p>or <code>drtmpt</code></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>drtmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(drtmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(drtmpt_out)</span></code></pre></div>
 </div>
 </div>
 <div id="equation-and-model-files" class="section level1">
@@ -931,17 +1474,17 @@ restrictions that are possible we decided to use now functions instead
 <h2>2.1 Equation files</h2>
 <p>As we have seen above one can specify an equation file
 (<code>eqn_file</code>) like this:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="st">## tree ; cat ;         path</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="st">## tree ; cat ;         path</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>The trees, categories, and paths need to be separated by a semi-colon
 or a comma, but should not be mixed. As mentioned above the
 <code>eqn_file</code> can be provided by a text file through a path to
@@ -953,29 +1496,30 @@ the file or written directly in R/Rstudio like above.</p>
 (<code>mdl_file</code>). This is also not yet the model itself as needed
 for the <code>fit_rtmpt()</code> call, but much closer. It is based on
 the syntax developed by Singmann and Kellen (2013).</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">## targets:</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">## lures</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="st">## targets:</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="st">## lures</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>Between two trees (here targets and lures) there must be an empty
 line. All paths which lead to the same response category are added
 together on one line by a <code>+</code> symbol.</p>
 <p>Internally an <code>eqn_file</code> will be converted to an
 <code>mdl_file</code>. From that a text file will be written locally
-onto your computer, used by the <code>fit_rtmpt()</code> call, and
-removed afterwards.</p>
+onto your computer (in a temporary file within a temporary folder
+created by the R session), used by the <code>fit_ertmpt()</code> or
+<code>fit_drtmpt()</code> call, and removed afterwards.</p>
 </div>
 </div>
 <div id="data-transformation" class="section level1">
 <h1>3 Data transformation</h1>
-<div id="labels-in-data-file" class="section level2">
-<h2>3.1 Labels in data file</h2>
+<div id="labels-in-a-data-file" class="section level2">
+<h2>3.1 Labels in a data file</h2>
 <p>When labels are used in the data set one has to be cautious when
 specifying the equation file. The labels of the trees and categories in
 the equation file must match those of the data. For example, if the tree
@@ -985,8 +1529,8 @@ a model file (<code>mdl_file</code>) instead of the equation file the
 labels in the data set need to be changed to numerics. Otherwise no
 mapping between those can be done.</p>
 </div>
-<div id="numbers-in-data-file" class="section level2">
-<h2>3.2 Numbers in data file</h2>
+<div id="numbers-in-a-data-file" class="section level2">
+<h2>3.2 Numbers in a data file</h2>
 <p>When numbers are used in the data set for the trees and categories it
 is best to also check that they match with the ones used in the equation
 / model file, but the program checks for the order. So for example, if
@@ -1001,66 +1545,67 @@ against</strong> it. It will be assumed, that the order in which you
 specify the equations matches the order of the numbers in the data file
 starting from the lowest to the highest. So if you are using again {1,
 2, 3, 4} for the four trees, then the first tree you need to define in
-the equation files (no matter what label you use) must correspond to
-tree 1 in the data and so on.</p>
+the equation file (no matter what label you use) must correspond to tree
+1 in the data and so on.</p>
 </div>
 </div>
 <div id="data-simulation-and-simulation-based-calibration" class="section level1">
 <h1>4 Data simulation and simulation-based calibration</h1>
 <div id="data-simulation" class="section level2">
 <h2>Data simulation</h2>
-<p>With the function <code>sim_rtmpt_data()</code> it is possible to
-generate data from an RT-MPT model. Required is a model object generated
-with the function <code>to_rtmpt_model()</code>, a random seed number,
-the number of subjects, the number of trials per tree in the model, and
-a named list of parameters. Here it is also possible to set the mean of
-<code>mean_of_mu_alpha</code>; A value of zero refers to the probability
-of <code>0.5</code>. If a given probability is desired, say
-<code>0.4</code>, then one might specify
+<p>With the function <code>sim_ertmpt_data()</code> (so far no
+<code>sim_drtmpt_data()</code> is available) it is possible to generate
+data from an exponential RT-MPT model. Required is a model object
+generated with the function <code>to_ertmpt_model()</code>, a random
+seed number, the number of subjects, the number of trials per tree in
+the model, and a named list of parameters. Here it is also possible to
+set the mean of <code>mean_of_mu_alpha</code>; A value of zero refers to
+the probability of <code>0.5</code>. If a given probability is desired,
+say <code>0.4</code>, then one might specify
 <code>params &lt;- list(mean_of_mu_alpha = qnorm(.4))</code>. If a mean
 process time of <code>200</code> ms is required, one might specify
 <code>params &lt;- list(mean_of_exp_mu_beta = 1000/200)</code>. The mean
-parameter of the motor times is easier to transform, since they are
-already on the second scale; Just write <code>500/1000</code> if your
-mean motor time should be <code>500</code> ms. The code below shows a
-more or less good balance between too large variances (leading to too
-many extreme values like probabilities of zero and one and RTs of zero)
-and too small variances (unrealistic data).</p>
+parameter of the evidence plus motor times is easier to transform, since
+they are already on the seconds scale; Just write <code>500/1000</code>
+if your mean encoding plus motor time should be <code>500</code> ms. The
+code below shows a more or less good balance between too large variances
+(leading to too many extreme values like probabilities of zero and one
+and RTs of zero) and too small variances (unrealistic data).</p>
 <p>Important: If no variances are specified in the <code>params</code>
 argument, then the corresponding mean values are fixed, else they will
 be randomly drawn.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drawn group-level mean values</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>mdl_2HTM <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="st"># targets</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="st">do+(1-do)*g     ; 0</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-do)*(1-g)    ; 1</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="st"># lures</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-dn)*g        ; 0</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="st">dn+(1-dn)*(1-g) ; 1</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="st"># do: detect old; dn: detect new; g: guess</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">to_rtmpt_model</span>(<span class="at">mdl_file =</span> mdl_2HTM)</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># random group-level parameters</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_of_mu_alpha =</span> <span class="dv">0</span>, </span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_alpha =</span> <span class="dv">1</span>,         <span class="co"># delete this line to fix mean_of_mu_alpha to 0</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_exp_mu_beta =</span> <span class="dv">10</span>, </span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_exp_mu_beta =</span> <span class="dv">10</span>,     <span class="co"># delete this line to fix mean_of_exp_mu_beta to 10</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_mu_gamma =</span> <span class="fl">0.5</span>, </span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_gamma =</span> <span class="fl">0.0025</span>,    <span class="co"># delete this line to fix mean_of_mu_gamma to 0.5</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_omega_sqr =</span> <span class="fl">0.005</span>, </span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_omega_sqr =</span> <span class="fl">0.000025</span>, <span class="co"># delete this line to fix mean_of_omega_sqr to 0.005</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">df_of_sigma_sqr =</span> <span class="dv">10</span>, </span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_SIGMA =</span> <span class="fl">0.1</span>, </span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_GAMMA =</span> <span class="fl">0.01</span>, </span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>               <span class="at">prec_epsilon =</span> <span class="dv">10</span>,</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">add_df_to_invWish =</span> <span class="dv">5</span>)</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_rtmpt_data</span>(model, <span class="at">seed =</span> <span class="dv">123</span>, <span class="at">n.subj =</span> <span class="dv">40</span>, <span class="at">n.trials =</span> <span class="dv">30</span>, <span class="at">params =</span> params)</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data_frame)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drawn group-level mean values</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>mdl_2HTM <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="st"># targets</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="st">do+(1-do)*g     ; 0</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-do)*(1-g)    ; 1</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="st"># lures</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-dn)*g        ; 0</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="st">dn+(1-dn)*(1-g) ; 1</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="st"># do: detect old; dn: detect new; g: guess</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">mdl_file =</span> mdl_2HTM)</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="co"># random group-level parameters</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_of_mu_alpha =</span> <span class="dv">0</span>, </span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_alpha =</span> <span class="dv">1</span>,         <span class="co"># delete this line to fix mean_of_mu_alpha to 0</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_exp_mu_beta =</span> <span class="dv">10</span>, </span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_exp_mu_beta =</span> <span class="dv">10</span>,     <span class="co"># delete this line to fix mean_of_exp_mu_beta to 10</span></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_mu_gamma =</span> <span class="fl">0.5</span>, </span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_gamma =</span> <span class="fl">0.0025</span>,    <span class="co"># delete this line to fix mean_of_mu_gamma to 0.5</span></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_omega_sqr =</span> <span class="fl">0.005</span>, </span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_omega_sqr =</span> <span class="fl">0.000025</span>, <span class="co"># delete this line to fix mean_of_omega_sqr to 0.005</span></span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">df_of_sigma_sqr =</span> <span class="dv">10</span>, </span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_SIGMA =</span> <span class="fl">0.1</span>, </span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_GAMMA =</span> <span class="fl">0.01</span>, </span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>               <span class="at">prec_epsilon =</span> <span class="dv">10</span>,</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">add_df_to_invWish =</span> <span class="dv">5</span>)</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_ertmpt_data</span>(model, <span class="at">seed =</span> <span class="dv">123</span>, <span class="at">n.subj =</span> <span class="dv">40</span>, <span class="at">n.trials =</span> <span class="dv">30</span>, <span class="at">params =</span> params)</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data_frame)</span></code></pre></div>
 <pre><code>##   subj group tree cat  rt
 ## 1    0     0    0   0 560
 ## 2    0     0    0   0 456
@@ -1071,7 +1616,7 @@ be randomly drawn.</p>
 </div>
 <div id="simulation-based-calibration" class="section level2">
 <h2>4.1 Simulation-based calibration</h2>
-<p>With the function <code>fit_rtmpt_SBC()</code> it is possible to
+<p>With the function <code>fit_ertmpt_SBC()</code> it is possible to
 generate data and fit the model to that data using the same priors /
 ground truths. The main output of this function will be the rank
 statistic for each parameter in the model, which is needed for the
@@ -1082,7 +1627,7 @@ add all the rank statistics to a matrix (<code>2000</code> rows and
 number of parameters as columns) and then calculate the pearsons’
 chi-squared statistic. This allows one to test for how many of the
 parameters the rank statistics are not uniformly distributed. A value of
-about <code>0.05</code> is typical for a test with an alpha level of
+about <code>0.05</code> is expected for a test with an alpha level of
 <code>0.05</code>.</p>
 <p>Here is an example of one replication of the SBC procedure:</p>
 <pre><code>mdl_2HTM &lt;- &quot;
@@ -1097,7 +1642,7 @@ d+(1-d)*(1-g) ; 1
 # d: detect; g: guess
 &quot;
 
-model &lt;- to_rtmpt_model(mdl_file = mdl_2HTM)
+model &lt;- to_ertmpt_model(mdl_file = mdl_2HTM)
 
 params &lt;- list(mean_of_exp_mu_beta = 10, 
                var_of_exp_mu_beta = 10, 
@@ -1111,7 +1656,7 @@ params &lt;- list(mean_of_exp_mu_beta = 10,
                prec_epsilon = 10,
                add_df_to_invWish = 5)
 
-SBC_out &lt;- fit_rtmpt_SBC(model, seed = 123, prior_params = params)
+SBC_out &lt;- fit_ertmpt_SBC(model, seed = 123, prior_params = params)
 SBC_out$ranks
 </code></pre>
 <p>With the following code it would essentially be possible to calculate
@@ -1125,7 +1670,7 @@ R = 2000
 rank_mat &lt;- data.frame()
 
 for (r in 1:R) {
-  SBC_out &lt;- fit_rtmpt_SBC(model, seed = r*123, prior_params = params, n.eff_samples = 99)
+  SBC_out &lt;- fit_ertmpt_SBC(model, seed = r*123, prior_params = params, n.eff_samples = 99)
   rank_mat &lt;- rbind(rank_mat, SBC_out$ranks)
 }
 
@@ -1137,15 +1682,15 @@ z95 &lt;- qchisq(0.95, 99) # 99 = degrees of freedom
 sum(pearson&gt;z95) / length(pearson)</code></pre>
 <p>With the following code a rank matrix is generated from a uniform
 distribution and then tested for uniformity:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>rand_rankmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>, R<span class="sc">*</span><span class="dv">393</span>, <span class="at">replace=</span><span class="cn">TRUE</span>), <span class="at">nrow =</span> R, <span class="at">ncol =</span> <span class="dv">393</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="do">## pearsons&#39; chi-square for testing uniformity</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">apply</span>(rand_rankmat[<span class="dv">1</span><span class="sc">:</span>R,], <span class="dv">2</span>, table)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>expect <span class="ot">&lt;-</span> R<span class="sc">/</span><span class="dv">100</span> <span class="co"># 100 = number of bins/cells (0:99)</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>pearson <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> x, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> <span class="cf">function</span>(x) {<span class="fu">sum</span>((x<span class="sc">-</span>expect)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>expect)})</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>z95 <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="dv">99</span>) <span class="co"># 99 = degrees of freedom</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pearson<span class="sc">&gt;</span>z95) <span class="sc">/</span> <span class="fu">length</span>(pearson)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>rand_rankmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>, R<span class="sc">*</span><span class="dv">393</span>, <span class="at">replace=</span><span class="cn">TRUE</span>), <span class="at">nrow =</span> R, <span class="at">ncol =</span> <span class="dv">393</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="do">## pearsons&#39; chi-square for testing uniformity</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">apply</span>(rand_rankmat[<span class="dv">1</span><span class="sc">:</span>R,], <span class="dv">2</span>, table)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>expect <span class="ot">&lt;-</span> R<span class="sc">/</span><span class="dv">100</span> <span class="co"># 100 = number of bins/cells (0:99)</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>pearson <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> x, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> <span class="cf">function</span>(x) {<span class="fu">sum</span>((x<span class="sc">-</span>expect)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>expect)})</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>z95 <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="dv">99</span>) <span class="co"># 99 = degrees of freedom</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pearson<span class="sc">&gt;</span>z95) <span class="sc">/</span> <span class="fu">length</span>(pearson)</span></code></pre></div>
 <pre><code>## [1] 0.05343511</code></pre>
 </div>
 </div>

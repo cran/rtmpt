@@ -4,12 +4,12 @@
 #' Mapping response categories with encoding and motor execution times (deltas). Unlike the processes there are no names for 
 #'   the different deltas and therefore a mapping from response categories to different deltas must be specified.
 #'
-#' @param model A list of the class \code{rtmpt_model}.
+#' @param model A list of the class \code{ertmpt_model} or \code{drtmpt_model}.
 #' @param trees Character or numerical vector giving the trees
 #' @param categories Character or numerical vector identifying category/ies within 
 #'   the specified \code{trees} for which the deltas should be changed.
 #' @param mappings Numerical vector of length \code{length(categories)} providing the mappings. Default is 0.
-#' @return A list of the class \code{rtmpt_model}.
+#' @return A list of the class \code{ertmpt_model}.
 #' @examples
 #' ###########################################################################
 #' # Detect-Guess variant of the Two-High Threshold model.
@@ -28,7 +28,16 @@
 #' # do: detect old; dn: detect new; g: guess
 #' "
 #' 
-#' model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+#' model <- to_ertmpt_model(mdl_file = mdl_2HTM)
+#' 
+#' ## changing the model to have two different encoding and motor execution 
+#' ## times for "old" and "new" responses.
+#' new_model <- delta2delta(model = model, trees = c(0, 1), 
+#'                          categories = c(1,3), mappings = c(1,1))
+#' new_model
+#' 
+#' 
+#' model <- to_drtmpt_model(mdl_file = mdl_2HTM)
 #' 
 #' ## changing the model to have two different encoding and motor execution 
 #' ## times for "old" and "new" responses.
@@ -42,7 +51,7 @@
 delta2delta <- function(model, trees, categories, mappings = 0) {
   
   
-  if (!inherits(model, "rtmpt_model")) stop("model must be of class \"rtmpt_model\".")
+  if (!inherits(model, c("ertmpt_model", "rtmpt_model", "drtmpt_model"))) stop("model must be of class \"ertmpt_model\", or \"drtmpt_model\".")
   if (!("lines" %in% names(model)) || !("params" %in% names(model)) || !("responses" %in% names(model))) stop("No valid model file.")
 
   resps_df <- model$responses
@@ -115,17 +124,17 @@ set_deltas_equal <- delta2delta
 
 
 
-#' Set responses in an \code{rtmpt_model}
+#' Set responses in an \code{ertmpt_model} or a \code{drtmpt_model}
 #' 
 #' Change the responses for a tree and the categories within that tree.
 #'
-#' @param model A list of the class \code{rtmpt_model}.
+#' @param model A list of the class \code{ertmpt_model} or \code{drtmpt_model}.
 #' @param tree Character or numerical value of the tree for which the responses 
 #'   should be changed.
 #' @param categories Character or numerical vector identifying category/ies within 
 #'   the specified \code{tree} for which the responses should be changed.
 #' @param values Numerical vector of length \code{length(categories)} providing the responses. Default is 0.
-#' @return A list of the class \code{rtmpt_model}.
+#' @return A list of the class \code{ertmpt_model} or \code{drtmpt_model}.
 #' @examples
 #' #########################################################################
 #' # Detect-Guess variant of the Two-High Threshold model.
@@ -145,14 +154,21 @@ set_deltas_equal <- delta2delta
 #' # do: detect old; dn: detect new; g: guess
 #' "
 #' 
-#' model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+#' model <- to_ertmpt_model(mdl_file = mdl_2HTM)
+#' 
+#' ## changing the model to have two different encoding and response execution 
+#' ## times for "old" and "new" responses.
+#' for(i in c(0,1)) model <- set_resps(model = model, tree = i, 
+#'                                     categories = i*2+1, values = 1)
+#' 
+#' 
+#' #' model <- to_drtmpt_model(mdl_file = mdl_2HTM)
 #' 
 #' ## changing the model to have two different encoding and response execution 
 #' ## times for "old" and "new" responses.
 #' for(i in c(0,1)) model <- set_resps(model = model, tree = i, 
 #'                                     categories = i*2+1, values = 1)
 #'                                  
-#' @seealso \code{\link{set_params}}
 #' @author Raphael Hartmann
 #' @export
 set_resps <- function(model, tree, categories, values = 0) {

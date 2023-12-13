@@ -1,11 +1,11 @@
 
 #' Simulation-based calibration for RT-MPT models
 #'
-#' Simulate data from RT-MPT models using \code{rtmpt_model} objects. The difference to \code{\link{sim_rtmpt_data}} is that here only scalars are allowed. This makes it usable for
+#' Simulate data from RT-MPT models using \code{ertmpt_model} objects. The difference to \code{\link{sim_ertmpt_data}} is that here only scalars are allowed. This makes it usable for
 #'   simulation-based calibration (SBC; Talts et al., 2018). You can specify the random seed, number of subjects, number of trials, and some
-#'   parameters (same as \code{prior_params} from \code{\link{fit_rtmpt}}).
+#'   parameters (same as \code{prior_params} from \code{\link{fit_ertmpt}}).
 #'
-#' @param model A list of the class \code{rtmpt_model}.
+#' @param model A list of the class \code{ertmpt_model}.
 #' @param seed Random seed number.
 #' @param n.eff_samples Number of effective samples. Default is 99, leading to 100 possible ranks (from 0 to 99).
 #' @param n.chains Number of chains to use. Default is 4. Must be larger than 1 and smaller or equal to 16.
@@ -23,7 +23,7 @@
 #' @param n.subj Number of subjects. Default is 40.
 #' @param n.trials Number of trials per tree. Default is 30.
 #' @param prior_params Named list of parameters from which the data will be generated. This must be the same named list as \code{prior_params} from
-#'   \code{\link{fit_rtmpt}} and has the same defaults. It is not recommended to use the defaults since they lead to many probabilities close or
+#'   \code{\link{fit_ertmpt}} and has the same defaults. It is not recommended to use the defaults since they lead to many probabilities close or
 #'   equal to \code{0} and/or \code{1} and to RTs close or equal to \code{0}. Allowed parameters are:
 #'   \itemize{
 #'     \item \code{mean_of_exp_mu_beta}: This is the expected exponential rate (\code{E(exp(beta)) = E(lambda)}) and
@@ -55,13 +55,13 @@
 #'           \code{DF = P + add_df_to_invWish}. The default for \code{add_df_to_invWish} is \code{1}, such that the correlations are uniformly
 #'           distributed within \code{[-1, 1]}.
 #'   }
-#' @param sim_list Object of class \code{rtmpt_sim}. This is also an output object. Can be used to re-fit the model if \code{n.eff_samples} was not achieved in a previous fitting attempt.
+#' @param sim_list Object of class \code{ertmpt_sim}. This is also an output object. Can be used to re-fit the model if \code{n.eff_samples} was not achieved in a previous fitting attempt.
 #'   It will then use the data stored in this object. Default is NULL and this object will be created anew.
-#' @return A list of the class \code{rtmpt_sbc} containing
+#' @return A list of the class \code{ertmpt_sbc} containing
 #'   \itemize{
 #'     \item \code{ranks}: the rank statistic for all parameters,
-#'     \item \code{sim_list}: an object of the class \code{rtmpt_sim},
-#'     \item \code{fit_list}: an object of the class \code{rtmpt_fit},
+#'     \item \code{sim_list}: an object of the class \code{ertmpt_sim},
+#'     \item \code{fit_list}: an object of the class \code{ertmpt_fit},
 #'     \item \code{specs}: some specifications like the model, seed number, etc.,
 #'   }
 #' @references
@@ -84,7 +84,7 @@
 #' # d: detect; g: guess
 #' "
 #'
-#' model <- to_rtmpt_model(mdl_file = mdl_2HTM)
+#' model <- to_ertmpt_model(mdl_file = mdl_2HTM)
 #'
 #' params <- list(mean_of_exp_mu_beta = 10,
 #'                var_of_exp_mu_beta = 10,
@@ -101,7 +101,7 @@
 #' R = 2 # typically 2000 with n.eff_samples = 99, but this will run many days
 #' rank_mat <- matrix(NA, ncol = 393, nrow = 2)
 #' for (r in 1:R) {
-#'   SBC_out <- fit_rtmpt_SBC(model, seed = r*123, prior_params = params,
+#'   SBC_out <- fit_ertmpt_SBC(model, seed = r*123, prior_params = params,
 #'                            n.eff_samples = 99, n.thin = 5,
 #'                            n.iter = 5000, n.burnin = 2000, Irep = 5000)
 #'   rank_mat[r, ] <- SBC_out$ranks
@@ -111,7 +111,7 @@
 #' @author Raphael Hartmann
 #' @export
 #' @importFrom coda effectiveSize varnames
-fit_rtmpt_SBC <- function(model,
+fit_ertmpt_SBC <- function(model,
                           seed,
                           n.eff_samples = 99,
                           n.chains = 4,
@@ -145,7 +145,7 @@ fit_rtmpt_SBC <- function(model,
     if (!is.numeric(n.eff_samples) | n.eff_samples%%1!=0 | n.eff_samples<1) stop("\"n.eff_samples\" must be a natural number larger than one.")
 
     # generate data ----
-    sim_list <- sim_rtmpt_data_SBC(model = model, seed = seed, n.subj = n.subj, n.trials = n.trials, params = prior_params)
+    sim_list <- sim_ertmpt_data_SBC(model = model, seed = seed, n.subj = n.subj, n.trials = n.trials, params = prior_params)
 
   } else {
     model <- sim_list$specs$model
@@ -160,12 +160,12 @@ fit_rtmpt_SBC <- function(model,
 
     if (!is.numeric(n.eff_samples) | n.eff_samples%%1!=0 | n.eff_samples<1) stop("\"n.eff_samples\" must be a natural number larger than one.")
 
-    if (!inherits(sim_list, "rtmpt_sim")) stop("\"sim_list\" is not of class \"rtmpt_sim\".")
+    if (!inherits(sim_list, c("ertmpt_sim", "rtmpt_sim"))) stop("\"sim_list\" is not of class \"ertmpt_sim\".")
   }
 
 
   # fitting model to data ----
-  fit_list <- fit_rtmpt(model = sim_list$specs$model, data = sim_list$data_frame, n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
+  fit_list <- fit_ertmpt(model = sim_list$specs$model, data = sim_list$data_frame, n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
                         n.thin = n.thin, Rhat_max = Rhat_max, Irep = Irep, prior_params = prior_params,
                         indices = FALSE, save_log_lik = FALSE)
 
@@ -350,7 +350,7 @@ fit_rtmpt_SBC <- function(model,
   # output ----
   sbc_list <- list(ranks = rankmat, sim_list = sim_list, fit_list = fit_list, specs = specs)
 
-  class(sbc_list) <- "rtmpt_sbc"
+  class(sbc_list) <- "ertmpt_sbc"
 
   return(sbc_list)
 
