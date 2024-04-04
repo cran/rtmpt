@@ -731,11 +731,11 @@ namespace drtmpt {
   void compute_nppr(const std::vector<trial> & daten) {
     //nppr berechnen,
     if (!(nppr = (int*)malloc(indi * respno * sizeof(int)))) { Rprintf("Allocation failure\n"); }
-
     for (int t = 0; t != indi * respno; t++) nppr[t] = 0;
     for (int x = 0; x != datenzahl; x++)
     {
-      int t = daten[x].person; int r = cat2resp[daten[x].category];
+      int t = daten[x].person; 
+      int r = cat2resp[daten[x].category];
       nppr[t * respno + r]++;
     }
   }
@@ -842,8 +842,8 @@ namespace drtmpt {
     nhamil = 0;
     phase = 1;
     RMAX_reached = 0;
-
-
+    
+    
     std::vector<trial> daten;
     int exit_status = 0;
     long int seed = static_cast<long>(std::time(nullptr)); seed = abs(seed * seed);
@@ -868,7 +868,7 @@ namespace drtmpt {
     // nur f�r generate
     int* idaten = 0; if (!(idaten = (int*)malloc(indi * kerncat * sizeof(int)))) { Rprintf("Allocation failure\n"); }
     make_idaten(daten, idaten);
-
+    
     // Model Design
     if (!(ar = (int*)malloc(kerncat * zweig * nodemax * sizeof(int)))) { Rprintf("Allocation failure\n"); }
     if (!(branch = (int*)malloc(kerncat * sizeof(int)))) { Rprintf("Allocation failure\n"); }
@@ -885,26 +885,23 @@ namespace drtmpt {
     // Parameter: beta_comp yes/no
     // if (!(comp = (bool*)malloc(3 * kernpar * sizeof(bool)))) { Rprintf("Allocation failure\n"); }
     // if (!(consts = (double*)malloc(3 * kernpar * sizeof(double)))) { Rprintf("Allocation failure\n"); };
+    
     model_design(kerntree, ar, branch, nodes_per_tree, tree_and_node2par);
     make_drin_cdrin();
     avwtrans[0] = prep_transform(1.0e-2, 1.0e2, 0.8, 0.2);
     avwtrans[1] = prep_transform(-1.0e2, 1.0e2, 0.0, 1.0);
     avwtrans[2] = prep_transform(1.0e-3, 0.999, 0.5, 0.1);
-
     make_map(kerntree, no_patterns, tree_and_node2map);
-
     compute_nppr(daten);
     nnodes = (int*)malloc(indi * no_patterns * sizeof(int));
     n_per_subj = (int*)malloc(indi * sizeof(int));
     make_nodes_by_ind(daten, kerntree, nodes_per_tree, nnodes, n_per_subj);
-
     //NTAU Positions berechnen
     if (!(tau_by_node = (int*)malloc(2 * datenzahl * nodemax * sizeof(int)))) { Rprintf("Allocation failure\n"); }
     make_positions(daten, tau_by_node);
     if (!(t2group = (int*)malloc(indi * sizeof(int)))) { Rprintf("Allocation failure\n"); }
     if (!(ng = (int*)calloc(igroup, sizeof(int)))) { Rprintf("Allocation failure\n"); }
     set_t2group(daten, t2group, ng);
-
     make_rtmins(daten, rtmins);
     mapmavw = (int*)calloc(igroup * ifreemax * 3, sizeof(int));
     mapavw = (int*)calloc(indi * ifreemax * 3, sizeof(int));

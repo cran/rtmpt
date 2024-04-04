@@ -12,7 +12,7 @@
 
 <meta name="author" content="Raphael Hartmann" />
 
-<meta name="date" content="2023-12-13" />
+<meta name="date" content="2024-03-25" />
 
 <title>rtmpt: Guideline</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rtmpt: Guideline</h1>
 <h4 class="author">Raphael Hartmann</h4>
-<h4 class="date">2023-12-13</h4>
+<h4 class="date">2024-03-25</h4>
 
 
 
@@ -375,35 +375,35 @@ or a syntax that is comparable to the <code>MDL</code> syntax by
 Singmann and Kellen (2013). In the <code>EQN</code> syntax you can
 separate trees, categories and paths either by using semicolons (like in
 the example below) or commas, but not mixed:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">## EQN SYNTAX</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">## tree ; cat ;          mpt</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="st">## EQN SYNTAX</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="st">## tree ; cat ;          mpt</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>In this <code>eqn</code> object we specify a Two-High Threshold (2HT)
 model. Comments can be done with a <code>#</code> symbol at the
 beginning of a line.</p>
 <p>The same model can be specified with the <code>MDL</code> syntax:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">## MDL SYNTAX</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">### targets</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">### lure</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="st">## MDL SYNTAX</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="st">### targets</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="st">### lure</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>All paths/branches that lead to the same response category will be
 added together with a <code>+</code> symbol.</p>
 <p>More information about these two syntaxes are written in Section
@@ -412,13 +412,13 @@ added together with a <code>+</code> symbol.</p>
 <code>drtmpt_model</code> list can then be done by the
 <code>to_ertmpt_model()</code> or <code>to_drtmpt_model()</code>,
 respectively, function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtmpt)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># MAKING AN ERTMPT MODEL</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the MDL syntax:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>e2HTM <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the EQN syntax:</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>e2HTM <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>e2HTM</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(rtmpt)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># MAKING AN ERTMPT MODEL</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#   using the MDL syntax:</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>e2HTM <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#   using the EQN syntax:</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>e2HTM <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>e2HTM</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -466,12 +466,12 @@ respectively, function:</p>
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
 ## -----------------------------------</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MAKING A DRTMPT MODEL</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the MDL syntax:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>d2HTM <span class="ot">&lt;-</span> <span class="fu">to_drtmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   using the EQN syntax:</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>d2HTM <span class="ot">&lt;-</span> <span class="fu">to_drtmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>d2HTM</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># MAKING A DRTMPT MODEL</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#   using the MDL syntax:</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>d2HTM <span class="ot">&lt;-</span> <span class="fu">to_drtmpt_model</span>(<span class="at">mdl_file =</span> mdl)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#   using the EQN syntax:</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>d2HTM <span class="ot">&lt;-</span> <span class="fu">to_drtmpt_model</span>(<span class="at">eqn_file =</span> eqn)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>d2HTM</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -527,7 +527,7 @@ respectively, function:</p>
 ## * NOTE 2: Each mapping number corresponds to a distinct encoding plus motor execution time.
 ## * INFO: 1 distinct delta(s) assumed, namely with mapping [ 0 ].
 ## -----------------------------------</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># </span></span></code></pre></div>
 </div>
 <div id="model-specifications" class="section level2">
 <h2>1.2 Model specifications</h2>
@@ -547,7 +547,7 @@ are set to zero, or to make some process completion times equal.</p>
 <h4>Modifying process probabilities</h4>
 <p>To hold a process probability constant you can use
 <code>theta2const()</code> like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2const</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">theta2const</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -603,7 +603,7 @@ object.</p>
 <p>An alias for this function is <code>set_theta_const()</code>.</p>
 <p>To set two or more process probabilities equal, you can use
 <code>theta2theta()</code> like this:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theta2theta</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">theta2theta</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -666,7 +666,7 @@ use <code>theta2const()</code> for that.</p>
 <h4>Modifying process completion times</h4>
 <p>To suppress a process completion time (i.e., set it to zero) you can
 use <code>tau2zero()</code> like this:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2zero</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">outcomes =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">values =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">tau2zero</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">outcomes =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">values =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -721,7 +721,7 @@ do). Also this function can be used with vectors.</p>
 <p>An alias for this function is <code>set_tau_zero()</code>.</p>
 <p>To set two or more process completion times with the same outcome
 equal you can use <code>theta2theta()</code> like this:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tau2tau</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">outcome =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">keep_zeros =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">tau2tau</span>(<span class="at">model =</span> e2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">outcome =</span> <span class="st">&quot;minus&quot;</span>, <span class="at">keep_zeros =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -795,7 +795,7 @@ be used to make some process parameters equal.</p>
 <h4>Modifying the threshold parameter in a process</h4>
 <p>To hold a process threshold constant you can use
 <code>a2const()</code> like this:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">a2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">a2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -859,7 +859,7 @@ R object.</p>
 <p>An alias for this function is <code>set_a_equal()</code>.</p>
 <p>To set two or more process thresholds equal you can use
 <code>a2a()</code> like this:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">a2a</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">a2a</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -930,7 +930,7 @@ process thresholds should have the same constant, but we suggest to use
 <h4>Modifying the drif rate parameter in a process</h4>
 <p>To hold a process drift-rate constant you can use
 <code>nu2const()</code> like this:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nu2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">nu2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -994,7 +994,7 @@ R object.</p>
 <p>An alias for this function is <code>set_nu_equal()</code>.</p>
 <p>To set two or more process drift-rates equal you can use
 <code>nu2nu()</code> like this:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nu2nu</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">nu2nu</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -1065,7 +1065,7 @@ process drift-rates should have the same constant, but we suggest to use
 <h4>Modifying the relative starting point parameter in a process</h4>
 <p>To hold a process relative-starting-point constant you can use
 <code>omega2const()</code> like this:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">omega2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">omega2const</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="st">&quot;g&quot;</span>, <span class="at">constants =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -1129,7 +1129,7 @@ did not assign it to an R object.</p>
 <p>An alias for this function is <code>set_omega_equal()</code>.</p>
 <p>To set two or more process relative-starting-points equal you can use
 <code>omega2omega()</code> like this:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">omega2omega</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">omega2omega</span>(<span class="at">model =</span> d2HTM, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Do&quot;</span>, <span class="st">&quot;Dn&quot;</span>), <span class="at">keep_consts =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -1208,7 +1208,7 @@ use to set them equal. Therefore a mapping is used in the function
 times by using a mapping argument (<code>mappings</code>). Because the
 response categories are not always unique the tree (<code>trees</code>)
 has to be provided as well.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">delta2delta</span>(<span class="at">model =</span> e2HTM, <span class="at">trees =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">categories =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">mappings =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">delta2delta</span>(<span class="at">model =</span> e2HTM, <span class="at">trees =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">categories =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="at">mappings =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code></pre></div>
 <pre><code>## 
 ## MODEL OVERVIEW
 ## 
@@ -1298,10 +1298,10 @@ equation/model file.</p>
 <p>Here is an example of a data set with unordered variables and wrong
 values (not starting from zero) and a transformation of this data
 set:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tree =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="at">rt =</span> <span class="fu">round</span>(<span class="dv">1000</span><span class="sc">*</span>(<span class="fu">runif</span>(<span class="dv">16</span>)<span class="sc">+</span>.<span class="dv">3</span>)), </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">group =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">8</span>), <span class="at">subj =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> <span class="dv">4</span>), <span class="at">cat =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>raw_data</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">tree =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">8</span>), <span class="at">rt =</span> <span class="fu">round</span>(<span class="dv">1000</span><span class="sc">*</span>(<span class="fu">runif</span>(<span class="dv">16</span>)<span class="sc">+</span>.<span class="dv">3</span>)), </span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>                       <span class="at">group =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">8</span>), <span class="at">subj =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> <span class="dv">4</span>), <span class="at">cat =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>raw_data</span></code></pre></div>
 <pre><code>##    tree   rt group subj cat
 ## 1     1  751     1    1   1
 ## 2     2 1084     1    1   2
@@ -1319,8 +1319,8 @@ set:</p>
 ## 14    2  867     2    4   2
 ## 15    1 1120     2    4   3
 ## 16    2  552     2    4   4</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_data</span>(<span class="at">raw_data =</span> raw_data, <span class="at">model =</span> e2HTM)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>data</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_data</span>(<span class="at">raw_data =</span> raw_data, <span class="at">model =</span> e2HTM)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>data</span></code></pre></div>
 <pre><code>## 
 ## DATA TRANSFORMATION OVERVIEW
 ## 
@@ -1369,26 +1369,26 @@ from one; Make sure the labels or numbers for these two match.</p>
 <p>Finally, with the function <code>fit_ertmpt()</code> or
 <code>fit_drtmpt()</code> one can fit the model to the data. This code
 should not be run. There are way too few data points.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>ertmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_ertmpt</span>(<span class="at">model =</span> e2HTM, <span class="at">data =</span> data)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>ertmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_ertmpt</span>(<span class="at">model =</span> e2HTM, <span class="at">data =</span> data)</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
 <p>In this function call we used the default values for all the
 parameters that are not listed in the call. <code>model</code> and
 <code>data</code> do not have default values. The full call of the
 function would look like this:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>ertmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_ertmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> data, </span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.iter =</span> <span class="dv">5000</span>, </span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.burnin =</span> <span class="dv">200</span>,</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">indices =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">save_log_lik =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>ertmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_ertmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a>                         <span class="at">data =</span> data, </span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>                         <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a>                         <span class="at">n.iter =</span> <span class="dv">5000</span>, </span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a>                         <span class="at">n.burnin =</span> <span class="dv">200</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>                         <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>                         <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a>                                   <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a>                         <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a>                         <span class="at">indices =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a>                         <span class="at">save_log_lik =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
 <p><code>n.chains</code> is the number of chains with a maximum of 16,
 <code>n.iter</code> is the number of samples to draw from the posterior
 distribution, <code>n.burnin</code> is analogue to the burn-in phase for
@@ -1404,26 +1404,26 @@ one can allow to compute the WAIC and LOO, and <code>save_log_lik</code>
 is a logical parameter that allows one to save the log-likelihood for
 each posterior sample and data point.</p>
 <p>The equivalent for the <code>drtmpt</code> is</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>drtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_drtmpt</span>(<span class="at">model =</span> d2HTM, <span class="at">data =</span> data)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>drtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_drtmpt</span>(<span class="at">model =</span> d2HTM, <span class="at">data =</span> data)</span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
 <p>Where also the the default values for all the parameters are used.
 Also here, <code>model</code> and <code>data</code> do not have default
 values. The full call of the function would look like this:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do not run</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>drtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_drtmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> data, </span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.iter =</span> <span class="dv">1000</span>, </span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.phase1 =</span> <span class="dv">1000</span>,</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.phase1 =</span> <span class="dv">2000</span>,</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">flags =</span> <span class="cn">NULL</span>,</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">control =</span> <span class="cn">NULL</span>)</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="do">## do not run</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>drtmpt_out <span class="ot">&lt;-</span> <span class="fu">fit_drtmpt</span>(<span class="at">model =</span> restr_2HTM, </span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>                         <span class="at">data =</span> data, </span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a>                         <span class="at">n.chains =</span> <span class="dv">4</span>, </span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a>                         <span class="at">n.iter =</span> <span class="dv">1000</span>, </span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a>                         <span class="at">n.phase1 =</span> <span class="dv">1000</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a>                         <span class="at">n.phase1 =</span> <span class="dv">2000</span>,</span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a>                         <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a>                         <span class="at">Rhat_max =</span> <span class="fl">1.05</span>, </span>
+<span id="cb37-10"><a href="#cb37-10" tabindex="-1"></a>                                   <span class="at">Irep =</span> <span class="dv">1000</span>, </span>
+<span id="cb37-11"><a href="#cb37-11" tabindex="-1"></a>                         <span class="at">prior_params =</span> <span class="cn">NULL</span>,</span>
+<span id="cb37-12"><a href="#cb37-12" tabindex="-1"></a>                         <span class="at">flags =</span> <span class="cn">NULL</span>,</span>
+<span id="cb37-13"><a href="#cb37-13" tabindex="-1"></a>                                   <span class="at">control =</span> <span class="cn">NULL</span>)</span>
+<span id="cb37-14"><a href="#cb37-14" tabindex="-1"></a><span class="do">## end not run</span></span></code></pre></div>
 <p><code>n.chains</code>, <code>n.iter</code>, <code>n.thin</code>,
 <code>Rhat_max</code>, and <code>Irep</code>, are the same as for
 <code>fit_ertmpt()</code>. <code>prior_params</code> is still a list of
@@ -1455,13 +1455,13 @@ can use the <code>traceplot()</code> function from <code>coda</code>.
 You can also use the <code>summary()</code> function to get a summary of
 the estimates.</p>
 <p>Here a code snippet for <code>ertmpt</code></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>ertmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(ertmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ertmpt_out)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>ertmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(ertmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">summary</span>(ertmpt_out)</span></code></pre></div>
 <p>or <code>drtmpt</code></p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>drtmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(drtmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(drtmpt_out)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>drtmpt_out<span class="sc">$</span>diags<span class="sc">$</span>R_hat</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">traceplot</span>(drtmpt_out<span class="sc">$</span>samples[, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="fu">summary</span>(drtmpt_out)</span></code></pre></div>
 </div>
 </div>
 <div id="equation-and-model-files" class="section level1">
@@ -1474,17 +1474,17 @@ restrictions that are possible we decided to use now functions instead
 <h2>2.1 Equation files</h2>
 <p>As we have seen above one can specify an equation file
 (<code>eqn_file</code>) like this:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="st">## tree ; cat ;         path</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>eqn <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="st">## tree ; cat ;         path</span></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="st">      0 ;   0 ;           Do</span></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="st">      0 ;   0 ;     (1-Do)*g</span></span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a><span class="st">      0 ;   1 ; (1-Do)*(1-g)</span></span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="st">      1 ;   3 ;           Dn</span></span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a><span class="st">      1 ;   2 ;     (1-Dn)*g</span></span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a><span class="st">      1 ;   3 ; (1-Dn)*(1-g)</span></span>
+<span id="cb40-11"><a href="#cb40-11" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>The trees, categories, and paths need to be separated by a semi-colon
 or a comma, but should not be mixed. As mentioned above the
 <code>eqn_file</code> can be provided by a text file through a path to
@@ -1496,16 +1496,16 @@ the file or written directly in R/Rstudio like above.</p>
 (<code>mdl_file</code>). This is also not yet the model itself as needed
 for the <code>fit_rtmpt()</code> call, but much closer. It is based on
 the syntax developed by Singmann and Kellen (2013).</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="st">## targets:</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="st">## lures</span></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>mdl <span class="ot">=</span> <span class="st">&quot;</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="st"># CORE MODEL</span></span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="st">## targets:</span></span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a><span class="st">Do+(1-Do)*g</span></span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a><span class="st">(1-Do)*(1-g)</span></span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a><span class="st">## lures</span></span>
+<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a><span class="st">(1-Dn)*g</span></span>
+<span id="cb41-9"><a href="#cb41-9" tabindex="-1"></a><span class="st">Dn+(1-Dn)*(1-g)</span></span>
+<span id="cb41-10"><a href="#cb41-10" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>Between two trees (here targets and lures) there must be an empty
 line. All paths which lead to the same response category are added
 together on one line by a <code>+</code> symbol.</p>
@@ -1574,38 +1574,38 @@ and RTs of zero) and too small variances (unrealistic data).</p>
 <p>Important: If no variances are specified in the <code>params</code>
 argument, then the corresponding mean values are fixed, else they will
 be randomly drawn.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly drawn group-level mean values</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>mdl_2HTM <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="st"># targets</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="st">do+(1-do)*g     ; 0</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="st">(1-do)*(1-g)    ; 1</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="st"># lures</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="st">(1-dn)*g        ; 0</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="st">dn+(1-dn)*(1-g) ; 1</span></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="st"># do: detect old; dn: detect new; g: guess</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">mdl_file =</span> mdl_2HTM)</span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="co"># random group-level parameters</span></span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_of_mu_alpha =</span> <span class="dv">0</span>, </span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_alpha =</span> <span class="dv">1</span>,         <span class="co"># delete this line to fix mean_of_mu_alpha to 0</span></span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_exp_mu_beta =</span> <span class="dv">10</span>, </span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_exp_mu_beta =</span> <span class="dv">10</span>,     <span class="co"># delete this line to fix mean_of_exp_mu_beta to 10</span></span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_mu_gamma =</span> <span class="fl">0.5</span>, </span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_mu_gamma =</span> <span class="fl">0.0025</span>,    <span class="co"># delete this line to fix mean_of_mu_gamma to 0.5</span></span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">mean_of_omega_sqr =</span> <span class="fl">0.005</span>, </span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">var_of_omega_sqr =</span> <span class="fl">0.000025</span>, <span class="co"># delete this line to fix mean_of_omega_sqr to 0.005</span></span>
-<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">df_of_sigma_sqr =</span> <span class="dv">10</span>, </span>
-<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_SIGMA =</span> <span class="fl">0.1</span>, </span>
-<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_GAMMA =</span> <span class="fl">0.01</span>, </span>
-<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>               <span class="at">prec_epsilon =</span> <span class="dv">10</span>,</span>
-<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>               <span class="at">add_df_to_invWish =</span> <span class="dv">5</span>)</span>
-<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_ertmpt_data</span>(model, <span class="at">seed =</span> <span class="dv">123</span>, <span class="at">n.subj =</span> <span class="dv">40</span>, <span class="at">n.trials =</span> <span class="dv">30</span>, <span class="at">params =</span> params)</span>
-<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data_frame)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="co"># randomly drawn group-level mean values</span></span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>mdl_2HTM <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="st"># targets</span></span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="st">do+(1-do)*g     ; 0</span></span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a><span class="st">(1-do)*(1-g)    ; 1</span></span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a><span class="st"># lures</span></span>
+<span id="cb42-8"><a href="#cb42-8" tabindex="-1"></a><span class="st">(1-dn)*g        ; 0</span></span>
+<span id="cb42-9"><a href="#cb42-9" tabindex="-1"></a><span class="st">dn+(1-dn)*(1-g) ; 1</span></span>
+<span id="cb42-10"><a href="#cb42-10" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" tabindex="-1"></a><span class="st"># do: detect old; dn: detect new; g: guess</span></span>
+<span id="cb42-12"><a href="#cb42-12" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb42-13"><a href="#cb42-13" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="#cb42-14" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">to_ertmpt_model</span>(<span class="at">mdl_file =</span> mdl_2HTM)</span>
+<span id="cb42-15"><a href="#cb42-15" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" tabindex="-1"></a><span class="co"># random group-level parameters</span></span>
+<span id="cb42-17"><a href="#cb42-17" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean_of_mu_alpha =</span> <span class="dv">0</span>, </span>
+<span id="cb42-18"><a href="#cb42-18" tabindex="-1"></a>               <span class="at">var_of_mu_alpha =</span> <span class="dv">1</span>,         <span class="co"># delete this line to fix mean_of_mu_alpha to 0</span></span>
+<span id="cb42-19"><a href="#cb42-19" tabindex="-1"></a>               <span class="at">mean_of_exp_mu_beta =</span> <span class="dv">10</span>, </span>
+<span id="cb42-20"><a href="#cb42-20" tabindex="-1"></a>               <span class="at">var_of_exp_mu_beta =</span> <span class="dv">10</span>,     <span class="co"># delete this line to fix mean_of_exp_mu_beta to 10</span></span>
+<span id="cb42-21"><a href="#cb42-21" tabindex="-1"></a>               <span class="at">mean_of_mu_gamma =</span> <span class="fl">0.5</span>, </span>
+<span id="cb42-22"><a href="#cb42-22" tabindex="-1"></a>               <span class="at">var_of_mu_gamma =</span> <span class="fl">0.0025</span>,    <span class="co"># delete this line to fix mean_of_mu_gamma to 0.5</span></span>
+<span id="cb42-23"><a href="#cb42-23" tabindex="-1"></a>               <span class="at">mean_of_omega_sqr =</span> <span class="fl">0.005</span>, </span>
+<span id="cb42-24"><a href="#cb42-24" tabindex="-1"></a>               <span class="at">var_of_omega_sqr =</span> <span class="fl">0.000025</span>, <span class="co"># delete this line to fix mean_of_omega_sqr to 0.005</span></span>
+<span id="cb42-25"><a href="#cb42-25" tabindex="-1"></a>               <span class="at">df_of_sigma_sqr =</span> <span class="dv">10</span>, </span>
+<span id="cb42-26"><a href="#cb42-26" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_SIGMA =</span> <span class="fl">0.1</span>, </span>
+<span id="cb42-27"><a href="#cb42-27" tabindex="-1"></a>               <span class="at">sf_of_scale_matrix_GAMMA =</span> <span class="fl">0.01</span>, </span>
+<span id="cb42-28"><a href="#cb42-28" tabindex="-1"></a>               <span class="at">prec_epsilon =</span> <span class="dv">10</span>,</span>
+<span id="cb42-29"><a href="#cb42-29" tabindex="-1"></a>               <span class="at">add_df_to_invWish =</span> <span class="dv">5</span>)</span>
+<span id="cb42-30"><a href="#cb42-30" tabindex="-1"></a></span>
+<span id="cb42-31"><a href="#cb42-31" tabindex="-1"></a>sim_dat <span class="ot">&lt;-</span> <span class="fu">sim_ertmpt_data</span>(model, <span class="at">seed =</span> <span class="dv">123</span>, <span class="at">n.subj =</span> <span class="dv">40</span>, <span class="at">n.trials =</span> <span class="dv">30</span>, <span class="at">params =</span> params)</span>
+<span id="cb42-32"><a href="#cb42-32" tabindex="-1"></a><span class="fu">head</span>(sim_dat<span class="sc">$</span>data_frame)</span></code></pre></div>
 <pre><code>##   subj group tree cat  rt
 ## 1    0     0    0   0 560
 ## 2    0     0    0   0 456
@@ -1682,15 +1682,15 @@ z95 &lt;- qchisq(0.95, 99) # 99 = degrees of freedom
 sum(pearson&gt;z95) / length(pearson)</code></pre>
 <p>With the following code a rank matrix is generated from a uniform
 distribution and then tested for uniformity:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>rand_rankmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>, R<span class="sc">*</span><span class="dv">393</span>, <span class="at">replace=</span><span class="cn">TRUE</span>), <span class="at">nrow =</span> R, <span class="at">ncol =</span> <span class="dv">393</span>)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="do">## pearsons&#39; chi-square for testing uniformity</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">apply</span>(rand_rankmat[<span class="dv">1</span><span class="sc">:</span>R,], <span class="dv">2</span>, table)</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>expect <span class="ot">&lt;-</span> R<span class="sc">/</span><span class="dv">100</span> <span class="co"># 100 = number of bins/cells (0:99)</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>pearson <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> x, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> <span class="cf">function</span>(x) {<span class="fu">sum</span>((x<span class="sc">-</span>expect)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>expect)})</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>z95 <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="dv">99</span>) <span class="co"># 99 = degrees of freedom</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pearson<span class="sc">&gt;</span>z95) <span class="sc">/</span> <span class="fu">length</span>(pearson)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>rand_rankmat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>, R<span class="sc">*</span><span class="dv">393</span>, <span class="at">replace=</span><span class="cn">TRUE</span>), <span class="at">nrow =</span> R, <span class="at">ncol =</span> <span class="dv">393</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="do">## pearsons&#39; chi-square for testing uniformity</span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">apply</span>(rand_rankmat[<span class="dv">1</span><span class="sc">:</span>R,], <span class="dv">2</span>, table)</span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>expect <span class="ot">&lt;-</span> R<span class="sc">/</span><span class="dv">100</span> <span class="co"># 100 = number of bins/cells (0:99)</span></span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a>pearson <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> x, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> <span class="cf">function</span>(x) {<span class="fu">sum</span>((x<span class="sc">-</span>expect)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>expect)})</span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a>z95 <span class="ot">&lt;-</span> <span class="fu">qchisq</span>(<span class="fl">0.95</span>, <span class="dv">99</span>) <span class="co"># 99 = degrees of freedom</span></span>
+<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a><span class="fu">sum</span>(pearson<span class="sc">&gt;</span>z95) <span class="sc">/</span> <span class="fu">length</span>(pearson)</span></code></pre></div>
 <pre><code>## [1] 0.05343511</code></pre>
 </div>
 </div>

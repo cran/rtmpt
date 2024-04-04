@@ -68,7 +68,7 @@ void lies(std::vector<trial> &daten)
   
   kerncat=nKERN;
   cat2resp = (int *)calloc(kerncat, sizeof(int));
-  for (int i=0;i!=kerncat;i++) cat2resp[i]= CatToResp[i];
+  for (int i=0;i!=kerncat;i++) {cat2resp[i]= CatToResp[i];}
   respno = nRESP;
 }
 
@@ -160,25 +160,21 @@ namespace drtmpt {
       info.close();
     }
     
-    
     for (int it = 0; it != kerntree; it++) for (int in = 0; in != nodemax; in++) for (int type = 0; type != 3; type++)
       dTREE_AND_NODE2PAR(it, in, type) = dKERN2FREE(type, TEMP_TREE_AND_NODE2PAR(it, in));
     
     
     // Konstanten SETZEN
 
-    
     for (int type = 0; type != 3; type++) {
       icomp[type] = 0;
       for (int ip = 0; ip != ifree[type]; ip++) if (dCOMP(type, ip)) icomp[type]++;
     }
-    
     ifreeg = ifree[0] + ifree[1] + ifree[2];
     ifreemax = std::max(std::max(ifree[0], ifree[1]), ifree[2]);
     icompg = icomp[0] + icomp[1] + icomp[2];
     
     if (!(free2comp = (int*)malloc(kernpar * 3 * sizeof(int)))) { Rprintf("Allocation failure\n"); }
-    
     int jj = 0;
     
     for (int ip = 0; ip != ifreeg; ip++) {
@@ -188,7 +184,6 @@ namespace drtmpt {
       if (dCOMP(type, ind)) dFREE2COMP(type, ind) = jj++;
       else dFREE2COMP(type, ind) = -1;
     }
-    
     if (temp_tree_and_node2par) free(temp_tree_and_node2par);
     
   }

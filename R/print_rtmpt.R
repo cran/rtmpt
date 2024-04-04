@@ -395,7 +395,7 @@ prob_lower <- function(a, v, w) {
   vm <- fifelse(v >= 0, v, -v)
   wm <- fifelse(v >= 0, w, 1-w)
   tmp <- exp( logdiff(rep(0, len), -2*vm*a*(1-wm)) - logdiff(2*vm*a*wm, -2*vm*a*(1-wm)) )
-  if (any(tmp < 0)) stop("bla")
+  if (any(tmp < 0)) stop("sth went wrong")
   return(fifelse(v >= rep(0, len), tmp, 1-tmp))
 }
 

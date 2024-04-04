@@ -9,6 +9,7 @@
 const char *MODEL;
 const char *DATA;
 int nKERN;
+int nPROCS;
 int nRESP;
 int *CatToResp = 0;
 // number of all parameters
@@ -153,14 +154,17 @@ extern "C" {
 		SAMPLE_SIZE = INTEGER(in)[3];
 		IREP = INTEGER(in)[4];
 		nKERN = INTEGER(in)[5];
-		nRESP = INTEGER(in)[6];
+		nPROCS = INTEGER(in)[6];
+		nRESP = INTEGER(in)[7];
 
 		CatToResp = (int *)calloc(nKERN, sizeof(int));
-		ConstProb = (double *)calloc(nKERN, sizeof(double));
-		CompMinus = (int *)calloc(nKERN, sizeof(int));
-		CompPlus = (int *)calloc(nKERN, sizeof(int));
+		ConstProb = (double *)calloc(nPROCS, sizeof(double));
+		CompMinus = (int *)calloc(nPROCS, sizeof(int));
+		CompPlus = (int *)calloc(nPROCS, sizeof(int));
 		for (int i = 0; i < nKERN; i++) {
 		  CatToResp[i] = INTEGER(in2)[i];
+		}
+		for (int i = 0; i < nPROCS; i++) {
 		  ConstProb[i] = REAL(re2)[i];
 		  CompMinus[i] = INTEGER(bo1)[i];
 		  CompPlus[i] = INTEGER(bo2)[i];
@@ -285,11 +289,12 @@ extern "C" {
     SAMPLE_SIZE = INTEGER(in1)[5];//2 * NOTHREADS * IREP;
     MAXTHREADS = INTEGER(in1)[6];
     nKERN = INTEGER(in1)[7];
-    nRESP = INTEGER(in1)[8];
+    nPROCS = INTEGER(in1)[8];
+    nRESP = INTEGER(in1)[9];
 
     CatToResp = (int *)calloc(nKERN, sizeof(int));
     for (int i = 0; i < nKERN; i++) {
-      CatToResp[i] = INTEGER(in1)[9+i];
+      CatToResp[i] = INTEGER(in1)[10+i];
     }
 
     RMAX = REAL(re1)[0];
@@ -326,16 +331,16 @@ extern "C" {
 
 
     // CONSTANTS AND EQUALIZATION
-    consts = (double*)malloc(nKERN * 3 * sizeof(double));
-    for (int i = 0; i < nKERN*3; i++) {
+    consts = (double*)malloc(nPROCS * 3 * sizeof(double));
+    for (int i = 0; i < nPROCS*3; i++) {
       consts[i] = REAL(re3)[i];
     }
-    kern2free = (int*)malloc(nKERN * 3 * sizeof(int));
-    comp = (bool*)malloc(nKERN * 3 * sizeof(bool));
-    for (int i = 0; i < nKERN*3; i++) {
+    kern2free = (int*)malloc(nPROCS * 3 * sizeof(int));
+    comp = (bool*)malloc(nPROCS * 3 * sizeof(bool));
+    for (int i = 0; i < nPROCS*3; i++) {
       kern2free[i] = INTEGER(in5)[i];
-      comp[i] = (INTEGER(in5)[i+nKERN*3] == 1);
-      if (i < 3) ifree[i] = INTEGER(in5)[i+nKERN*6];
+      comp[i] = (INTEGER(in5)[i+nPROCS*3] == 1);
+      if (i < 3) ifree[i] = INTEGER(in5)[i+nPROCS*6];
     }
 
 

@@ -283,7 +283,7 @@ fit_ertmpt <- function(model,
             loglike = loglik_path)
   
   REAL <- c(Rhat_max)
-  
+
   REAL2 <- sapply(X = model$params$probs, FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, -1, x)})  # constants in probs
 
   INTEGER <- c(NoThr = Nchains, 
@@ -292,9 +292,10 @@ fit_ertmpt <- function(model,
                SampSize = Nchains*Nsamples,
                Irep = Irep,
                nKERN = dim(model$responses)[1], 
+               nPROCS = nprocs,
                nRESP = length(unique(model$responses$MAP)))
   INTEGER2 <- model$responses$MAP  # cat2resp
-  
+
   BOOL1 <- sapply(X = model$params[["taus"]]["minus",], FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, 1, 0)})  # tau minus
   BOOL2 <- sapply(X = model$params[["taus"]]["plus",], FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, 1, 0)})  # tau plus
   
@@ -779,7 +780,8 @@ fit_drtmpt <- function(model,
                            NOTHREADS = n.chains,
                            SAMPLE_SIZE = n.chains*n.iter,
                            MAXTHREADS = control$maxthreads,
-                           kernpar = nprocs,
+                           nKERN = dim(model$responses)[1],
+                           nPROCS = nprocs,
                            respno = length(unique(model$responses$MAP)),
                            cat2resp = model$responses$MAP))
   REAL1 <- c(Rhat_max = Rhat_max)
