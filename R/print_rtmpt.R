@@ -523,7 +523,7 @@ writeSummaryDRTMPT <- function(x, keep, ...) {
                             df = x$specs$prior_params$delta_df)
       if (s == 1) {delta[[n]] <- temp[[s]]} else delta[[n]] <- delta[[n]] + temp[[s]]
     }
-    delta[[n]] <- delta[[n]] / Nsubj * 1000
+    delta[[n]] <- as.mcmc(delta[[n]] / Nsubj * 1000)
     
     if (Nthresh) samp[[n]][, ind_thresh] <- inv_scale_logit(ttheta = as.matrix(x$samples[[n]][, ind_thresh]), a = logit_args$a[1], b = logit_args$b[1], location = logit_args$location[1], 
                                                              scale = logit_args$scale[1], range = logit_args$range[1])

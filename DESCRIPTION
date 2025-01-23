@@ -1,5 +1,5 @@
 Package: rtmpt
-Version: 2.0-1
+Version: 2.0-2
 Title: Fitting (Exponential/Diffusion) RT-MPT Models
 Authors@R: c(person("Raphael", "Hartmann", email = "raphael.hartmann@protonmail.com", role = c("aut", "cre")),
              person("Karl C.", "Klauer", email="christoph.klauer@psychologie.uni-freiburg.de", role=c("cph", "aut", "ctb", "ths")),
@@ -31,7 +31,7 @@ Description: Fit (exponential or diffusion) response-time extended multinomial p
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
-Packaged: 2024-03-25 13:02:51 UTC; hartmann
+RoxygenNote: 7.3.2
+Packaged: 2025-01-22 15:56:43 UTC; hartmann
 Repository: CRAN
-Date/Publication: 2024-04-04 10:40:02 UTC
+Date/Publication: 2025-01-23 10:40:02 UTC

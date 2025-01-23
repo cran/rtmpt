@@ -405,7 +405,7 @@ labelnames_keep_d <- function(data_info) {
 
 
 #' @importFrom data.table as.data.table
-#' @importFrom coda as.mcmc
+#' @importFrom coda as.mcmc as.mcmc.list
 make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   
   # read text file with chains
@@ -466,7 +466,7 @@ make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
 
 
 #' @importFrom data.table as.data.table fread setnames
-#' @importFrom coda as.mcmc
+#' @importFrom coda as.mcmc as.mcmc.list
 make_mcmc_list_d <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   
   # label the samples

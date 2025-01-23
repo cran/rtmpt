@@ -3,11 +3,17 @@
 \name{tau2tau}
 \alias{tau2tau}
 \alias{set_taus_equal}
+\alias{set_lambdas_equal}
+\alias{lambda2lambda}
 \title{Set process completion times equal}
 \usage{
 tau2tau(model, names, outcome, keep_zeros = FALSE)
 
 set_taus_equal(model, names, outcome, keep_zeros = FALSE)
+
+set_lambdas_equal(model, names, outcome, keep_zeros = FALSE)
+
+lambda2lambda(model, names, outcome, keep_zeros = FALSE)
 }
 \arguments{
 \item{model}{A list of the class \code{ertmpt_model}.}
@@ -77,6 +83,14 @@ new_model
 
 ## make do = dn
 new_model <- set_taus_equal(model = model, names = c("do", "dn"), outcome = "both")
+new_model
+
+## make do = dn
+new_model <- set_lambdas_equal(model = model, names = c("do", "dn"), outcome = "both")
+new_model
+
+## make do = dn
+new_model <- lambda2lambda(model = model, names = c("do", "dn"), outcome = "both")
 new_model
 }
 \seealso{

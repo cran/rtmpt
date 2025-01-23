@@ -3,11 +3,17 @@
 \name{omega2const}
 \alias{omega2const}
 \alias{set_omega_const}
+\alias{set_w_const}
+\alias{w2const}
 \title{Set process relative starting-point to constants}
 \usage{
 omega2const(model, names, constants = NA)
 
 set_omega_const(model, names, constants = NA)
+
+set_w_const(model, names, constants = NA)
+
+w2const(model, names, constants = NA)
 }
 \arguments{
 \item{model}{An object of the class \code{rtmpt_model}.}
@@ -24,7 +30,7 @@ set_omega_const(model, names, constants = NA)
 An object of the class \code{drtmpt_model}.
 }
 \description{
-Setting process relative starting-point (parameter omega) to constants or change it back to be estimated.
+Setting process relative starting-point (omega/w) to constants or change it back to be estimated.
 }
 \examples{
 ####################################################################################
@@ -54,6 +60,14 @@ new_model
 
 ## setting relative starting-point of g to a constant (0.5):
 new_model <- set_omega_const(model = model, names = c("g"), constants = c(0.5))
+new_model
+
+## setting relative starting-point of g to a constant (0.5):
+new_model <- set_w_const(model = model, names = c("g"), constants = c(0.5))
+new_model
+
+## setting relative starting-point of g to a constant (0.5):
+new_model <- w2const(model = model, names = c("g"), constants = c(0.5))
 new_model
 }
 \seealso{

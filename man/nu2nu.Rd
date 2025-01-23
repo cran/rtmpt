@@ -3,11 +3,17 @@
 \name{nu2nu}
 \alias{nu2nu}
 \alias{set_nu_equal}
+\alias{set_v_equal}
+\alias{v2v}
 \title{Set process drift rates equal}
 \usage{
 nu2nu(model, names, keep_consts = FALSE)
 
 set_nu_equal(model, names, keep_consts = FALSE)
+
+set_v_equal(model, names, keep_consts = FALSE)
+
+v2v(model, names, keep_consts = FALSE)
 }
 \arguments{
 \item{model}{A list of the class \code{drtmpt_model}.}
@@ -29,7 +35,7 @@ set_nu_equal(model, names, keep_consts = FALSE)
 A list of the class \code{drtmpt_model}.
 }
 \description{
-Setting multiple process drift rates (nu) equal. One of the process drift rates will be estimated and the other
+Setting multiple process drift rates (nu/v) equal. One of the process drift rates will be estimated and the other
   named drift rates will be set to equal the former. The equality can be removed by only using one name of a process.
 }
 \examples{
@@ -61,6 +67,14 @@ new_model
 
 ## make do = dn
 new_model <- set_nu_equal(model = model, names = c("do", "dn"))
+new_model
+
+## make do = dn
+new_model <- set_v_equal(model = model, names = c("do", "dn"))
+new_model
+
+## make do = dn
+new_model <- v2v(model = model, names = c("do", "dn"))
 new_model
 }
 \seealso{

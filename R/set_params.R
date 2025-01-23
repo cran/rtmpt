@@ -245,7 +245,6 @@ tau2zero <- function(model, names, outcomes, values = 0) {
   return(model)
 }
 
-
 #' @rdname tau2zero
 #' @examples
 #' 
@@ -255,6 +254,8 @@ tau2zero <- function(model, names, outcomes, values = 0) {
 #' new_model
 #' @export
 set_tau_zero <- tau2zero
+
+
 
 
 
@@ -357,7 +358,6 @@ theta2theta <- function(model, names, keep_consts = FALSE) {
   model$params <- params_list
   return(model)
 }
-
 
 #' @rdname theta2theta
 #' @examples
@@ -538,7 +538,6 @@ tau2tau <- function(model, names, outcome, keep_zeros = FALSE) {
   return(model)
 }
 
-
 #' @rdname tau2tau
 #' @examples
 #' 
@@ -548,7 +547,23 @@ tau2tau <- function(model, names, outcome, keep_zeros = FALSE) {
 #' @export
 set_taus_equal <- tau2tau
 
+#' @rdname tau2tau
+#' @examples
+#' 
+#' ## make do = dn
+#' new_model <- set_lambdas_equal(model = model, names = c("do", "dn"), outcome = "both")
+#' new_model
+#' @export
+set_lambdas_equal <- tau2tau
 
+#' @rdname tau2tau
+#' @examples
+#' 
+#' ## make do = dn
+#' new_model <- lambda2lambda(model = model, names = c("do", "dn"), outcome = "both")
+#' new_model
+#' @export
+lambda2lambda <- tau2tau
 
 
 
@@ -565,7 +580,7 @@ set_taus_equal <- tau2tau
 
 #' Set process threshold to constants
 #'
-#' Setting process thresholds (parameter a) to constants or change it back to be estimated.
+#' Setting process thresholds (a) to constants or change it back to be estimated.
 #'
 #' @param model An object of the class \code{rtmpt_model}.
 #' @param names Character vector with process names.
@@ -664,7 +679,7 @@ set_a_const <- a2const
 
 #' Set process drift rate to constants
 #'
-#' Setting process drif rate (parameter nu) to constants or change it back to be estimated.
+#' Setting process drif rate (nu/v) to constants or change it back to be estimated.
 #'
 #' @param model An object of the class \code{rtmpt_model}.
 #' @param names Character vector with process names.
@@ -749,6 +764,24 @@ nu2const <- function(model, names, constants = NA) {
 #' @export
 set_nu_const <- nu2const
 
+#' @rdname nu2const
+#' @examples
+#'
+#' ## setting drift rate of g to a constant (1.0):
+#' new_model <- set_v_const(model = model, names = c("g"), constants = c(1.0))
+#' new_model
+#' @export
+set_v_const <- nu2const
+
+#' @rdname nu2const
+#' @examples
+#'
+#' ## setting drift rate of g to a constant (1.0):
+#' new_model <- v2const(model = model, names = c("g"), constants = c(1.0))
+#' new_model
+#' @export
+v2const <- nu2const
+
 
 
 
@@ -758,7 +791,7 @@ set_nu_const <- nu2const
 
 #' Set process relative starting-point to constants
 #'
-#' Setting process relative starting-point (parameter omega) to constants or change it back to be estimated.
+#' Setting process relative starting-point (omega/w) to constants or change it back to be estimated.
 #'
 #' @param model An object of the class \code{rtmpt_model}.
 #' @param names Character vector with process names.
@@ -843,6 +876,24 @@ omega2const <- function(model, names, constants = NA) {
 #' @export
 set_omega_const <- omega2const
 
+#' @rdname omega2const
+#' @examples
+#'
+#' ## setting relative starting-point of g to a constant (0.5):
+#' new_model <- set_w_const(model = model, names = c("g"), constants = c(0.5))
+#' new_model
+#' @export
+set_w_const <- omega2const
+
+#' @rdname omega2const
+#' @examples
+#'
+#' ## setting relative starting-point of g to a constant (0.5):
+#' new_model <- w2const(model = model, names = c("g"), constants = c(0.5))
+#' new_model
+#' @export
+w2const <- omega2const
+
 
 
 
@@ -852,7 +903,7 @@ set_omega_const <- omega2const
 
 #' Set process thresholds equal
 #'
-#' Setting multiple process thresholds (parameter a) equal. One of the process thresholds will be estimated and the other
+#' Setting multiple process thresholds (a) equal. One of the process thresholds will be estimated and the other
 #'   named thresholds will be set to equal the former. The equality can be removed by only using one name of a process.
 #'
 #' @param model A list of the class \code{drtmpt_model}.
@@ -948,7 +999,6 @@ a2a <- function(model, names, keep_consts = FALSE) {
   return(model)
 }
 
-
 #' @rdname a2a
 #' @examples
 #'
@@ -963,11 +1013,13 @@ set_a_equal <- a2a
 
 
 
+
+
 ############ MAKE NU EQUAL ############
 
 #' Set process drift rates equal
 #'
-#' Setting multiple process drift rates (nu) equal. One of the process drift rates will be estimated and the other
+#' Setting multiple process drift rates (nu/v) equal. One of the process drift rates will be estimated and the other
 #'   named drift rates will be set to equal the former. The equality can be removed by only using one name of a process.
 #'
 #' @param model A list of the class \code{drtmpt_model}.
@@ -1063,7 +1115,6 @@ nu2nu <- function(model, names, keep_consts = FALSE) {
   return(model)
 }
 
-
 #' @rdname nu2nu
 #' @examples
 #'
@@ -1072,6 +1123,24 @@ nu2nu <- function(model, names, keep_consts = FALSE) {
 #' new_model
 #' @export
 set_nu_equal <- nu2nu
+
+#' @rdname nu2nu
+#' @examples
+#'
+#' ## make do = dn
+#' new_model <- set_v_equal(model = model, names = c("do", "dn"))
+#' new_model
+#' @export
+set_v_equal <- nu2nu
+
+#' @rdname nu2nu
+#' @examples
+#'
+#' ## make do = dn
+#' new_model <- v2v(model = model, names = c("do", "dn"))
+#' new_model
+#' @export
+v2v <- nu2nu
 
 
 
@@ -1082,7 +1151,7 @@ set_nu_equal <- nu2nu
 
 #' Set process relaitve starting-point equal
 #'
-#' Setting multiple process relaitve starting-points (omegas) equal. One of the process relaitve starting-points will be estimated and the
+#' Setting multiple process relaitve starting-points (omega/w) equal. One of the process relaitve starting-points will be estimated and the
 #'   other named relaitve starting-points will be set to equal the former. The equality can be removed by only using one name of a process.
 #'
 #' @param model A list of the class \code{drtmpt_model}.
@@ -1178,7 +1247,6 @@ omega2omega <- function(model, names, keep_consts = FALSE) {
   return(model)
 }
 
-
 #' @rdname omega2omega
 #' @examples
 #'
@@ -1187,4 +1255,22 @@ omega2omega <- function(model, names, keep_consts = FALSE) {
 #' new_model
 #' @export
 set_omegas_equal <- omega2omega
+
+#' @rdname omega2omega
+#' @examples
+#'
+#' ## make do = dn
+#' new_model <- set_w_equal(model = model, names = c("do", "dn"))
+#' new_model
+#' @export
+set_w_equal <- omega2omega
+
+#' @rdname omega2omega
+#' @examples
+#'
+#' ## make do = dn
+#' new_model <- w2w(model = model, names = c("do", "dn"))
+#' new_model
+#' @export
+w2w <- omega2omega
 

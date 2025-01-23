@@ -3,11 +3,17 @@
 \name{omega2omega}
 \alias{omega2omega}
 \alias{set_omegas_equal}
+\alias{set_w_equal}
+\alias{w2w}
 \title{Set process relaitve starting-point equal}
 \usage{
 omega2omega(model, names, keep_consts = FALSE)
 
 set_omegas_equal(model, names, keep_consts = FALSE)
+
+set_w_equal(model, names, keep_consts = FALSE)
+
+w2w(model, names, keep_consts = FALSE)
 }
 \arguments{
 \item{model}{A list of the class \code{drtmpt_model}.}
@@ -29,7 +35,7 @@ set_omegas_equal(model, names, keep_consts = FALSE)
 A list of the class \code{drtmpt_model}.
 }
 \description{
-Setting multiple process relaitve starting-points (omegas) equal. One of the process relaitve starting-points will be estimated and the
+Setting multiple process relaitve starting-points (omega/w) equal. One of the process relaitve starting-points will be estimated and the
   other named relaitve starting-points will be set to equal the former. The equality can be removed by only using one name of a process.
 }
 \examples{
@@ -61,6 +67,14 @@ new_model
 
 ## make do = dn
 new_model <- set_omegas_equal(model = model, names = c("do", "dn"))
+new_model
+
+## make do = dn
+new_model <- set_w_equal(model = model, names = c("do", "dn"))
+new_model
+
+## make do = dn
+new_model <- w2w(model = model, names = c("do", "dn"))
 new_model
 }
 \seealso{

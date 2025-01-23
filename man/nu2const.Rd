@@ -3,11 +3,17 @@
 \name{nu2const}
 \alias{nu2const}
 \alias{set_nu_const}
+\alias{set_v_const}
+\alias{v2const}
 \title{Set process drift rate to constants}
 \usage{
 nu2const(model, names, constants = NA)
 
 set_nu_const(model, names, constants = NA)
+
+set_v_const(model, names, constants = NA)
+
+v2const(model, names, constants = NA)
 }
 \arguments{
 \item{model}{An object of the class \code{rtmpt_model}.}
@@ -24,7 +30,7 @@ set_nu_const(model, names, constants = NA)
 An object of the class \code{drtmpt_model}.
 }
 \description{
-Setting process drif rate (parameter nu) to constants or change it back to be estimated.
+Setting process drif rate (nu/v) to constants or change it back to be estimated.
 }
 \examples{
 ####################################################################################
@@ -54,6 +60,14 @@ new_model
 
 ## setting drift rate of g to a constant (1.0):
 new_model <- set_nu_const(model = model, names = c("g"), constants = c(1.0))
+new_model
+
+## setting drift rate of g to a constant (1.0):
+new_model <- set_v_const(model = model, names = c("g"), constants = c(1.0))
+new_model
+
+## setting drift rate of g to a constant (1.0):
+new_model <- v2const(model = model, names = c("g"), constants = c(1.0))
 new_model
 }
 \seealso{

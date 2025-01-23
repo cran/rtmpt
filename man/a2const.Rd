@@ -24,7 +24,7 @@ set_a_const(model, names, constants = NA)
 An object of the class \code{drtmpt_model}.
 }
 \description{
-Setting process thresholds (parameter a) to constants or change it back to be estimated.
+Setting process thresholds (a) to constants or change it back to be estimated.
 }
 \examples{
 ####################################################################################

@@ -29,7 +29,7 @@ set_a_equal(model, names, keep_consts = FALSE)
 A list of the class \code{drtmpt_model}.
 }
 \description{
-Setting multiple process thresholds (parameter a) equal. One of the process thresholds will be estimated and the other
+Setting multiple process thresholds (a) equal. One of the process thresholds will be estimated and the other
   named thresholds will be set to equal the former. The equality can be removed by only using one name of a process.
 }
 \examples{
