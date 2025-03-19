@@ -429,7 +429,7 @@ scale_logit <- function(theta, a, b, location, scale, range) {
   return((tmp-location)/scale)
 }
 
-#' @importFrom coda effectiveSize gelman.diag
+#' @importFrom coda as.mcmc effectiveSize gelman.diag
 #' @importFrom stats dnorm pnorm
 writeSummaryDRTMPT <- function(x, keep, ...) {
   

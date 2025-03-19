@@ -1,5 +1,6 @@
 
 #' @importFrom data.table ":=" ".SD" copy fread
+#' @importFrom loo loo waic relative_eff
 get_indices_x <- function(log_lik, Nchains, Nsample, df) {
   
   indices_list <- lapply(unique(df$subj), function(x) which(df$subj == x))

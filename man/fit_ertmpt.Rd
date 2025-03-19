@@ -85,7 +85,7 @@ Allowed parameters are:
 and with that the WAIC and LOO will be calculated via the \code{loo} package. If you want to have this log-likelihood matrix stored in the
 output of this function, you can set \code{save_log_lik} to \code{TRUE}. The default for \code{indices} is \code{FALSE}.}
 
-\item{save_log_lik}{If set to \code{TRUE} and \code{indices = TRUE} the log-likelihood matrix for each iteration and trial will
+\item{save_log_lik}{If set to \code{TRUE} the log-likelihood matrix for each iteration and trial will
 be saved in the output as a matrix. Its default is \code{FALSE}.}
 
 \item{old_label}{If set to \code{TRUE} the old labels of "subj" and "group" of the data will be used in the elements of the output list. Default is \code{FALSE}.}

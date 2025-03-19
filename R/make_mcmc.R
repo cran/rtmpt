@@ -404,8 +404,8 @@ labelnames_keep_d <- function(data_info) {
 
 
 
-#' @importFrom data.table as.data.table
-#' @importFrom coda as.mcmc as.mcmc.list
+#' @importFrom data.table as.data.table fread
+#' @importFrom coda as.mcmc as.mcmc.list "varnames<-"
 make_mcmc_list <- function(file, infofile, Nchains, Nsamples, data_info, keep) {
   
   # read text file with chains

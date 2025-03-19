@@ -88,7 +88,7 @@
 #' 
 #' @author Raphael Hartmann
 #' @importFrom truncnorm rtruncnorm
-#' @importFrom stats rgamma rnorm pnorm rexp
+#' @importFrom stats rgamma rnorm pnorm rexp runif
 sim_ertmpt_data_SBC<- function(model, 
                               seed,
                               n.subj,

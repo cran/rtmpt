@@ -354,6 +354,8 @@ namespace ertmpt {
   	lies(daten);
   	datenzahl = static_cast<int>(daten.size());
   	
+  	// Log-Likelihood vector
+  	loglik_vec = (double *)malloc(SAMPLE_SIZE * datenzahl * sizeof(double));
   	
   	//REPEAT:
   	set_ns(daten, indi, kerntree, kerncat, igroup);
@@ -885,6 +887,10 @@ namespace drtmpt {
     // Parameter: beta_comp yes/no
     // if (!(comp = (bool*)malloc(3 * kernpar * sizeof(bool)))) { Rprintf("Allocation failure\n"); }
     // if (!(consts = (double*)malloc(3 * kernpar * sizeof(double)))) { Rprintf("Allocation failure\n"); };
+    
+    // Log-Likelihood vector
+    loglik_vec = (double *)malloc(SAMPLE_SIZE * datenzahl * sizeof(double));
+    
     
     model_design(kerntree, ar, branch, nodes_per_tree, tree_and_node2par);
     make_drin_cdrin();

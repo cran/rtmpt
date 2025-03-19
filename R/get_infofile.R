@@ -160,6 +160,7 @@ setReplaceMethod("restrictions", "Rmpt.model", function(x, value) {
 # functions from
 # make.mpt.helper.R
 #####################
+#' @importFrom stats runif
 .Rcheck.MPT.probabilities <- function(tree){
   tmp.env <- new.env()
   temp.param.names <- .find.MPT.params(tree)
@@ -518,6 +519,7 @@ setClassUnion("bmpt.tree", "bmpt.leaf")
 setClass("strict.bmpt.tree", representation(top = "bmpt.tree", bottom = "bmpt.tree", parameter = "character", node = "numeric"))
 setIs("strict.bmpt.tree", "bmpt.tree")
 
+#' @importFrom stringr str_split str_detect str_c str_replace
 make.tree <- function(tree.df, envir) {
   if ((nrow(tree.df) == 1) & (tree.df[1, "branches"] == "")) return(tree.df[1, "category"])
   p <- str_split(tree.df[1,"branches"], "\\*")[[1]][1]

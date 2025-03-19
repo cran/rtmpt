@@ -64,7 +64,7 @@
 #' @param indices Model selection indices. If set to \code{TRUE} the log-likelihood for each iteration and trial will be stored temporarily
 #'   and with that the WAIC and LOO will be calculated via the \code{loo} package. If you want to have this log-likelihood matrix stored in the
 #'   output of this function, you can set \code{save_log_lik} to \code{TRUE}. The default for \code{indices} is \code{FALSE}.
-#' @param save_log_lik If set to \code{TRUE} and \code{indices = TRUE} the log-likelihood matrix for each iteration and trial will
+#' @param save_log_lik If set to \code{TRUE} the log-likelihood matrix for each iteration and trial will
 #'   be saved in the output as a matrix. Its default is \code{FALSE}.
 #' @param old_label If set to \code{TRUE} the old labels of "subj" and "group" of the data will be used in the elements of the output list. Default is \code{FALSE}.
 #' @return A list of the class \code{ertmpt_fit} containing 
@@ -128,14 +128,9 @@
 #' @author Raphael Hartmann
 #' @useDynLib "rtmpt", .registration=TRUE
 #' @export
-#' @importFrom coda as.mcmc as.mcmc.list "varnames<-" gelman.diag
-#' @importFrom data.table as.data.table fread
-#' @importFrom loo loo waic relative_eff
-#' @importFrom methods as callGeneric new
-#' @importFrom stats runif
+#' @importFrom coda gelman.diag
+#' @importFrom methods as callGeneric new is
 #' @importFrom utils read.table write.table
-#' @importFrom stringr str_split str_detect str_c str_replace
-#' @importFrom methods is
 fit_ertmpt <- function(model, 
                        data,
                        n.chains = 4, 
@@ -299,7 +294,7 @@ fit_ertmpt <- function(model,
   BOOL1 <- sapply(X = model$params[["taus"]]["minus",], FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, 1, 0)})  # tau minus
   BOOL2 <- sapply(X = model$params[["taus"]]["plus",], FUN = function(x) {ifelse(is.na(x) | x %in% proc_names, 1, 0)})  # tau plus
   
-  BOOL3 <- c(loglik = indices, bridge = FALSE)#bridge)
+  BOOL3 <- c(loglik = (save_log_lik | indices), bridge = FALSE)#bridge)
   
   REAL3 <- c(prior_params$df_of_sigma_sqr, 
              shape_omega_sqr, 
@@ -410,15 +405,35 @@ fit_ertmpt <- function(model,
 
   
   # WAIC & LOO
-  if (file.exists(loglik_path)) {
+  if (all(out$LogLik == 0)) {
+    out$LogLik <- NULL
+  } else {
     if (indices) {
-      suppressWarnings( temp <- get_indices_x(loglik_path, Nchains, Nsamples, data_frame) )
+      suppressWarnings( temp <- get_indices_x(out$LogLik, Nchains, Nsamples, data_frame) )
       ertmpt$indices <- list(WAIC = temp$WAIC, LOO = temp$LOO)
-      if (save_log_lik) ertmpt$LogLik <- temp$LogLik
+      #if (save_log_lik) ertmpt$LogLik <- temp$LogLik
       rm(temp)
     }
+    if (save_log_lik) {
+      ertmpt$LogLik <- out$LogLik
+    }
   }
-  file.remove(loglik_path)
+  # if (file.exists(loglik_path)) {
+  #   if (indices) {
+  #     suppressWarnings( temp <- get_indices_x(loglik_path, Nchains, Nsamples, data_frame) )
+  #     ertmpt$indices <- list(WAIC = temp$WAIC, LOO = temp$LOO)
+  #     if (save_log_lik) ertmpt$LogLik <- temp$LogLik
+  #     rm(temp)
+  #   } else {
+  #     if (save_log_lik) {
+  #       fwrite(data.table(V1 = ""), loglik_path, append = TRUE, col.names = FALSE, row.names = FALSE)
+  #       ll_dt <- fread(file = loglik_path, skip = 0, header = FALSE)
+  #       ertmpt$LogLik <- as.matrix(copy(ll_dt))
+  #     }
+  #   }
+  #   
+  # }
+  # file.remove(loglik_path)
   
   
   # remove data file
@@ -496,7 +511,7 @@ fit_ertmpt <- function(model,
 #'     \item \code{old_label} If set to \code{TRUE} the old labels of "subj" and "group" of the data will be used in the elements of the output list.
 #'       Default is \code{FALSE}.
 #'     \item \code{indices} Model selection indices. If set to \code{TRUE} the log-likelihood for each iteration and trial will be
-#'       stored temporarily and with that the WAIC and LOO will be calculated via the \code{loo} package. If you want to have this
+#'       stored temporarily and with that the DIC, as well as the WAIC and LOOIC will be calculated via the \code{loo} package. If you want to have the
 #'       log-likelihood matrix stored in the output of this function, you can set \code{loglik} to \code{TRUE}. Default for
 #'       \code{indices} is \code{FALSE}.
 #'     \item \code{loglik} If set to \code{TRUE} and \code{indices = TRUE} the log-likelihood matrix for each iteration and trial will
@@ -565,14 +580,9 @@ fit_ertmpt <- function(model,
 #' @author Raphael Hartmann
 #' @useDynLib "rtmpt", .registration=TRUE
 #' @export
-#' @importFrom coda as.mcmc as.mcmc.list "varnames<-" gelman.diag
-#' @importFrom data.table as.data.table fread
-#' @importFrom loo loo waic relative_eff
-#' @importFrom methods as callGeneric new
-#' @importFrom stats runif
+#' @importFrom coda gelman.diag
+#' @importFrom methods as callGeneric new is
 #' @importFrom utils read.table write.table
-#' @importFrom stringr str_split str_detect str_c str_replace
-#' @importFrom methods is
 fit_drtmpt <- function(model,
                        data,
                        n.chains = 4,
@@ -789,7 +799,7 @@ fit_drtmpt <- function(model,
   
   # FLAGS ARGUMENT
   BOOL1 <- as.integer(c(DIC_FL = flags$indices,
-                        LOG_LIK_FL = flags$loglik,
+                        LOG_LIK_FL = (flags$loglik),
                         ML_INIT_FL = !flags$random_init))
   
   
@@ -867,17 +877,36 @@ fit_drtmpt <- function(model,
   }
   
   
-  # COMPUTE WAIC AND LOO-IC
-  if (flags$indices) {
-    if (file.exists(ll_path)) {
-      if (flags$indices) {
-        temp <- NULL
-        suppressWarnings( temp <- get_indices_x(log_lik = ll_path, Nchains = n.chains, Nsample = n.iter, df = data_frame) )
-        drtmpt$indices <- list(WAIC = temp$WAIC, LOO = temp$LOO)
-        if (flags$loglik) drtmpt$LogLik <- temp$LogLik
-        rm(temp)
-      }
-      file.remove(ll_path)
+  # # COMPUTE WAIC AND LOO-IC
+  # if (flags$indices) {
+  #   if (file.exists(ll_path)) {
+  #     if (flags$indices) {
+  #       temp <- NULL
+  #       suppressWarnings( temp <- get_indices_x(log_lik = ll_path, Nchains = n.chains, Nsample = n.iter, df = data_frame) )
+  #       drtmpt$indices <- list(WAIC = temp$WAIC, LOO = temp$LOO)
+  #       if (flags$loglik) drtmpt$LogLik <- temp$LogLik
+  #       rm(temp)
+  #     } else {
+  #       if (flags$loglik) {
+  #         fwrite(data.table(V1 = ""), ll_path, append = TRUE, col.names = FALSE, row.names = FALSE)
+  #         ll_dt <- fread(file = ll_path, skip = 0, header = FALSE)
+  #         drtmpt$LogLik <- as.matrix(copy(ll_dt))
+  #       }
+  #     }
+  #     file.remove(ll_path)
+  #   }
+  # }
+  # WAIC & LOO
+  if (all(out$loglik == 0)) {
+    out$loglik <- NULL
+  } else {
+    if (flags$indices) {
+      suppressWarnings( temp <- get_indices_x(out$loglik, n.chains, n.iter, data_frame) )
+      drtmpt$indices <- list(WAIC = temp$WAIC, LOO = temp$LOO)
+      rm(temp)
+    }
+    if (flags$loglik) {
+      drtmpt$loglik <- out$loglik
     }
   }
   

@@ -225,7 +225,7 @@ namespace ertmpt {
   		// }
   		if (complength == 0) { pij[k] = (-0.5*gsl_pow_2((rt - rmu) / rsig)) / sqr2pi / rsig; }
 
-  		if ((complength == 1) /*&& (PFAD_INDEX(j, k) > -1)*/) {
+  		if (complength == 1 /*&& (PFAD_INDEX(j, k) > -1)*/) {
 
   			double lam = lams[0];
   			double hplus, hminus;
@@ -259,8 +259,12 @@ namespace ertmpt {
   
   void dic(int N_all_parameters, std::vector <trial> daten, double *beta, double *sample) {
   
-  	std::ofstream log_lik(LOGLIK);
-  	if (log_lik_flag) log_lik << std::setprecision(12);
+  	// std::ofstream log_lik(LOGLIK);
+  	// loglik_vec = (double *)malloc(SAMPLE_SIZE * datenzahl * sizeof(double));
+    
+  	if (log_lik_flag) {
+  	  // log_lik << std::setprecision(12);
+  	}
   	double dbar = 0.0, pd = 0.0, pv = 0.0;
   
   	double *x_for_all = 0; x_for_all = (double *)malloc(indi*kernpar * sizeof(double));
@@ -293,10 +297,13 @@ namespace ertmpt {
   			p -= xsi;
   			if (p==GSL_NEGINF)
   				Rprintf("DIC loglik Problem\n");
-  			if (log_lik_flag) log_lik << std::setw(20) << p;
+  			if (log_lik_flag) {
+  			  // log_lik << std::setw(20) << p;
+  			  loglik_vec[is + SAMPLE_SIZE * x] = p;
+  			}
   			persample += -2 * (p);
   		}
-  		if (log_lik_flag) log_lik << std::endl;
+  		// if (log_lik_flag) log_lik << std::endl;
   		dbar += persample / (SAMPLE_SIZE);
   		pv += gsl_pow_2(persample) / (SAMPLE_SIZE);
   	}
@@ -339,7 +346,7 @@ namespace ertmpt {
   		tests_out << "DIC1, DIC2, pd, pv: " << std::endl;
   		tests_out << std::setw(15) << pd + dbar << std::setw(15) << pv + dbar << std::setw(15) << pd << std::endl << std::setw(15) << pv << std::endl;
   	}
-  	log_lik.close();
+  	// log_lik.close();
   	free(pij);
   	free(xbar);
   	free(x_for_all);
@@ -1028,13 +1035,11 @@ namespace drtmpt {
   
   //compute DIC and output likelihood for WAIC, etc. (optional)
   void dic(std::vector <trial> daten, double* sample) {
-    
-    std::ofstream log_lik(LOGLIK);
-    if (log_lik_flag) {
-      log_lik << std::setprecision(12);
-      // loglik_vec = (double *)malloc(SAMPLE_SIZE * datenzahl * sizeof(double));
-    }
-    
+    // std::ofstream log_lik(LOGLIK);
+    // if (log_lik_flag) {
+    //   log_lik << std::setprecision(12);
+    // }
+
     double dbar = 0.0, pd = 0.0, pv = 0.0;
     
     double* tavw = 0; if (!(tavw = (double*)calloc(ifreemax * 3 * indi, sizeof(double)))) { Rprintf("Allocation failure\n"); }
@@ -1068,6 +1073,7 @@ namespace drtmpt {
     }
     
     double persample_old = 0.0;
+    int myind = 0;
     for (int is = 0; is != sample_size; is++) {
       
       progress = 1.0*(is+1)/sample_size;
@@ -1108,7 +1114,9 @@ namespace drtmpt {
                     double p = ps[x];
                     if ((p <= 0) || !(p == p))
                       Rprintf("DIC loglik Problem\n");
-                    if (log_lik_flag) icstore[t * kerncat + j].push_back(log(p) - xsi);
+                    if (log_lik_flag) {
+                      icstore[t * kerncat + j].push_back(log(p) - xsi);
+                    }
                     icpersample[t * kerncat + j] += -2 * log(p);
                   }
                   icpersample[t * kerncat + j] += 2 * icdaten[t * kerncat + j].size() * xsi;
@@ -1132,7 +1140,9 @@ namespace drtmpt {
                 double p = ps[x];
                 if ((p <= 0) || !(p == p))
                   Rprintf("DIC loglik Problem\n");
-                if (log_lik_flag) icstore[t * kerncat + j].push_back(log(p) - xsi);
+                if (log_lik_flag) {
+                  icstore[t * kerncat + j].push_back(log(p) - xsi);
+                }
                 icpersample[t * kerncat + j] += -2 * log(p);
               }
               icpersample[t * kerncat + j] += 2 * icdaten[t * kerncat + j].size() * xsi;
@@ -1148,26 +1158,28 @@ namespace drtmpt {
         for (int tj = 0; tj != indi * kerncat; tj++)  persample += icpersample[tj];
         free(icpersample);
       }
-      if (log_lik_flag)
-        for (int t = 0; t < indi; t++)
+      if (log_lik_flag) {
+        for (int t = 0; t < indi; t++) {
           for (int j = 0; j < kerncat; j++) {
             int tmp_K = static_cast<int>(icstore[t * kerncat + j].size());
             // Rprintf("tmp_K = %d\n", tmp_K);
             for (int k = 0; k != tmp_K; k++) {
-              log_lik << std::setw(20) << icstore[t * kerncat + j][k];
-              // Rprintf("zeile = %d", indi*kerncat*tmp_K);
-              // loglik_vec[is*indi*kerncat*tmp_K] = icstore[t * kerncat + j][k];
-              // Rprintf("loglik_vec[t*kerncat + j] = %g\n", loglik_vec[indi*kerncat*tmp_K*is+ kerncat*tmp_K*t + tmp_K*j + k]);
+              // log_lik << std::setw(20) << icstore[t * kerncat + j][k];
+              loglik_vec[myind] = icstore[t * kerncat + j][k];
+              myind++;
+              // Rprintf("%10d\n" , index[t*kerncat + j][k] );
             }
           }
-          
+        }
+      }
+
       if (same) persample = persample_old; else persample_old = persample;
       if (!same) {
         for (int i = 0; i != ifreemax * 3 * indi; i++) tavw_old[i] = tavw[i];
         for (int i = 0; i != (respno + 1) * indi; i++) lambdas_old[i] = lambdas[i];
       }
       //Rprintf("%20g%10d\n", persample, same);
-      log_lik << std::endl;
+      // log_lik << std::endl;
       dbar += persample;
       pv += gsl_pow_2(persample);
       //Rprintf("is %d\n", is);
@@ -1203,7 +1215,7 @@ namespace drtmpt {
       tests_out << "DIC2,  pv: " << std::endl;
       tests_out << std::setw(15) << pv + dbar << std::setw(15) << pv << std::endl;
     }
-    log_lik.close();
+    // log_lik.close();
     free(lambdas);
     free(tavw);
     free(tavw_old);

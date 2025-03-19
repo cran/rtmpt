@@ -304,7 +304,7 @@ readinfofile <- function(infofile) {
 #' @author Raphael Hartmann
 #' @export
 #' @importFrom truncnorm rtruncnorm
-#' @importFrom stats rgamma rnorm pnorm rexp
+#' @importFrom stats rgamma rnorm pnorm rexp runif
 sim_ertmpt_data <- function(model, 
                            seed,
                            n.subj,

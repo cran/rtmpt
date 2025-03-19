@@ -17,7 +17,7 @@ int n_all_parameters;
 // number of total trials
 int datenzahl;
 // loglikelihood vector
-// double *loglik_vec = 0;
+double *loglik_vec;
 
 namespace ertmpt {
 
@@ -202,6 +202,8 @@ extern "C" {
 		outCnt++;
 		SEXP pars_bridge = PROTECT(Rf_allocMatrix(REALSXP, SAMPLE_SIZE, (n_bridge_parameters+1)));
 		outCnt++;
+		SEXP loglik = PROTECT(Rf_allocMatrix(REALSXP, SAMPLE_SIZE, datenzahl));
+		outCnt++;
 		SEXP ans = PROTECT(Rf_allocVector(VECSXP, outCnt));
 		prtCnt = outCnt + 1;
 
@@ -209,7 +211,8 @@ extern "C" {
 		double *Rprob = REAL(prob);
 		double *Rpars_samples = REAL(pars_samples);
 		double *Rpars_bridge = REAL(pars_bridge);
-
+		double *Rloglik = REAL(loglik);
+		
 
 		Rprob[0] = 0.44332211;
 		for (int i=0; i!=SAMPLE_SIZE; i++) {
@@ -225,6 +228,11 @@ extern "C" {
 					Rpars_bridge[j*SAMPLE_SIZE + i] = 0;
 				}
 			}
+			if (log_lik_flag) {
+			  for (int j = 0; j!=datenzahl; j++) {
+			    Rloglik[j*SAMPLE_SIZE + i] = loglik_vec[j*SAMPLE_SIZE + i];
+			  }
+			}
 		}
 		if (complete_sample) free(complete_sample);
 		if (complete_bridge) free(complete_bridge);
@@ -233,14 +241,16 @@ extern "C" {
 		SET_VECTOR_ELT(ans,0,prob);
 		SET_VECTOR_ELT(ans,1,pars_samples);
 		SET_VECTOR_ELT(ans,2,pars_bridge);
-
+		SET_VECTOR_ELT(ans,3,loglik);
+		
 
 		SEXP names = PROTECT(Rf_allocVector(STRSXP, outCnt));
 		prtCnt++;
 		SET_STRING_ELT(names,0,Rf_mkChar("prob"));
 		SET_STRING_ELT(names,1,Rf_mkChar("pars_samples"));
 		SET_STRING_ELT(names,2,Rf_mkChar("pars_bridge"));
-
+		SET_STRING_ELT(names,3,Rf_mkChar("LogLik"));
+		
 
 		Rf_setAttrib(ans,R_NamesSymbol,names);
 
@@ -249,6 +259,7 @@ extern "C" {
 		free(ConstProb);
 		free(CompMinus);
 		free(CompPlus);
+		free(loglik_vec);
 
 
 		/* Unprotect the ans and names objects */
@@ -357,42 +368,39 @@ extern "C" {
 
 
     double *Rpars_samples = REAL(pars_samples);
-    // double *Rloglik = REAL(loglik);
+    double *Rloglik = REAL(loglik);
 
 
     for (int i=0; i< SAMPLE_SIZE; i++) {
       for (int j = 0; j < n_all_parameters; j++) {
         Rpars_samples[i + j*SAMPLE_SIZE] = complete_sample[i*(n_all_parameters) + j];
       }
-      // if (log_lik_flag) {
-      //   for (int j = 0; j < datenzahl; j++) {
-      //     Rloglik[i + j*SAMPLE_SIZE] = loglik_vec[i + j*SAMPLE_SIZE];
-      //   }
-      // }
+      if (log_lik_flag) {
+        for (int j = 0; j < datenzahl; j++) {
+          Rloglik[i + j*SAMPLE_SIZE] = loglik_vec[i*datenzahl + j];
+        }
+      }
     }
 
 
     if (complete_sample) free(complete_sample);
-    // if (loglik_vec) free(loglik_vec);
+    free(loglik_vec);
 
 
     SET_VECTOR_ELT(ans, 0, pars_samples);
-    if (log_lik_flag) SET_VECTOR_ELT(ans,1,loglik);
+    SET_VECTOR_ELT(ans, 1, loglik);
 
 
     SEXP names = PROTECT(Rf_allocVector(STRSXP, outCnt));
     prtCnt++;
     SET_STRING_ELT(names, 0, Rf_mkChar("pars_samples"));
-    if (log_lik_flag) SET_STRING_ELT(names, 1, Rf_mkChar("loglik"));
+    SET_STRING_ELT(names, 1, Rf_mkChar("loglik"));
 
 
     Rf_setAttrib(ans, R_NamesSymbol, names);
 
     /* Unprotect the ans and names objects */
     UNPROTECT(prtCnt);
-
-    // int tmp_cnt = 1;
-    // SEXP tmp_out = PROTECT(Rf_allocVector(REALSXP, 1));
 
 
     // FREE DYNAMIC VARIABLES
@@ -402,9 +410,6 @@ extern "C" {
     if (CatToResp) free(CatToResp);
 
 
-    // UNPROTECT(tmp_cnt);
-
-    // return(tmp_out);
     return(ans);
   }
 
